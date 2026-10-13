@@ -1,0 +1,12 @@
+
+#!/bin/sh
+
+set -e
+
+echo "Running ESLint..."
+npm run lint
+
+echo "Checking Prettier formatting..."
+npm run format:check
+
+echo "All pre-push checks passed."
