@@ -37,3 +37,192 @@ p {
   font-size: 1.125rem;
   line-height: 1.5;
 }
+
+/* Ingredient Shelf */
+
+.shelf {
+  width: 100%;
+  max-width: 900px;
+  margin-top: 40px;
+}
+
+.shelf h2 {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.shelf__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.ingredient-card {
+  position: relative;
+  display: flex;
+  min-height: 190px;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 12px;
+  border: 1px solid #625574;
+  border-radius: 16px;
+  background: #282238;
+  color: #f5f1e8;
+  font: inherit;
+  cursor: pointer;
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease,
+    transform 200ms ease;
+}
+
+.ingredient-card:not(:disabled):hover {
+  transform: translateY(-3px);
+  border-color: #c6a56a;
+  background: #342a47;
+}
+
+.ingredient-card:focus-visible {
+  outline: 3px solid #e5be77;
+  outline-offset: 3px;
+}
+
+.ingredient-card:disabled {
+  cursor: not-allowed;
+}
+
+.ingredient-card--empty {
+  opacity: 0.4;
+}
+
+.ingredient-card__stock {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: 50%;
+  background: #66517e;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.ingredient-card__icon {
+  font-size: 2.5rem;
+  line-height: 1.2;
+}
+
+.ingredient-card__name {
+  font-weight: 700;
+  text-align: center;
+}
+
+.ingredient-card__values {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+@media (max-width: 767px) {
+  .shelf__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .ingredient-card {
+    min-height: 180px;
+    padding: 16px 8px;
+  }
+}
+
+/* Cauldron */
+
+.cauldron {
+  width: 100%;
+  max-width: 900px;
+  margin-top: 32px;
+  padding: 24px;
+  border: 1px solid #625574;
+  border-radius: 20px;
+  background: #242032;
+}
+
+.cauldron__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.cauldron__header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.cauldron__counter {
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: #443653;
+  color: #e5be77;
+  font-weight: 700;
+}
+
+.cauldron__list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cauldron__ingredient {
+  display: flex;
+  min-height: 100px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid #51465f;
+  border-radius: 12px;
+  background: #332b42;
+}
+
+.cauldron__icon {
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+.cauldron__name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.cauldron__empty {
+  margin: 0;
+  padding: 32px 16px;
+  color: #b6aabe;
+  text-align: center;
+}
+
+@media (max-width: 767px) {
+  .cauldron {
+    padding: 16px;
+  }
+
+  .cauldron__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cauldron__ingredient {
+    min-height: 90px;
+  }
+}
