@@ -33,10 +33,22 @@ export const renderShelf = (): string => {
             isEmpty
               ? ''
               : `<span class="ingredient-card__values">
-                  <span>Temp: ${ingredient.temperature > 0 ? '+' : ''}${ingredient.temperature}</span>
-                  <span>Density: ${ingredient.density > 0 ? '+' : ''}${ingredient.density}</span>
-                  <span>Magic: ${ingredient.magicPower > 0 ? '+' : ''}${ingredient.magicPower}</span>
-                </span>`
+           <span class="ingredient-card__value">
+             <span class="ingredient-card__label-desktop">Temp:</span>
+             <span class="ingredient-card__label-mobile">T:</span>
+             ${ingredient.temperature > 0 ? '+' : ''}${ingredient.temperature}
+           </span>
+           <span class="ingredient-card__value">
+             <span class="ingredient-card__label-desktop">Density:</span>
+             <span class="ingredient-card__label-mobile">D:</span>
+             ${ingredient.density > 0 ? '+' : ''}${ingredient.density}
+           </span>
+           <span class="ingredient-card__value">
+             <span class="ingredient-card__label-desktop">Magic:</span>
+             <span class="ingredient-card__label-mobile">M:</span>
+             ${ingredient.magicPower > 0 ? '+' : ''}${ingredient.magicPower}
+           </span>
+         </span>`
           }
         </button>
       `;

@@ -25,14 +25,17 @@ export const renderCauldron = (): string => {
 
   return `
     <section class="cauldron" aria-labelledby="cauldron-title">
-      <div class="cauldron__header">
-        <h2 id="cauldron-title">Cauldron</h2>
-        <span class="cauldron__counter">
-          ${ingredients.length} / ${LEVEL_ONE_CONFIG.maxCauldronIngredients}
-        </span>
-      </div>
+      <h2 id="cauldron-title">Cauldron</h2>
 
-      ${ingredients.length === 0 ? content : `<ol class="cauldron__list">${content}</ol>`}
+      <div class="cauldron__body">
+        <div class="cauldron__header">
+          <span class="cauldron__counter">
+            ${ingredients.length} / ${LEVEL_ONE_CONFIG.maxCauldronIngredients}
+          </span>
+        </div>
+
+        ${ingredients.length === 0 ? content : `<ol class="cauldron__list">${content}</ol>`}
+      </div>
     </section>
   `;
 };
