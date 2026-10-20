@@ -4,6 +4,7 @@ import { addIngredient, gameState, startNewGame } from './state/game-state';
 import { renderCauldron } from './ui/cauldron';
 import { renderShelf } from './ui/shelf';
 import { renderBars, updateBars } from './ui/bars';
+import { renderRecipe } from './ui/recipe';
 
 const app = document.querySelector<HTMLDivElement>('#app');
 
@@ -33,7 +34,7 @@ const renderApp = (): void => {
         </div>
 
         <div class="game-layout__recipe">
-          <!-- Recipe panel will be added in US 1.3 -->
+          ${renderRecipe()}
         </div>
 
         <div class="game-layout__bars">
