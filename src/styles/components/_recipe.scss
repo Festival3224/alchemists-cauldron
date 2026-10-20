@@ -1,0 +1,48 @@
+@use '../abstracts/tokens' as t;
+@use '../abstracts/breakpoints' as bp;
+
+/* Recipe Panel */
+
+.recipe {
+  padding: t.$space-6;
+  border: 1px solid t.$color-border-primary;
+  border-radius: t.$radius-xl;
+  background: t.$color-bg-panel;
+  text-align: left;
+
+  h2 {
+    margin: 0 0 t.$space-2;
+    color: t.$color-accent;
+    font-size: t.$font-size-xl;
+  }
+
+  &__difficulty {
+    margin-bottom: t.$space-5;
+    color: t.$color-text-secondary;
+    font-size: t.$font-size-sm;
+    text-transform: capitalize;
+  }
+
+  &__ranges {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-3;
+
+    p {
+      display: flex;
+      justify-content: space-between;
+      gap: t.$space-3;
+      font-size: t.$font-size-sm;
+    }
+
+    strong {
+      color: t.$color-success;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+  }
+
+  @include bp.mobile {
+    padding: t.$space-4;
+  }
+}

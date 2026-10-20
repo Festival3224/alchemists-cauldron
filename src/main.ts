@@ -1,4 +1,4 @@
-import './styles/style.css';
+import './styles/main.scss';
 
 import { addIngredient, gameState, startNewGame } from './state/game-state';
 import { renderCauldron } from './ui/cauldron';
