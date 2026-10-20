@@ -4,16 +4,20 @@ import type { IGameState } from '../types/game';
 
 import { LEVEL_ONE_CONFIG } from '../data/difficulty';
 
+import { getRandomRecipe } from '../logic/recipe-generator';
+
 export const gameState: IGameState = {
   status: 'menu',
   cauldronIngredients: [],
   shelfStock: {},
+  activeRecipe: null,
 };
 
 export const startNewGame = (): void => {
   gameState.status = 'playing';
   gameState.cauldronIngredients = [];
   gameState.shelfStock = createStock(INGREDIENTS.slice(0, LEVEL_ONE_CONFIG.ingredientCount));
+  gameState.activeRecipe = getRandomRecipe('medium');
 };
 
 export const addIngredient = (id: string): boolean => {

@@ -3,6 +3,7 @@ import './styles/style.css';
 import { addIngredient, gameState, startNewGame } from './state/game-state';
 import { renderCauldron } from './ui/cauldron';
 import { renderShelf } from './ui/shelf';
+import { renderBars, updateBars } from './ui/bars';
 
 const app = document.querySelector<HTMLDivElement>('#app');
 
@@ -22,8 +23,23 @@ const renderApp = (): void => {
           : ''
       }
 
-      ${renderShelf()}
-      ${renderCauldron()}
+      <div class="game-layout">
+        <div class="game-layout__shelf">
+          ${renderShelf()}
+        </div>
+
+        <div class="game-layout__cauldron">
+          ${renderCauldron()}
+        </div>
+
+        <div class="game-layout__recipe">
+          <!-- Recipe panel will be added in US 1.3 -->
+        </div>
+
+        <div class="game-layout__bars">
+          ${renderBars()}
+        </div>
+      </div>
     </main>
   `;
 };
@@ -52,7 +68,18 @@ app.addEventListener('click', (event: MouseEvent) => {
   const ingredientId = ingredientButton.dataset.ingredientId;
 
   if (ingredientId && addIngredient(ingredientId)) {
-    renderApp();
+    const shelf = app.querySelector('.shelf');
+    const cauldron = app.querySelector('.cauldron');
+
+    if (shelf) {
+      shelf.outerHTML = renderShelf();
+    }
+
+    if (cauldron) {
+      cauldron.outerHTML = renderCauldron();
+    }
+
+    updateBars();
   }
 });
 
