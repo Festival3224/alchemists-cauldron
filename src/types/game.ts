@@ -17,6 +17,10 @@ export type GameStatus = 'menu' | 'playing' | 'paused' | 'game-over';
 
 export interface IGameState {
   status: GameStatus;
+  score: number;
+  timeLeft: number;
+  timerEndsAt: number | null;
+  lives: number;
   cauldronIngredients: IIngredient[];
   shelfStock: Record<string, number>;
   activeRecipe: IRecipe | null;

@@ -1,0 +1,67 @@
+@use '../abstracts/tokens' as t;
+@use '../abstracts/breakpoints' as bp;
+
+.game-hud {
+  display: grid;
+  width: 100%;
+  max-width: t.$content-max-width;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: t.$space-4;
+  margin-top: t.$space-6;
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: t.$space-2;
+    padding: t.$space-4;
+    border: 1px solid t.$color-border-primary;
+    border-radius: t.$radius-md;
+    background: t.$color-bg-panel;
+  }
+
+  &__label {
+    color: t.$color-text-secondary;
+    font-size: t.$font-size-sm;
+  }
+
+  &__value {
+    color: t.$color-accent;
+    font-size: t.$font-size-xl;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @include bp.mobile {
+    gap: t.$space-2;
+    margin-top: t.$space-4;
+
+    &__item {
+      padding: t.$space-2;
+    }
+
+    &__value {
+      font-size: t.$font-size-lg;
+    }
+  }
+
+  &__pause {
+    grid-column: 1 / -1;
+    padding: t.$space-3 t.$space-4;
+    border: 1px solid t.$color-accent;
+    border-radius: t.$radius-md;
+    background: t.$color-bg-panel;
+    color: t.$color-accent;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+
+    &:hover {
+      background: t.$color-bg-card-hover;
+    }
+
+    &:focus-visible {
+      outline: 2px solid t.$color-accent;
+      outline-offset: t.$space-1;
+    }
+  }
+}

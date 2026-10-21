@@ -54,6 +54,34 @@
     background: t.$color-bg-card-inner;
   }
 
+  &__brew {
+    margin-top: t.$space-4;
+    width: 100%;
+    border: 1px solid t.$color-accent;
+    padding: t.$space-3 t.$space-4;
+    background: t.$color-accent;
+    border-radius: t.$radius-md;
+    font: inherit;
+    color: t.$color-bg-page;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background-color t.$transition-fast;
+
+    &:hover:not(:disabled) {
+      background: t.$color-accent-hover;
+    }
+
+    &:focus-visible {
+      outline: 3px solid t.$color-accent;
+      outline-offset: t.$space-1;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
   &__icon {
     font-size: t.$font-size-2xl;
     line-height: 1.2;
