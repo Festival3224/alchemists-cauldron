@@ -51,8 +51,8 @@
 
   &__track {
     position: relative;
-    height: 20px;
-    border-radius: 10px;
+    height: t.$bar-track-height;
+    border-radius: t.$bar-track-radius;
     background: t.$color-bg-track;
   }
 
@@ -70,21 +70,21 @@
   &__zero {
     position: absolute;
     z-index: 1;
-    top: -5px;
+    top: t.$bar-indicator-offset;
     left: 50%;
-    width: 2px;
-    height: 30px;
+    width: t.$bar-zero-width;
+    height: t.$bar-indicator-height;
     background: t.$color-text-muted;
   }
 
   &__marker {
     position: absolute;
     z-index: 2;
-    top: -5px;
+    top: t.$bar-indicator-offset;
     left: 50%;
-    width: 4px;
-    height: 30px;
-    border-radius: 3px;
+    width: t.$size-1;
+    height: t.$bar-indicator-height;
+    border-radius: t.$bar-marker-radius;
     background: t.$color-accent;
     transform: translateX(-50%);
     transition: left t.$transition-normal;
@@ -102,7 +102,7 @@
   &__scale {
     display: flex;
     justify-content: space-between;
-    margin-top: 10px;
+    margin-top: t.$space-2-5;
     color: t.$color-text-secondary;
     font-size: t.$font-size-xs;
   }

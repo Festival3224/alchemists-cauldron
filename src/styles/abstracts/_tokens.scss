@@ -33,7 +33,15 @@ $space-4: 16px;
 $space-5: 20px;
 $space-6: 24px;
 $space-8: 32px;
-$space-10: 40px;
+
+// Sizes (4px base)
+$size-1: 4px;
+$size-2: 8px;
+$size-3: 12px;
+$size-4: 16px;
+$size-5: 20px;
+$size-6: 24px;
+$size-8: 32px;
 
 // Border radius
 $radius-sm: 8px;
@@ -43,11 +51,13 @@ $radius-xl: 20px;
 $radius-full: 9999px;
 
 // Typography
+$font-size-2xs: 0.6875rem;
 $font-size-xs: 0.75rem;
 $font-size-sm: 0.875rem;
 $font-size-base: 1rem;
 $font-size-lg: 1.125rem;
 $font-size-xl: 1.5rem;
+$font-size-2xl: 2rem;
 
 // Transitions
 $transition-fast: 200ms ease;
@@ -55,4 +65,25 @@ $transition-normal: 350ms ease;
 
 // Layout
 $content-max-width: 1200px;
-$panel-max-width: 900px;
+
+// Fine spacing
+$space-0-75: 3px;
+$space-1-25: 5px;
+$space-1-5: 6px;
+$space-2-5: 10px;
+
+// Ingredient cards
+$ingredient-card-min-height: 160px;
+$ingredient-stock-size: 30px;
+
+// Cauldron
+$cauldron-ingredient-min-height: 100px;
+$cauldron-ingredient-min-height-mobile: 90px;
+
+// Parameter bars
+$bar-track-height: 20px;
+$bar-track-radius: 10px;
+$bar-indicator-offset: -5px;
+$bar-indicator-height: 30px;
+$bar-zero-width: 2px;
+$bar-marker-radius: 3px;

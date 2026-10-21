@@ -14,17 +14,17 @@
   &__grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+    gap: t.$space-2-5;
   }
 }
 
 .ingredient-card {
   position: relative;
   display: flex;
-  min-height: 160px;
+  min-height: t.$ingredient-card-min-height;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: t.$space-2-5;
   padding: t.$space-5 t.$space-3;
   border: 1px solid t.$color-border-primary;
   border-radius: t.$radius-lg;
@@ -59,11 +59,11 @@
 
   &__stock {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: t.$space-2-5;
+    right: t.$space-2-5;
     display: grid;
-    width: 30px;
-    height: 30px;
+    width: t.$ingredient-stock-size;
+    height: t.$ingredient-stock-size;
     place-items: center;
     border-radius: 50%;
     background: t.$color-bg-stock;
@@ -72,7 +72,7 @@
   }
 
   &__icon {
-    font-size: 2rem;
+    font-size: t.$font-size-2xl;
     line-height: 1.2;
   }
 
@@ -84,7 +84,7 @@
   &__values {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: t.$space-1-25;
     font-size: t.$font-size-sm;
     text-align: center;
   }
@@ -95,8 +95,8 @@
 
   @include bp.mobile {
     min-height: 0;
-    gap: 3px;
-    padding: t.$space-2 6px;
+    gap: t.$space-0-75;
+    padding: t.$space-2 t.$space-3;
 
     &__icon {
       font-size: t.$font-size-xl;
@@ -106,8 +106,8 @@
       flex-direction: row;
       flex-wrap: nowrap;
       justify-content: center;
-      gap: 6px;
-      font-size: 0.6875rem;
+      gap: t.$space-1-5;
+      font-size: t.$font-size-xs;
       white-space: nowrap;
     }
 
