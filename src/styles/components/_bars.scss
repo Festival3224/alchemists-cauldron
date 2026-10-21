@@ -1,0 +1,116 @@
+@use '../abstracts/tokens' as t;
+@use '../abstracts/breakpoints' as bp;
+
+/* Cauldron Parameter Bars */
+
+.parameters {
+  width: 100%;
+  padding: t.$space-6;
+  border: 1px solid t.$color-border-primary;
+  border-radius: t.$radius-xl;
+  background: t.$color-bg-panel;
+
+  h2 {
+    margin: 0 0 t.$space-6;
+    font-size: t.$font-size-xl;
+  }
+
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: t.$space-6;
+  }
+
+  @include bp.tablet-and-mobile {
+    &__list {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @include bp.mobile {
+    padding: t.$space-4;
+  }
+}
+
+.parameter-bar {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    gap: t.$space-4;
+    margin-bottom: t.$space-3;
+  }
+
+  &__label {
+    font-weight: 600;
+  }
+
+  &__value {
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__track {
+    position: relative;
+    height: t.$bar-track-height;
+    border-radius: t.$bar-track-radius;
+    background: t.$color-bg-track;
+  }
+
+  &__target {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    border-radius: t.$space-1;
+    background: t.$color-target-range;
+    transition:
+      left t.$transition-normal,
+      width t.$transition-normal;
+  }
+
+  &__zero {
+    position: absolute;
+    z-index: 1;
+    top: t.$bar-indicator-offset;
+    left: 50%;
+    width: t.$bar-zero-width;
+    height: t.$bar-indicator-height;
+    background: t.$color-text-muted;
+  }
+
+  &__marker {
+    position: absolute;
+    z-index: 2;
+    top: t.$bar-indicator-offset;
+    left: 50%;
+    width: t.$size-1;
+    height: t.$bar-indicator-height;
+    border-radius: t.$bar-marker-radius;
+    background: t.$color-accent;
+    transform: translateX(-50%);
+    transition: left t.$transition-normal;
+  }
+
+  &--success &__marker {
+    background: t.$color-success;
+    box-shadow: 0 0 12px 4px t.$color-success-glow;
+  }
+
+  &--success &__value {
+    color: t.$color-success;
+  }
+
+  &__scale {
+    display: flex;
+    justify-content: space-between;
+    margin-top: t.$space-2-5;
+    color: t.$color-text-secondary;
+    font-size: t.$font-size-xs;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .parameter-bar__marker,
+  .parameter-bar__target {
+    transition: none;
+  }
+}

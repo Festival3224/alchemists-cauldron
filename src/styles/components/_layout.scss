@@ -1,0 +1,73 @@
+@use '../abstracts/tokens' as t;
+@use '../abstracts/breakpoints' as bp;
+
+/* App layout */
+
+.app {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: t.$space-6;
+  text-align: center;
+
+  @include bp.mobile {
+    padding: t.$space-4;
+  }
+}
+
+.game-layout {
+  display: grid;
+  width: 100%;
+  max-width: t.$content-max-width;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 0.9fr);
+  grid-template-areas:
+    'shelf cauldron recipe'
+    'bars bars bars';
+  align-items: start;
+  gap: t.$space-5;
+  margin-top: t.$space-6;
+
+  @include bp.compact-desktop {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      'shelf cauldron'
+      'shelf recipe'
+      'bars bars';
+  }
+
+  @include bp.tablet-and-mobile {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'shelf'
+      'cauldron'
+      'recipe'
+      'bars';
+  }
+
+  @include bp.mobile {
+    gap: t.$space-4;
+  }
+
+  &__shelf {
+    grid-area: shelf;
+    min-width: 0;
+  }
+
+  &__cauldron {
+    grid-area: cauldron;
+    min-width: 0;
+  }
+
+  &__recipe {
+    grid-area: recipe;
+    min-width: 0;
+  }
+
+  &__bars {
+    grid-area: bars;
+    min-width: 0;
+  }
+}

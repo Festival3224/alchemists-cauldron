@@ -1,0 +1,31 @@
+@use './abstracts/tokens' as t;
+
+:root {
+  font-family: Arial, Helvetica, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 375px;
+  min-height: 100vh;
+  margin: 0;
+  background-color: t.$color-bg-page;
+  color: t.$color-text-primary;
+}
+
+h1 {
+  margin: 0 0 t.$space-4;
+  font-size: clamp(t.$font-size-2xl, 5vw, 3.5rem);
+}
+
+p {
+  margin: 0;
+  font-size: t.$font-size-lg;
+  line-height: 1.5;
+}

@@ -27,7 +27,7 @@ const renderBar = (
   const rangeStart = range ? getBarPosition(range.min, limit) : 0;
   const rangeEnd = range ? getBarPosition(range.max, limit) : 0;
 
-  const isInRange = isValueInRange(value, range);
+  const isInRange = gameState.cauldronIngredients.length > 0 && isValueInRange(value, range);
 
   return `
     <div
@@ -129,6 +129,9 @@ export const updateBars = (): void => {
       maxElement.textContent = `+${limit}`;
     }
 
-    bar.classList.toggle('parameter-bar--success', isValueInRange(value, range));
+    bar.classList.toggle(
+      'parameter-bar--success',
+      gameState.cauldronIngredients.length > 0 && isValueInRange(value, range),
+    );
   }
 };

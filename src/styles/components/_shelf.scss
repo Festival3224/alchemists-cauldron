@@ -1,0 +1,122 @@
+@use '../abstracts/tokens' as t;
+@use '../abstracts/breakpoints' as bp;
+
+/* Ingredient Shelf */
+
+.shelf {
+  width: 100%;
+
+  h2 {
+    margin: 0 0 t.$space-3;
+    font-size: t.$font-size-xl;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: t.$space-2-5;
+  }
+}
+
+.ingredient-card {
+  position: relative;
+  display: flex;
+  min-height: t.$ingredient-card-min-height;
+  flex-direction: column;
+  align-items: center;
+  gap: t.$space-2-5;
+  padding: t.$space-5 t.$space-3;
+  border: 1px solid t.$color-border-primary;
+  border-radius: t.$radius-lg;
+  background: t.$color-bg-card;
+  color: t.$color-text-primary;
+  font: inherit;
+  cursor: pointer;
+
+  transition:
+    background-color t.$transition-fast,
+    border-color t.$transition-fast,
+    transform t.$transition-fast;
+
+  &:not(:disabled):hover {
+    transform: translateY(-3px);
+    border-color: t.$color-accent-hover;
+    background: t.$color-bg-card-hover;
+  }
+
+  &:focus-visible {
+    outline: 3px solid t.$color-accent;
+    outline-offset: 3px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+
+  &--empty {
+    opacity: 0.4;
+  }
+
+  &__stock {
+    position: absolute;
+    top: t.$space-2-5;
+    right: t.$space-2-5;
+    display: grid;
+    width: t.$ingredient-stock-size;
+    height: t.$ingredient-stock-size;
+    place-items: center;
+    border-radius: 50%;
+    background: t.$color-bg-stock;
+    font-size: t.$font-size-sm;
+    font-weight: 700;
+  }
+
+  &__icon {
+    font-size: t.$font-size-2xl;
+    line-height: 1.2;
+  }
+
+  &__name {
+    font-weight: 700;
+    text-align: center;
+  }
+
+  &__values {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-1-25;
+    font-size: t.$font-size-sm;
+    text-align: center;
+  }
+
+  &__label-mobile {
+    display: none;
+  }
+
+  @include bp.mobile {
+    min-height: 0;
+    gap: t.$space-0-75;
+    padding: t.$space-2 t.$space-3;
+
+    &__icon {
+      font-size: t.$font-size-xl;
+    }
+
+    &__values {
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: center;
+      gap: t.$space-1-5;
+      font-size: t.$font-size-xs;
+      white-space: nowrap;
+    }
+
+    &__label-desktop {
+      display: none;
+    }
+
+    &__label-mobile {
+      display: inline;
+    }
+  }
+}

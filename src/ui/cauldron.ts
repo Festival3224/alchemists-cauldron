@@ -35,6 +35,15 @@ export const renderCauldron = (): string => {
         </div>
 
         ${ingredients.length === 0 ? content : `<ol class="cauldron__list">${content}</ol>`}
+
+          <button
+            class="cauldron__brew"
+            type="button"
+            data-action="brew"
+            ${gameState.status !== 'playing' || ingredients.length === 0 ? 'disabled' : ''}
+          >
+            Brew Potion
+          </button>
       </div>
     </section>
   `;
