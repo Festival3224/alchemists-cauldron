@@ -1,6 +1,6 @@
 import { gameState } from '../state/game-state';
 
-import { LEVEL_ONE_CONFIG } from '../data/difficulty';
+/* import { LEVEL_ONE_CONFIG } from '../data/difficulty'; */
 
 export const renderCauldron = (): string => {
   const ingredients = gameState.cauldronIngredients;
@@ -28,11 +28,6 @@ export const renderCauldron = (): string => {
       <h2 id="cauldron-title">Cauldron</h2>
 
       <div class="cauldron__body">
-        <div class="cauldron__header">
-          <span class="cauldron__counter">
-            ${ingredients.length} / ${LEVEL_ONE_CONFIG.maxCauldronIngredients}
-          </span>
-        </div>
 
         ${ingredients.length === 0 ? content : `<ol class="cauldron__list">${content}</ol>`}
 

@@ -163,6 +163,12 @@ app.addEventListener('click', (event: MouseEvent) => {
       cauldron.outerHTML = renderCauldron();
     }
 
+    const recipe = app.querySelector('.recipe');
+
+    if (recipe) {
+      recipe.outerHTML = renderRecipe();
+    }
+
     updateBars();
   }
 });

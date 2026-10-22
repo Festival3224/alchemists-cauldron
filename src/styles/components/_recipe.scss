@@ -4,6 +4,8 @@
 /* Recipe Panel */
 
 .recipe {
+  position: relative;
+
   padding: t.$space-6;
   border: 1px solid t.$color-border-primary;
   border-radius: t.$radius-xl;
@@ -14,6 +16,8 @@
     margin: 0 0 t.$space-2;
     color: t.$color-accent;
     font-size: t.$font-size-xl;
+
+    padding-right: 4rem;
   }
 
   &__difficulty {
@@ -39,6 +43,31 @@
       color: t.$color-success;
       font-variant-numeric: tabular-nums;
       white-space: nowrap;
+    }
+  }
+
+  &__counter {
+    position: absolute;
+    top: t.$space-4;
+    right: t.$space-4;
+    margin: 0;
+
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    margin-bottom: t.$space-4;
+    padding: t.$space-1-5 t.$space-3;
+    border: 1px solid transparent;
+    border-radius: t.$radius-xl;
+    background: t.$color-bg-track;
+    color: t.$color-accent;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+
+    &--full {
+      border-color: t.$color-accent;
+      background: t.$color-bg-track;
+      color: t.$color-accent;
     }
   }
 
