@@ -62,6 +62,22 @@ const renderApp = (brewResult?: BrewResult): void => {
        </dialog>`
       : '';
 
+  const pauseMarkup =
+    gameState.status === 'paused'
+      ? `<dialog class="pause-dialog" closedby="none" aria-labelledby="pause-title">
+              <h2 id="pause-title">Game Paused</h2>
+              <p>Your potion is waiting.</p>
+
+              <button class="start-button" type="button" data-action="pause">
+                Resume
+              </button>
+
+              <button class="pause-dialog__menu-button" type="button" data-action="menu">
+                Main Menu
+              </button>
+            </dialog>`
+      : '';
+
   app.innerHTML = `  
     <main class="app">
       <h1>Alchemist's Cauldron</h1>
@@ -102,6 +118,7 @@ const renderApp = (brewResult?: BrewResult): void => {
       }
     </main>
     ${gameOverMarkup}
+    ${pauseMarkup}
   `;
   const gameOverDialog = app.querySelector<HTMLDialogElement>('.game-over');
 
@@ -112,6 +129,17 @@ const renderApp = (brewResult?: BrewResult): void => {
 
     gameOverDialog.showModal();
     gameOverDialog.querySelector<HTMLElement>('#game-over-title')?.focus();
+  }
+
+  const pauseDialog = app.querySelector<HTMLDialogElement>('.pause-dialog');
+
+  if (pauseDialog) {
+    pauseDialog.addEventListener('cancel', (event) => {
+      event.preventDefault();
+    });
+
+    pauseDialog.showModal();
+    pauseDialog.querySelector<HTMLButtonElement>('[data-action="pause"]')?.focus();
   }
 };
 
