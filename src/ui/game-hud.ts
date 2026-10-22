@@ -1,9 +1,13 @@
+import { LEVEL_ONE_CONFIG } from '../data/difficulty';
+import { formatTime } from '../logic/timer';
 import { gameState } from '../state/game-state';
 
 export const renderGameHud = (): string => {
   if (gameState.status === 'menu') {
     return '';
   }
+
+  const isUrgent = gameState.timeLeft < 15;
 
   return `
     <section class="game-hud" aria-label="Game statistics">
@@ -12,9 +16,15 @@ export const renderGameHud = (): string => {
         <strong class="game-hud__value">${gameState.score}</strong>
       </div>
 
-      <div class="game-hud__item">
+      <div class="game-hud__item game-hud__item--time ${isUrgent ? 'game-hud__item--urgent' : ''}">
         <span class="game-hud__label">Time</span>
-        <strong class="game-hud__value">${gameState.timeLeft}s</strong>
+        <strong class="game-hud__value">${formatTime(gameState.timeLeft)}</strong>
+        <progress
+          class="game-hud__progress"
+          max="${LEVEL_ONE_CONFIG.startingTime}"
+          value="${gameState.timeLeft}"
+          aria-label="Remaining time"
+        ></progress>
       </div>
 
       <div class="game-hud__item">
@@ -28,8 +38,7 @@ export const renderGameHud = (): string => {
                ${gameState.status === 'paused' ? 'Resume' : 'Pause'}
              </button>`
           : ''
-      }  
-
+      }
     </section>
   `;
 };

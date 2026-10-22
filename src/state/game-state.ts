@@ -95,6 +95,7 @@ export const brewPotion = (): BrewResult => {
     gameState.activeRecipe = getRandomRecipe('medium');
   }
 
+  checkOutOfIngredients();
   return isSuccessful ? 'success' : 'failure';
 };
 
@@ -110,6 +111,7 @@ export const updateTimer = (): void => {
     gameState.timerEndsAt = null;
     gameState.activeRecipe = null;
   }
+  checkOutOfIngredients();
 };
 
 export const pauseGame = (): void => {
@@ -135,4 +137,33 @@ export const resumeGame = (): void => {
   gameState.timerEndsAt = Date.now() + gameState.timeLeft * MILLISECONDS_PER_SECOND;
 
   gameState.status = 'playing';
+};
+
+const checkOutOfIngredients = (): void => {
+  if (gameState.status !== 'playing') {
+    return;
+  }
+
+  const stockValues = Object.values(gameState.shelfStock);
+
+  if (
+    stockValues.length > 0 &&
+    stockValues.every((quantity) => quantity === 0) &&
+    gameState.cauldronIngredients.length === 0
+  ) {
+    gameState.status = 'game-over';
+    gameState.timerEndsAt = null;
+    gameState.activeRecipe = null;
+  }
+};
+
+export const exitToMenu = (): void => {
+  gameState.status = 'menu';
+  gameState.score = 0;
+  gameState.timeLeft = 0;
+  gameState.timerEndsAt = null;
+  gameState.lives = 0;
+  gameState.cauldronIngredients = [];
+  gameState.shelfStock = {};
+  gameState.activeRecipe = null;
 };
