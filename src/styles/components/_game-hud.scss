@@ -9,6 +9,38 @@
   gap: t.$space-4;
   margin-top: t.$space-6;
 
+  &__progress {
+    width: 100%;
+    height: 8px;
+    appearance: none;
+    border: 0;
+    border-radius: 999px;
+    overflow: hidden;
+    background: t.$color-bg-track;
+
+    &::-webkit-progress-bar {
+      border-radius: 999px;
+      background: t.$color-bg-track;
+    }
+
+    &::-webkit-progress-value {
+      border-radius: 999px;
+      background: t.$color-accent;
+      transition: width 0.25s linear;
+    }
+  }
+
+  &__item--urgent {
+    .game-hud__value {
+      color: #ef5350;
+      animation: timer-pulse 0.8s ease-in-out infinite alternate;
+    }
+
+    .game-hud__progress::-webkit-progress-value {
+      background: #ef5350;
+    }
+  }
+
   &__item {
     display: flex;
     flex-direction: column;
@@ -63,5 +95,21 @@
       outline: 2px solid t.$color-accent;
       outline-offset: t.$space-1;
     }
+  }
+}
+
+@keyframes timer-pulse {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0.4;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-hud__item--urgent .game-hud__value {
+    animation: none;
   }
 }

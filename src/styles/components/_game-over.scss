@@ -1,0 +1,78 @@
+.game-over {
+  position: fixed;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: calc(100% - 2rem);
+  max-width: 380px;
+  margin: auto;
+  padding: 2.5rem 2rem;
+  border: 1px solid #685777;
+  border-radius: 1.5rem;
+  background: #2a2435;
+  color: #f2edf5;
+  box-shadow: 0 20px 60px rgb(0 0 0 / 40%);
+  text-align: center;
+
+  &[open] {
+    display: flex;
+  }
+
+  &::backdrop {
+    background: rgb(10 8 16 / 75%);
+  }
+
+  h2 {
+    margin: 0;
+    color: #e8bd6e;
+    font-size: 2rem;
+  }
+
+  &__score-label {
+    margin: 0;
+    color: #b9b0c6;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  &__score {
+    color: #e8bd6e;
+    font-size: 2.5rem;
+  }
+
+  .start-button {
+    width: 100%;
+    min-height: 44px;
+    margin-top: 0.5rem;
+    border: 0;
+    border-radius: 0.5rem;
+    background: #e8bd6e;
+    color: #211b29;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  &__menu-button {
+    width: 100%;
+    min-height: 44px;
+    border: 1px solid #685777;
+    border-radius: 0.5rem;
+    background: transparent;
+    color: #f2edf5;
+    font: inherit;
+    cursor: pointer;
+
+    &:hover {
+      background: rgb(255 255 255 / 8%);
+    }
+
+    &:focus-visible {
+      outline: 2px solid #e8bd6e;
+      outline-offset: 3px;
+    }
+  }
+}
