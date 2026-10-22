@@ -1,7 +1,11 @@
 import { gameState } from '../state/game-state';
+import { LEVEL_ONE_CONFIG } from '../data/difficulty';
 
 export const renderRecipe = (): string => {
   const recipe = gameState.activeRecipe;
+  const ingredientCount = gameState.cauldronIngredients.length;
+  const maxIngredients = LEVEL_ONE_CONFIG.maxCauldronIngredients;
+  const isFull = ingredientCount >= maxIngredients;
 
   if (!recipe) {
     return '';
@@ -13,6 +17,14 @@ export const renderRecipe = (): string => {
 
       <p class="recipe__difficulty">
         Difficulty: ${recipe.difficulty}
+      </p>
+
+      <p
+        class="recipe__counter ${isFull ? 'recipe__counter--full' : ''}"
+        aria-live="polite"
+        aria-label="Ingredients: ${ingredientCount} of ${maxIngredients}"
+      >
+         ${ingredientCount} / ${maxIngredients}
       </p>
 
       <div class="recipe__ranges">

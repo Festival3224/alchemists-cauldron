@@ -91,7 +91,7 @@ export const brewPotion = (): BrewResult => {
     gameState.status = 'game-over';
     gameState.timerEndsAt = null;
     gameState.activeRecipe = null;
-  } else {
+  } else if (isSuccessful) {
     gameState.activeRecipe = getRandomRecipe('medium');
   }
 
