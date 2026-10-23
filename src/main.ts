@@ -21,11 +21,22 @@ import { renderGameHud } from './ui/game-hud';
 
 import type { BrewResult } from './state/game-state';
 
+import {
+  clearLeaderboard,
+  qualifiesForLeaderboard,
+  saveLeaderboardEntry,
+  validatePlayerName,
+} from './storage/leaderboard';
+
+import { renderLeaderboard, renderPlayerNameForm } from './ui/leaderboard';
+
 const app = document.querySelector<HTMLDivElement>('#app');
 
 if (!app) {
   throw new Error('Application root element not found');
 }
+
+let scoreSubmitted = false;
 
 const renderApp = (brewResult?: BrewResult): void => {
   const gameOverMarkup =
@@ -47,6 +58,8 @@ const renderApp = (brewResult?: BrewResult): void => {
          <p class="game-over__score-label">Final Score</p>
          <strong class="game-over__score">${gameState.score}</strong>
 
+         ${!scoreSubmitted && qualifiesForLeaderboard(gameState.score) ? renderPlayerNameForm() : ''}
+
          <button class="start-button" type="button" data-action="start">
            Play Again
          </button>
@@ -58,6 +71,14 @@ const renderApp = (brewResult?: BrewResult): void => {
           >
             Main Menu
           </button>
+
+         <button
+           class="game-over__menu-button"
+           type="button"
+           data-action="leaderboard-open"
+      >
+           Leaderboard
+         </button> 
 
        </dialog>`
       : '';
@@ -87,7 +108,14 @@ const renderApp = (brewResult?: BrewResult): void => {
 
       ${
         gameState.status === 'menu'
-          ? '<button class="start-button" type="button" data-action="start">Start Game</button>'
+          ? `<div class="menu-actions">
+           <button class="start-button" type="button" data-action="start">
+             Start Game
+           </button>
+           <button class="start-button" type="button" data-action="leaderboard-open">
+             Leaderboard
+           </button>
+         </div>`
           : ''
       }
 
@@ -143,6 +171,30 @@ const renderApp = (brewResult?: BrewResult): void => {
   }
 };
 
+const openLeaderboard = (confirmClear = false): void => {
+  const existingDialog = app.querySelector<HTMLDialogElement>('.leaderboard-dialog');
+
+  if (existingDialog) {
+    existingDialog.close();
+    existingDialog.remove();
+  }
+
+  app.insertAdjacentHTML('beforeend', renderLeaderboard(confirmClear));
+
+  const dialog = app.querySelector<HTMLDialogElement>('.leaderboard-dialog');
+
+  if (!dialog) {
+    return;
+  }
+
+  dialog.addEventListener('cancel', (event) => {
+    event.preventDefault();
+  });
+
+  dialog.showModal();
+  dialog.querySelector<HTMLButtonElement>('button')?.focus();
+};
+
 const refreshGameHud = (): void => {
   if (gameState.status !== 'playing') {
     return;
@@ -177,6 +229,45 @@ app.addEventListener('click', (event: MouseEvent) => {
     return;
   }
 
+  const leaderboardButton = target.closest<HTMLButtonElement>('[data-action^="leaderboard-"]');
+
+  if (leaderboardButton) {
+    switch (leaderboardButton.dataset.action) {
+      case 'leaderboard-open':
+        openLeaderboard();
+        break;
+
+      case 'leaderboard-close': {
+        const dialog = app.querySelector<HTMLDialogElement>('.leaderboard-dialog');
+        dialog?.close();
+        dialog?.remove();
+        break;
+      }
+
+      case 'leaderboard-clear':
+        openLeaderboard(true);
+        break;
+
+      case 'leaderboard-cancel-clear':
+        openLeaderboard();
+        break;
+
+      case 'leaderboard-confirm-clear':
+        if (clearLeaderboard()) {
+          openLeaderboard();
+        } else {
+          const confirmation = app.querySelector('.leaderboard-dialog__confirmation');
+          confirmation?.insertAdjacentHTML(
+            'beforeend',
+            '<p role="alert">Could not clear the leaderboard.</p>',
+          );
+        }
+        break;
+    }
+
+    return;
+  }
+
   const menuButton = target.closest<HTMLButtonElement>('[data-action="menu"]');
 
   if (menuButton) {
@@ -188,6 +279,7 @@ app.addEventListener('click', (event: MouseEvent) => {
   const startButton = target.closest<HTMLButtonElement>('[data-action="start"]');
 
   if (startButton) {
+    scoreSubmitted = false;
     startNewGame();
     renderApp();
     return;
@@ -251,6 +343,43 @@ app.addEventListener('click', (event: MouseEvent) => {
 
     updateBars();
   }
+});
+
+app.addEventListener('submit', (event: SubmitEvent) => {
+  const form = event.target;
+
+  if (!(form instanceof HTMLFormElement) || form.dataset.form !== 'leaderboard-name') {
+    return;
+  }
+
+  event.preventDefault();
+
+  if (gameState.status !== 'game-over' || scoreSubmitted) {
+    return;
+  }
+
+  const formData = new FormData(form);
+  const name = String(formData.get('playerName') ?? '').trim();
+  const errorElement = form.querySelector<HTMLElement>('.leaderboard-name-form__error');
+
+  if (!validatePlayerName(name)) {
+    if (errorElement) {
+      errorElement.textContent = 'Use 2–15 characters: letters, numbers, spaces, _ or -.';
+    }
+
+    return;
+  }
+
+  if (!saveLeaderboardEntry(name, gameState.score)) {
+    if (errorElement) {
+      errorElement.textContent = 'Could not save your score. Please try again.';
+    }
+
+    return;
+  }
+
+  scoreSubmitted = true;
+  renderApp();
 });
 
 document.addEventListener('visibilitychange', () => {
