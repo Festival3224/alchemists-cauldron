@@ -68,7 +68,7 @@
     border-radius: 50%;
     background: t.$color-bg-stock;
     font-size: t.$font-size-sm;
-    font-weight: 700;
+    font-weight: t.$font-weight-bold;
   }
 
   &__icon {
@@ -77,7 +77,7 @@
   }
 
   &__name {
-    font-weight: 700;
+    font-weight: t.$font-weight-bold;
     text-align: center;
   }
 

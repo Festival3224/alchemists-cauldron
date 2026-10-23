@@ -1,17 +1,19 @@
+@use '../abstracts/tokens' as t;
+
 .pause-dialog {
   position: fixed;
   inset: 0;
   display: none;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: t.$space-4;
   width: calc(100% - 2rem);
-  max-width: 380px;
+  max-width: t.$modal-width-sm;
   margin: auto;
   padding: 2.5rem 2rem;
   border: 1px solid #685777;
   border-radius: 1.5rem;
-  background: #2a2435;
+  background: t.$color-bg-modal;
   color: #f2edf5;
   box-shadow: 0 20px 60px rgb(0 0 0 / 40%);
   text-align: center;
@@ -27,24 +29,24 @@
 
   h2 {
     margin: 0;
-    color: #e8bd6e;
-    font-size: 2rem;
+    color: t.$color-accent;
+    font-size: t.$font-size-2xl;
   }
 
   .start-button,
   &__menu-button {
     width: 100%;
-    min-height: 44px;
+    min-height: t.$button-min-height;
     border-radius: 0.5rem;
     font: inherit;
-    font-weight: 700;
+    font-weight: t.$font-weight-bold;
     cursor: pointer;
   }
 
   .start-button {
     border: 0;
     background: #e8bd6e;
-    color: #211b29;
+    color: t.$color-button-text;
   }
 
   &__menu-button {

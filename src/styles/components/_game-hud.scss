@@ -32,12 +32,12 @@
 
   &__item--urgent {
     .game-hud__value {
-      color: #ef5350;
+      color: t.$color-danger;
       animation: timer-pulse 0.8s ease-in-out infinite alternate;
     }
 
     .game-hud__progress::-webkit-progress-value {
-      background: #ef5350;
+      background: t.$color-danger;
     }
   }
 
@@ -84,7 +84,7 @@
     background: t.$color-bg-panel;
     color: t.$color-accent;
     font: inherit;
-    font-weight: 700;
+    font-weight: t.$font-weight-bold;
     cursor: pointer;
 
     &:hover {

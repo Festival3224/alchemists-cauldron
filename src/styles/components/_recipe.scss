@@ -61,7 +61,7 @@
     border-radius: t.$radius-xl;
     background: t.$color-bg-track;
     color: t.$color-accent;
-    font-weight: 700;
+    font-weight: t.$font-weight-bold;
     font-variant-numeric: tabular-nums;
 
     &--full {

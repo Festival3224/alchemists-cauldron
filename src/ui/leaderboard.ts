@@ -1,4 +1,9 @@
-import { formatLeaderboardDate, loadLeaderboard } from '../storage/leaderboard';
+import {
+  formatLeaderboardDate,
+  loadLeaderboard,
+  MIN_NAME_LENGTH,
+  MAX_NAME_LENGTH,
+} from '../storage/leaderboard';
 
 const escapeHtml = (value: string): string =>
   value
@@ -95,14 +100,14 @@ export const renderPlayerNameForm = (): string => `
       id="leaderboard-player-name"
       name="playerName"
       type="text"
-      minlength="2"
-      maxlength="15"
+      minlength="${MIN_NAME_LENGTH}"
+      maxlength="${MAX_NAME_LENGTH}"
       autocomplete="nickname"
       required
     />
 
     <p class="leaderboard-name-form__hint">
-      2–15 characters: letters, numbers, spaces, _ or -
+      ${MIN_NAME_LENGTH}-${MAX_NAME_LENGTH} characters: letters, numbers, spaces, _ or -
     </p>
 
     <p class="leaderboard-name-form__error" role="alert"></p>

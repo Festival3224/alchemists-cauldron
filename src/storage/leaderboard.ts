@@ -6,8 +6,8 @@ export interface ILeaderboardEntry {
 
 const STORAGE_KEY = 'alchemists-cauldron-leaderboard';
 const MAX_ENTRIES = 10;
-const MIN_NAME_LENGTH = 2;
-const MAX_NAME_LENGTH = 15;
+export const MIN_NAME_LENGTH = 2;
+export const MAX_NAME_LENGTH = 15;
 
 const isLeaderboardEntry = (value: unknown): value is ILeaderboardEntry => {
   if (typeof value !== 'object' || value === null) {

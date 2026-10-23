@@ -1,5 +1,7 @@
 import './styles/main.scss';
 
+import { LEVEL_ONE_CONFIG, TIMER_WARNING_THRESHOLD } from './data/difficulty';
+
 import {
   addIngredient,
   brewPotion,
@@ -26,6 +28,8 @@ import {
   qualifiesForLeaderboard,
   saveLeaderboardEntry,
   validatePlayerName,
+  MIN_NAME_LENGTH,
+  MAX_NAME_LENGTH,
 } from './storage/leaderboard';
 
 import { renderLeaderboard, renderPlayerNameForm } from './ui/leaderboard';
@@ -137,13 +141,15 @@ const renderApp = (brewResult?: BrewResult): void => {
         </div>
       </div>
 
-      ${
-        brewResult === 'success'
-          ? '<p class="brew-message brew-message--success" role="status">Potion brewed successfully! +200 points</p>'
-          : brewResult === 'failure'
-            ? '<p class="brew-message brew-message--failure" role="status">Brewing failed! Lost 1 life.</p>'
-            : ''
-      }
+            ${
+              brewResult === 'success'
+                ? `<p class="brew-message brew-message--success" role="status">
+                    Potion brewed successfully! +${LEVEL_ONE_CONFIG.scorePerBrew} points
+                  </p>`
+                : brewResult === 'failure'
+                  ? '<p class="brew-message brew-message--failure" role="status">Brewing failed! Lost 1 life.</p>'
+                  : ''
+            }
     </main>
     ${gameOverMarkup}
     ${pauseMarkup}
@@ -219,7 +225,10 @@ const refreshGameHud = (): void => {
     progress.value = gameState.timeLeft;
   }
 
-  timeItem?.classList.toggle('game-hud__item--urgent', gameState.timeLeft < 15);
+  timeItem?.classList.toggle(
+    'game-hud__item--urgent',
+    gameState.timeLeft < TIMER_WARNING_THRESHOLD,
+  );
 };
 
 app.addEventListener('click', (event: MouseEvent) => {
@@ -364,7 +373,7 @@ app.addEventListener('submit', (event: SubmitEvent) => {
 
   if (!validatePlayerName(name)) {
     if (errorElement) {
-      errorElement.textContent = 'Use 2–15 characters: letters, numbers, spaces, _ or -.';
+      errorElement.textContent = `Use ${MIN_NAME_LENGTH}-${MAX_NAME_LENGTH} characters: letters, numbers, spaces, _ or -.`;
     }
 
     return;

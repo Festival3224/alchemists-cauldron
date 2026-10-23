@@ -79,7 +79,7 @@
     display: inline-flex;
     align-items: center;
     gap: t.$space-2;
-    font-weight: 600;
+    font-weight: t.$font-weight-semibold;
   }
 
   &__icon {
@@ -112,7 +112,7 @@
   }
 
   &__value {
-    font-weight: 700;
+    font-weight: t.$font-weight-bold;
     font-variant-numeric: tabular-nums;
   }
 
@@ -163,7 +163,7 @@
     z-index: 3;
     top: 50%;
     left: 50%;
-    width: 6px;
+    width: t.$bar-marker-width;
     height: t.$bar-indicator-height;
     border-radius: t.$bar-marker-radius;
     background: t.$color-accent;
