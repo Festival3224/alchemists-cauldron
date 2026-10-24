@@ -5,6 +5,7 @@ export interface IIngredient {
   temperature: number;
   density: number;
   magicPower: number;
+  image?: string;
 }
 
 export interface ICauldronValues {

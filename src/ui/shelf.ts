@@ -23,9 +23,21 @@ export const renderShelf = (): string => {
           ${isDisabled ? 'disabled' : ''}
         >
           <span class="ingredient-card__stock">${stock}</span>
+
           <span class="ingredient-card__icon" aria-hidden="true">
-            ${isEmpty ? '' : ingredient.icon}
+            ${
+              isEmpty
+                ? ''
+                : ingredient.image
+                  ? `<img
+                      class="ingredient-card__image"
+                      src="${ingredient.image}"
+                      alt=""
+                    />`
+                  : ingredient.icon
+            }
           </span>
+
           <span class="ingredient-card__name">
             ${isEmpty ? 'Empty' : ingredient.name}
           </span>
