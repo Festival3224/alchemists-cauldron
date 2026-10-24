@@ -145,8 +145,21 @@
   }
 
   &__slot-icon {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    place-items: center;
+    flex-shrink: 0;
+    overflow: hidden;
     font-size: t.$font-size-xl;
     line-height: 1;
+  }
+
+  &__slot-image {
+    display: block;
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
   }
 
   &__slot-name {

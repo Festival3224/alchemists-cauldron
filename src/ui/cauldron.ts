@@ -15,9 +15,19 @@ export const renderCauldron = (brewResult?: BrewResult): string => {
       ? `
         <li class="cauldron__slot cauldron__slot--filled"
             title="${ingredient.name}">
+
           <span class="cauldron__slot-icon" aria-hidden="true">
-            ${ingredient.icon}
+            ${
+              ingredient.image
+                ? `<img
+                    class="cauldron__slot-image"
+                    src="${ingredient.image}"
+                    alt=""
+                  />`
+                : ingredient.icon
+            }
           </span>
+
           <span class="cauldron__slot-name">${ingredient.name}</span>
         </li>
       `
