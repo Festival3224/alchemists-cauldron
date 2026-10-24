@@ -5,7 +5,6 @@
 
 .recipe {
   position: relative;
-
   padding: t.$space-6;
   border: 1px solid t.$color-border-primary;
   border-radius: t.$radius-xl;
@@ -14,10 +13,12 @@
 
   h2 {
     margin: 0 0 t.$space-2;
+    padding-right: 4rem;
     color: t.$color-accent;
     font-size: t.$font-size-xl;
-
-    padding-right: 4rem;
+    font-family: t.$font-family-fantasy;
+    font-size: 1.75rem;
+    font-weight: t.$font-weight-normal;
   }
 
   &__difficulty {

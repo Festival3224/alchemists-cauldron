@@ -1,5 +1,13 @@
 @use './abstracts/tokens' as t;
 
+@font-face {
+  font-family: 'Nightmare Before Christmas';
+  src: url('../assets/fonts/NightmareBeforeChristmas-2v8e.ttf') format('truetype');
+  font-weight: t.$font-weight-normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   font-family: Arial, Helvetica, sans-serif;
   font-synthesis: none;
@@ -20,8 +28,13 @@ body {
 }
 
 h1 {
+  font-family: t.$font-family-title;
   margin: 0 0 t.$space-4;
   font-size: clamp(t.$font-size-2xl, 5vw, 3.5rem);
+}
+
+h2 {
+  font-family: t.$font-family-title;
 }
 
 p {

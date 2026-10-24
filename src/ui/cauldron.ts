@@ -74,7 +74,7 @@ export const renderCauldron = (brewResult?: BrewResult): string => {
           data-action="brew"
           ${gameState.status !== 'playing' || ingredients.length === 0 ? 'disabled' : ''}
         >
-          Brew Potion
+          Brew
         </button>
       </div>
     </section>
