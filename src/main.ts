@@ -129,7 +129,7 @@ const renderApp = (brewResult?: BrewResult): void => {
         </div>
 
         <div class="game-layout__cauldron">
-          ${renderCauldron()}
+          ${renderCauldron(brewResult)}
         </div>
 
         <div class="game-layout__recipe">
