@@ -7,7 +7,7 @@
   padding: t.$space-4;
   border: 1px solid currentColor;
   border-radius: t.$radius-md;
-  font-weight: 700;
+  font-weight: t.$font-weight-bold;
   text-align: center;
 
   &--success {

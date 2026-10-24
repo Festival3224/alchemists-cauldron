@@ -1,4 +1,4 @@
-import { LEVEL_ONE_CONFIG } from '../data/difficulty';
+import { LEVEL_ONE_CONFIG, TIMER_WARNING_THRESHOLD } from '../data/difficulty';
 import { formatTime } from '../logic/timer';
 import { gameState } from '../state/game-state';
 
@@ -7,7 +7,7 @@ export const renderGameHud = (): string => {
     return '';
   }
 
-  const isUrgent = gameState.timeLeft < 15;
+  const isUrgent = gameState.timeLeft < TIMER_WARNING_THRESHOLD;
 
   return `
     <section class="game-hud" aria-label="Game statistics">

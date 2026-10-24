@@ -18,20 +18,6 @@
     background: t.$color-bg-panel;
   }
 
-  /* &__header {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: t.$space-3;
-  }
-
-  &__counter {
-    padding: t.$space-1-5 t.$space-3;
-    border-radius: t.$radius-xl;
-    background: t.$color-bg-track;
-    color: t.$color-accent;
-    font-weight: 700;
-  } */
-
   &__list {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -64,7 +50,7 @@
     font: inherit;
     color: t.$color-bg-page;
     cursor: pointer;
-    font-weight: 700;
+    font-weight: t.$font-weight-bold;
     transition: background-color t.$transition-fast;
 
     &:hover:not(:disabled) {
@@ -89,7 +75,7 @@
 
   &__name {
     font-size: t.$font-size-sm;
-    font-weight: 500;
+    font-weight: t.$font-weight-medium;
     text-align: center;
   }
 

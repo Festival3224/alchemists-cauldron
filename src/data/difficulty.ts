@@ -10,3 +10,7 @@ export const LEVEL_ONE_CONFIG = {
 
 export const LEVEL_ONE_RECIPE_TOLERANCE = LEVEL_ONE_CONFIG.recipeTolerance;
 export const MILLISECONDS_PER_SECOND = 1000;
+
+export const TIMER_WARNING_THRESHOLD = 15;
+export const SECONDS_PER_MINUTE = 60;
+export const PERCENTAGE_MAX = 100;

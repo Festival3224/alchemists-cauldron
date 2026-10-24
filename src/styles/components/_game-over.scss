@@ -1,3 +1,5 @@
+@use '../abstracts/tokens' as t;
+
 .game-over {
   position: fixed;
   inset: 0;
@@ -6,12 +8,12 @@
   align-items: center;
   gap: 1rem;
   width: calc(100% - 2rem);
-  max-width: 380px;
+  max-width: t.$modal-width-sm;
   margin: auto;
   padding: 2.5rem 2rem;
   border: 1px solid #685777;
   border-radius: 1.5rem;
-  background: #2a2435;
+  background: t.$color-bg-modal;
   color: #f2edf5;
   box-shadow: 0 20px 60px rgb(0 0 0 / 40%);
   text-align: center;
@@ -26,14 +28,14 @@
 
   h2 {
     margin: 0;
-    color: #e8bd6e;
-    font-size: 2rem;
+    color: t.$color-accent;
+    font-size: t.$font-size-2xl;
   }
 
   &__score-label {
     margin: 0;
     color: #b9b0c6;
-    font-size: 0.875rem;
+    font-size: t.$font-size-sm;
     text-transform: uppercase;
     letter-spacing: 0.1em;
   }
@@ -45,20 +47,20 @@
 
   .start-button {
     width: 100%;
-    min-height: 44px;
+    min-height: t.$button-min-height;
     margin-top: 0.5rem;
     border: 0;
     border-radius: 0.5rem;
     background: #e8bd6e;
-    color: #211b29;
+    color: t.$color-button-text;
     font: inherit;
-    font-weight: 700;
+    font-weight: t.$font-weight-bold;
     cursor: pointer;
   }
 
   &__menu-button {
     width: 100%;
-    min-height: 44px;
+    min-height: t.$button-min-height;
     border: 1px solid #685777;
     border-radius: 0.5rem;
     background: transparent;
