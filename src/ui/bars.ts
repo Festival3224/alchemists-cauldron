@@ -105,11 +105,17 @@ export const renderBars = (): string => {
         ${bars}
       </div>
 
-      <div class="parameters__legend" aria-label="Parameter bar legend">
-        <span><i class="parameters__legend-exact"></i> Target range</span>
-        <span><i class="parameters__legend-tolerance"></i> Tolerance ±8</span>
-        <span><i class="parameters__legend-marker"></i> Current value</span>
-      </div>
+      ${
+        gameState.status !== 'menu'
+          ? `
+            <div class="parameters__legend" aria-label="Parameter bar legend">
+              <span><i class="parameters__legend-exact"></i> Target range</span>
+              <span><i class="parameters__legend-tolerance"></i> Tolerance ±8</span>
+              <span><i class="parameters__legend-marker"></i> Current value</span>
+            </div>
+          `
+          : ''
+      }
 
     </section>
   `;

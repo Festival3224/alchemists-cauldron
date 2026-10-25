@@ -101,6 +101,11 @@ $radius-xl: 20px;
 $radius-full: 9999px;
 
 // Typography
+// Font families
+$font-family-title: 'Metal Mania', fantasy;
+$font-family-fantasy: 'Nightmare Before Christmas', fantasy;
+
+// Fonts sizes and weights
 $font-size-2xs: 0.6875rem;
 $font-size-xs: 0.75rem;
 $font-size-sm: 0.875rem;
@@ -120,7 +125,7 @@ $transition-normal: 350ms ease;
 $transition-progress: 250ms linear;
 
 // Layout
-$content-max-width: 1200px;
+$content-max-width: 1440px;
 
 // Fine spacing
 $space-0-75: 3px;
