@@ -1,0 +1,66 @@
+@use '../abstracts/tokens' as t;
+
+.pause-dialog {
+  position: fixed;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: t.$space-4;
+  width: calc(100% - 2rem);
+  max-width: t.$modal-width-sm;
+  margin: auto;
+  padding: 2.5rem 2rem;
+  border: 1px solid #685777;
+  border-radius: 1.5rem;
+  background: t.$color-bg-modal;
+  color: #f2edf5;
+  box-shadow: 0 20px 60px rgb(0 0 0 / 40%);
+  text-align: center;
+
+  &[open] {
+    display: flex;
+  }
+
+  &::backdrop {
+    background: rgb(10 8 16 / 75%);
+    backdrop-filter: blur(8px);
+  }
+
+  h2 {
+    margin: 0;
+    color: t.$color-accent;
+    font-size: t.$font-size-2xl;
+  }
+
+  .start-button,
+  &__menu-button {
+    width: 100%;
+    min-height: t.$button-min-height;
+    border-radius: 0.5rem;
+    font: inherit;
+    font-weight: t.$font-weight-bold;
+    cursor: pointer;
+  }
+
+  .start-button {
+    border: 0;
+    background: #e8bd6e;
+    color: t.$color-button-text;
+  }
+
+  &__menu-button {
+    border: 1px solid #685777;
+    background: transparent;
+    color: #f2edf5;
+  }
+
+  &__menu-button:hover {
+    background: rgb(255 255 255 / 8%);
+  }
+
+  button:focus-visible {
+    outline: 2px solid #e8bd6e;
+    outline-offset: 3px;
+  }
+}

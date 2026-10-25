@@ -1,0 +1,230 @@
+@use '../abstracts/tokens' as t;
+@use '../abstracts/breakpoints' as bp;
+
+.game-hud {
+  display: grid;
+  width: 100%;
+  max-width: t.$content-max-width;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2.5fr) minmax(0, 1fr);
+  gap: t.$space-4;
+  margin-top: t.$space-6;
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: t.$space-2;
+    padding: t.$space-4;
+    border: 1px solid rgb(229 190 119 / 50%);
+    border-radius: 6px;
+    background: t.$color-bg-panel;
+    box-shadow:
+      inset 0 0 0 3px t.$color-bg-panel,
+      inset 0 0 0 4px rgb(229 190 119 / 20%);
+  }
+
+  &__label {
+    color: t.$color-text-secondary;
+    font-size: t.$font-size-sm;
+  }
+
+  &__value {
+    color: t.$color-accent;
+    font-size: t.$font-size-xl;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__time-controls {
+    position: relative;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: t.$space-2;
+  }
+
+  &__progress {
+    width: 100%;
+    height: 8px;
+    appearance: none;
+    border: 0;
+    border-radius: 999px;
+    overflow: hidden;
+    background: t.$color-bg-track;
+
+    &::-webkit-progress-bar {
+      border-radius: 999px;
+      background: t.$color-bg-track;
+    }
+
+    &::-webkit-progress-value {
+      border-radius: 999px;
+      background: t.$color-accent;
+      transition: width 0.25s linear;
+    }
+  }
+
+  &__pause {
+    flex-shrink: 0;
+    min-height: 32px;
+    padding: t.$space-1 t.$space-2;
+    border: 1px solid t.$color-accent;
+    border-radius: t.$radius-sm;
+    background: t.$color-bg-card-hover;
+    color: t.$color-accent;
+    font: inherit;
+    font-size: t.$font-size-sm;
+    cursor: pointer;
+
+    &:hover {
+      background: t.$color-bg-track;
+    }
+
+    &:focus-visible {
+      outline: 2px solid t.$color-accent;
+      outline-offset: t.$space-1;
+    }
+  }
+
+  &__item--urgent {
+    .game-hud__value {
+      color: t.$color-danger;
+      animation: timer-pulse 0.8s ease-in-out infinite alternate;
+    }
+
+    .game-hud__progress::-webkit-progress-value {
+      background: t.$color-danger;
+    }
+  }
+
+  &--idle .game-hud__pause {
+    visibility: hidden;
+  }
+
+  // Fluid sizing for mobile and tablet (up to 1023px).
+  @media (max-width: 1023px) {
+    gap: clamp(6px, 1.2vw, 12px);
+    margin-top: clamp(12px, 2vw, 20px);
+
+    &__item {
+      min-width: 0;
+      min-height: clamp(60px, 9vw, 78px);
+      padding: clamp(4px, 0.8vw, 8px);
+      gap: clamp(2px, 0.4vw, 4px);
+      justify-content: center;
+    }
+
+    &__item--time {
+      padding: 6px 8px;
+    }
+
+    &__label {
+      font-size: clamp(11px, 1.5vw, 13px);
+    }
+
+    &__value {
+      font-size: clamp(14px, 2vw, 20px);
+      line-height: 1.2;
+    }
+
+    &__progress {
+      height: 6px;
+    }
+
+    &__pause {
+      min-height: 24px;
+      padding: 2px 5px;
+      font-size: clamp(10px, 1.3vw, 12px);
+      line-height: 1;
+    }
+  }
+
+  // Mobile: compact pause control, without changing the centered Time label.
+  @include bp.mobile {
+    &__time-controls {
+      min-height: 20px;
+    }
+
+    &__pause {
+      position: absolute;
+      z-index: 1;
+      top: calc(50% - 8px);
+      right: 0;
+      transform: translateY(-50%);
+      min-height: 30px;
+      padding: 2px 6px;
+    }
+  }
+
+  // Preserve the smaller clock text on narrow phones.
+  @media (max-width: 480px) {
+    &__item--time .game-hud__value {
+      font-size: t.$font-size-sm;
+    }
+  }
+
+  // Tablet: 769-1023px.
+  @include bp.tablet {
+    &__pause {
+      position: absolute;
+      z-index: 1;
+      top: calc(50% - 12px);
+      right: 4px;
+      transform: translateY(-50%);
+      min-height: clamp(30px, 3.5vw, 36px);
+      padding: clamp(4px, 0.6vw, 6px) clamp(8px, 1vw, 12px);
+      font-size: clamp(11px, 1.4vw, 14px);
+      line-height: 1;
+    }
+  }
+
+  // Desktop: 1024px and wider.
+  @media (min-width: 1024px) {
+    &__pause {
+      position: absolute;
+      z-index: 1;
+      top: calc(50% - 16px);
+      right: 8px;
+      transform: translateY(-50%);
+      min-height: clamp(32px, 2.5vw, 40px);
+      padding: clamp(4px, 0.5vw, 7px) clamp(10px, 1vw, 16px);
+      font-size: clamp(12px, 1vw, 15px);
+      line-height: 1;
+    }
+  }
+
+  &--active {
+    .game-hud__value,
+    .game-hud__pause {
+      animation: hud-fade-in 450ms ease-out both;
+    }
+  }
+}
+
+@keyframes timer-pulse {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0.4;
+  }
+}
+
+@keyframes hud-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-hud__item--urgent .game-hud__value,
+  .game-hud--active .game-hud__value,
+  .game-hud--active .game-hud__pause {
+    animation: none;
+  }
+}

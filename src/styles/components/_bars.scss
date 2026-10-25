@@ -1,0 +1,214 @@
+@use '../abstracts/tokens' as t;
+@use '../abstracts/breakpoints' as bp;
+
+/* Cauldron Parameter Bars */
+
+.parameters {
+  width: 100%;
+  padding: t.$space-6;
+  border: 1px solid t.$color-border-primary;
+  border-radius: t.$radius-xl;
+  background: t.$color-bg-panel;
+
+  h2 {
+    margin: 0 0 t.$space-6;
+    font-size: t.$font-size-xl;
+  }
+
+  &__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: t.$space-4;
+    margin-top: t.$space-5;
+    color: t.$color-text-secondary;
+    font-size: t.$font-size-xs;
+
+    span {
+      display: inline-flex;
+      align-items: center;
+      gap: t.$space-2;
+    }
+
+    i {
+      display: inline-block;
+      width: t.$space-3;
+      height: t.$space-3;
+      border-radius: t.$space-1;
+    }
+
+    &-exact {
+      background: t.$color-target-acid;
+    }
+
+    &-tolerance {
+      background: t.$color-target-acid;
+      opacity: 0.25;
+    }
+
+    &-marker {
+      background: t.$color-accent;
+    }
+  }
+
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: t.$space-6;
+  }
+
+  @include bp.tablet-and-mobile {
+    &__list {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @include bp.mobile {
+    padding: t.$space-4;
+  }
+}
+
+.parameter-bar {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    gap: t.$space-4;
+    margin-bottom: t.$space-3;
+  }
+
+  &__label {
+    display: inline-flex;
+    align-items: center;
+    gap: t.$space-2;
+    font-weight: t.$font-weight-semibold;
+  }
+
+  &__icon {
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+
+  &--temperature &__track {
+    background: linear-gradient(
+      90deg,
+      t.$color-temperature-cold 0%,
+      t.$color-temperature-cool 25%,
+      t.$color-temperature-neutral 50%,
+      t.$color-temperature-warm 75%,
+      t.$color-temperature-hot 100%
+    );
+  }
+
+  &--density &__track {
+    background: linear-gradient(
+      90deg,
+      t.$color-density-light,
+      t.$color-density-mid,
+      t.$color-density-heavy
+    );
+  }
+
+  &--magicPower &__track {
+    background: linear-gradient(90deg, t.$color-magic-low, t.$color-magic-mid, t.$color-magic-high);
+  }
+
+  &__value {
+    font-weight: t.$font-weight-bold;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__track {
+    position: relative;
+    isolation: isolate;
+    height: t.$bar-track-height;
+    border-radius: t.$bar-track-radius;
+    background: t.$color-bg-track;
+  }
+
+  &__tolerance {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    border-radius: t.$space-1;
+    background: t.$color-target-acid;
+    opacity: 0.3;
+    transition:
+      left t.$transition-normal,
+      width t.$transition-normal;
+  }
+
+  &__target {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    border-radius: t.$space-1;
+    z-index: 1;
+    background: t.$color-target-acid;
+    transition:
+      left t.$transition-normal,
+      width t.$transition-normal;
+  }
+
+  &__zero {
+    position: absolute;
+    z-index: 2;
+    top: t.$bar-indicator-offset;
+    left: 50%;
+    width: t.$bar-zero-width;
+    height: t.$bar-indicator-height;
+    background: t.$color-text-muted;
+  }
+
+  &__marker {
+    position: absolute;
+    z-index: 3;
+    top: 50%;
+    left: 50%;
+    width: t.$bar-marker-width;
+    height: t.$bar-indicator-height;
+    border-radius: t.$bar-marker-radius;
+    background: t.$color-accent;
+    box-shadow:
+      0 0 2px rgb(20 16 30 / 85%),
+      0 0 10px rgb(232 189 110 / 50%);
+    transform: translate(-50%, -50%);
+    transition: left t.$transition-normal;
+  }
+
+  &--success &__marker {
+    background: t.$color-accent;
+    box-shadow:
+      0 0 0 2px rgb(20 16 30 / 85%),
+      0 0 8px 3px rgb(182 255 0 / 75%),
+      0 0 18px 6px rgb(182 255 0 / 30%);
+  }
+
+  &--success &__value {
+    color: t.$color-target-acid;
+  }
+
+  &__scale {
+    display: flex;
+    justify-content: space-between;
+    margin-top: t.$space-2-5;
+    color: t.$color-text-secondary;
+    font-size: t.$font-size-xs;
+  }
+
+  &__track::before {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    border-radius: inherit;
+    background: rgb(20 16 30 / 42%);
+    content: '';
+    pointer-events: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .parameter-bar__marker,
+  .parameter-bar__target,
+  .parameter-bar__tolerance {
+    transition: none;
+  }
+}

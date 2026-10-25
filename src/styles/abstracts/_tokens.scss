@@ -1,0 +1,142 @@
+// Backgrounds
+$color-bg-page: #151322;
+$color-bg-panel: #242032;
+$color-bg-card: #282238;
+$color-bg-card-hover: #342a47;
+$color-bg-card-inner: #332b42;
+$color-bg-track: #443653;
+$color-bg-stock: #66517e;
+
+// Text
+$color-text-primary: #f5f1e8;
+$color-text-secondary: #b6aabe;
+$color-text-muted: #a99ab8;
+$color-button-text: #211b29;
+
+// Accents
+$color-accent: #e5be77;
+$color-accent-hover: #c6a56a;
+$color-success: #65e69b;
+$color-danger: #ef5350;
+
+// Borders
+$color-border-primary: #625574;
+$color-border-secondary: #51465f;
+
+// Effects
+$color-target-range: rgb(74 190 126 / 45%);
+$color-success-glow: rgb(101 230 155 / 45%);
+
+// Modal surfaces and effects
+$color-bg-modal: #2a2435;
+$color-modal-backdrop: rgb(10 8 16 / 75%);
+$color-shadow-overlay: rgb(0 0 0 / 40%);
+$color-hover-overlay: rgb(255 255 255 / 8%);
+$color-divider-subtle: rgb(255 255 255 / 15%);
+
+// Parameter bar effects
+$color-bar-overlay: rgb(20 16 30 / 42%);
+$color-marker-outline: rgb(20 16 30 / 85%);
+$color-marker-glow: rgb(232 189 110 / 50%);
+$color-target-glow-strong: rgb(182 255 0 / 75%);
+$color-target-glow-soft: rgb(182 255 0 / 30%);
+
+// Alchemical parameter bars
+$color-target-acid: #b6ff00;
+$color-temperature-cold: #56d9ff;
+$color-temperature-cool: #3275ed;
+$color-temperature-neutral: #514a78;
+$color-temperature-warm: #ff9b40;
+$color-temperature-hot: #ff453a;
+
+$color-density-light: #123b60;
+$color-density-mid: #128fb5;
+$color-density-heavy: #40e0ee;
+
+$color-magic-low: #352052;
+$color-magic-mid: #9638db;
+$color-magic-high: #f150e7;
+
+// Component sizes
+$button-min-height: 44px;
+$modal-width-sm: 380px;
+$modal-width-lg: 650px;
+$modal-max-height: 85vh;
+
+// Parameter bars
+$bar-track-height: 20px;
+$bar-track-radius: 10px;
+$bar-indicator-offset: -5px;
+$bar-indicator-height: 30px;
+$bar-zero-width: 2px;
+$bar-marker-radius: 3px;
+
+// Parameter bar marker
+$bar-marker-width: 6px;
+// $bar-marker-height: 30px;
+
+// Spacing (4px base)
+$space-1: 4px;
+$space-2: 8px;
+$space-3: 12px;
+$space-4: 16px;
+$space-5: 20px;
+$space-6: 24px;
+$space-8: 32px;
+
+// Sizes (4px base)
+$size-1: 4px;
+$size-2: 8px;
+$size-3: 12px;
+$size-4: 16px;
+$size-5: 20px;
+$size-6: 24px;
+$size-8: 32px;
+
+// Border radius
+$radius-sm: 8px;
+$radius-md: 12px;
+$radius-lg: 16px;
+$radius-xl: 20px;
+$radius-full: 9999px;
+
+// Typography
+// Font families
+$font-family-title: 'Metal Mania', fantasy;
+$font-family-fantasy: 'Nightmare Before Christmas', fantasy;
+
+// Fonts sizes and weights
+$font-size-2xs: 0.6875rem;
+$font-size-xs: 0.75rem;
+$font-size-sm: 0.875rem;
+$font-size-base: 1rem;
+$font-size-lg: 1.125rem;
+$font-size-xl: 1.5rem;
+$font-size-2xl: 2rem;
+
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// Transitions
+$transition-fast: 200ms ease;
+$transition-normal: 350ms ease;
+$transition-progress: 250ms linear;
+
+// Layout
+$content-max-width: 1440px;
+
+// Fine spacing
+$space-0-75: 3px;
+$space-1-25: 5px;
+$space-1-5: 6px;
+$space-2-5: 10px;
+
+// Ingredient cards
+$ingredient-card-min-height: 160px;
+$ingredient-stock-size: 30px;
+
+// Cauldron
+$cauldron-ingredient-min-height: 100px;
+$cauldron-ingredient-min-height-mobile: 90px;

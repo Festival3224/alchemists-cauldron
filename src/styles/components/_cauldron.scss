@@ -1,0 +1,320 @@
+@use '../abstracts/tokens' as t;
+@use '../abstracts/breakpoints' as bp;
+
+.cauldron {
+  width: 100%;
+
+  h2 {
+    margin: 0 0 t.$space-3;
+    font-size: t.$font-size-xl;
+  }
+
+  &__body {
+    padding: t.$space-4;
+    border: 1px solid t.$color-border-primary;
+    border-radius: t.$radius-xl;
+    background: t.$color-bg-panel;
+  }
+
+  &__scene {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: t.$space-3 0;
+  }
+
+  &__visual {
+    position: relative;
+    width: 100%;
+    max-width: 380px;
+  }
+
+  &__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 14px 20px rgb(150 56 219 / 15%));
+  }
+
+  &__scene--success &__image {
+    animation: cauldron-brew-success 800ms ease-out;
+  }
+
+  &__scene--failure &__image {
+    animation: cauldron-brew-failure 800ms ease-out;
+  }
+
+  &__magic {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  &__magic-bubble {
+    position: absolute;
+    top: 17%;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+
+    border: 1px solid rgb(240 190 255 / 80%);
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at 30% 30%,
+      rgb(255 255 255 / 65%),
+      rgb(190 90 255 / 25%) 55%,
+      transparent
+    );
+
+    box-shadow: 0 0 12px rgb(190 90 255 / 50%);
+
+    opacity: 0;
+    animation: magic-bubble-rise 3s ease-out infinite;
+
+    &:nth-child(1) {
+      left: 30%;
+      animation-delay: 0s;
+    }
+
+    &:nth-child(2) {
+      left: 42%;
+      width: 8px;
+      height: 8px;
+      animation-delay: 0.7s;
+    }
+
+    &:nth-child(3) {
+      left: 60%;
+      width: 16px;
+      height: 16px;
+      animation-delay: 1.4s;
+    }
+
+    &:nth-child(4) {
+      left: 70%;
+      width: 9px;
+      height: 9px;
+      animation-delay: 2s;
+    }
+
+    &:nth-child(5) {
+      left: 50%;
+      width: 11px;
+      height: 11px;
+      animation-delay: 2.5s;
+    }
+  }
+
+  // Ingredients added to the cauldron
+  &__slots {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: t.$space-2;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__slot {
+    display: flex;
+    min-width: 0;
+    min-height: 64px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: t.$space-1;
+    padding: t.$space-2;
+    border: 1px solid t.$color-border-secondary;
+    border-radius: t.$radius-md;
+    background: t.$color-bg-card;
+    color: t.$color-text-muted;
+
+    &--filled {
+      border-color: t.$color-accent;
+      background: t.$color-bg-card-inner;
+      color: t.$color-text-primary;
+    }
+
+    &--empty {
+      font-size: t.$font-size-xl;
+      opacity: 0.6;
+    }
+  }
+
+  &__slot-icon {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    place-items: center;
+    flex-shrink: 0;
+    overflow: hidden;
+    font-size: t.$font-size-xl;
+    line-height: 1;
+  }
+
+  &__slot-image {
+    display: block;
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+  }
+
+  &__slot-name {
+    font-size: t.$font-size-2xs;
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+
+  &__brew {
+    position: relative;
+    width: 100%;
+    min-height: t.$button-min-height;
+    margin-top: t.$space-4;
+    padding: t.$space-2 t.$space-4;
+
+    border: 1px solid t.$color-accent-hover;
+    border-radius: t.$radius-md;
+
+    background: linear-gradient(180deg, #f6d99b 0%, t.$color-accent 42%, #b68a4f 100%);
+
+    color: t.$color-bg-page;
+    font-family: t.$font-family-title;
+    font-size: t.$font-size-xl;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: t.$font-weight-normal;
+    letter-spacing: 0.04em;
+    text-shadow: 0 1px rgb(255 255 255 / 25%);
+
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 65%),
+      inset 0 -3px 0 rgb(68 39 13 / 30%),
+      0 4px 12px rgb(0 0 0 / 22%);
+
+    cursor: pointer;
+    transition:
+      transform t.$transition-fast,
+      box-shadow t.$transition-fast,
+      filter t.$transition-fast;
+
+    &::before,
+    &::after {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #65451f;
+      font-family: serif;
+      font-size: t.$font-size-lg;
+      pointer-events: none;
+    }
+
+    &::before {
+      content: '✦';
+      left: t.$space-4;
+    }
+
+    &::after {
+      content: '✦';
+      right: t.$space-4;
+    }
+
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      filter: brightness(1.08);
+      box-shadow:
+        inset 0 1px 0 rgb(255 255 255 / 70%),
+        inset 0 -3px 0 rgb(68 39 13 / 30%),
+        0 0 18px rgb(229 190 119 / 35%),
+        0 6px 16px rgb(0 0 0 / 25%);
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+
+    &:focus-visible {
+      outline: 3px solid t.$color-accent;
+      outline-offset: t.$space-1;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      filter: saturate(0.6);
+    }
+  }
+
+  @include bp.mobile {
+    &__body {
+      padding: t.$space-2;
+    }
+
+    &__slots {
+      gap: t.$space-1;
+    }
+
+    &__slot {
+      min-height: 56px;
+      padding: t.$space-1;
+    }
+  }
+}
+
+@keyframes magic-bubble-rise {
+  0% {
+    transform: translate(-50%, 0) scale(0.5);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.8;
+  }
+
+  75% {
+    opacity: 0.6;
+  }
+
+  100% {
+    transform: translate(-50%, -65px) scale(1.3);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cauldron__magic-bubble,
+  .cauldron__scene--success .cauldron__image,
+  .cauldron__scene--failure .cauldron__image {
+    animation: none;
+  }
+}
+
+@keyframes cauldron-brew-success {
+  0% {
+    filter: drop-shadow(0 0 0 transparent);
+  }
+
+  35% {
+    filter: drop-shadow(0 0 18px t.$color-success) drop-shadow(0 0 35px t.$color-success-glow);
+  }
+
+  100% {
+    filter: drop-shadow(0 14px 20px rgb(150 56 219 / 15%));
+  }
+}
+
+@keyframes cauldron-brew-failure {
+  0% {
+    filter: drop-shadow(0 0 0 transparent);
+  }
+
+  35% {
+    filter: drop-shadow(0 0 18px t.$color-danger) drop-shadow(0 0 30px rgb(239 83 80 / 35%));
+  }
+
+  100% {
+    filter: drop-shadow(0 14px 20px rgb(150 56 219 / 15%));
+  }
+}

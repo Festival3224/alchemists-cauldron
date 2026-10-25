@@ -1,0 +1,127 @@
+@use '../abstracts/tokens' as t;
+@use '../abstracts/breakpoints' as bp;
+
+/* Recipe Panel */
+
+.recipe {
+  container-type: inline-size;
+
+  position: relative;
+  min-height: clamp(155px, 13vw, 195px);
+  padding: clamp(12px, 1.8vw, 24px);
+
+  border: 1px solid rgb(229 190 119 / 50%);
+  border-radius: 6px;
+  background: t.$color-bg-panel;
+
+  box-shadow:
+    inset 0 0 0 3px t.$color-bg-panel,
+    inset 0 0 0 4px rgb(229 190 119 / 20%);
+
+  text-align: left;
+
+  h2 {
+    margin: 0 0 t.$space-2;
+    padding-right: clamp(3rem, 5vw, 4rem);
+    color: t.$color-accent;
+    font-family: t.$font-family-fantasy;
+    font-size: clamp(1.25rem, 2vw, 1.75rem);
+    line-height: 1.2;
+    font-weight: t.$font-weight-normal;
+  }
+
+  &__difficulty {
+    margin-bottom: clamp(8px, 1.2vw, 20px);
+    color: t.$color-text-secondary;
+    font-size: clamp(12px, 1vw, 14px);
+    text-transform: capitalize;
+  }
+
+  &__ranges {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(4px, 1vw, 12px);
+    width: 100%;
+
+    p {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin: 0;
+      padding: 4px;
+      border-right: 1px solid t.$color-border-secondary;
+      font-size: clamp(12px, 1.1vw, 15px);
+      text-align: center;
+
+      &:last-child {
+        border-right: 0;
+      }
+    }
+
+    strong {
+      color: t.$color-success;
+      font-size: clamp(12px, 1.2vw, 16px);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+  }
+
+  &__counter {
+    position: absolute;
+    top: clamp(12px, 1.5vw, 16px);
+    right: clamp(12px, 1.5vw, 16px);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+
+    margin: 0;
+    padding: clamp(3px, 0.4vw, 6px) clamp(7px, 0.85vw, 12px);
+
+    border: 1px solid transparent;
+    border-radius: t.$radius-xl;
+    background: t.$color-bg-track;
+    color: t.$color-accent;
+
+    font-size: 12px;
+
+    @media (min-width: 1024px) {
+      font-size: clamp(13px, 0.95vw, 16px);
+    }
+    font-weight: t.$font-weight-bold;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
+    white-space: nowrap;
+
+    &--full {
+      border-color: t.$color-accent;
+      background: t.$color-bg-track;
+      color: t.$color-accent;
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  @container (max-width: 360px) {
+    .recipe__ranges {
+      grid-template-columns: 1fr;
+      gap: 8px;
+
+      p {
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 0;
+        border-right: 0;
+        text-align: left;
+      }
+
+      strong {
+        white-space: nowrap;
+      }
+    }
+  }
+}

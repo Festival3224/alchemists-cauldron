@@ -1,0 +1,22 @@
+@use '../abstracts/tokens' as t;
+
+.brew-message {
+  width: 100%;
+  max-width: t.$content-max-width;
+  margin-top: t.$space-4;
+  padding: t.$space-4;
+  border: 1px solid currentColor;
+  border-radius: t.$radius-md;
+  font-weight: t.$font-weight-bold;
+  text-align: center;
+
+  &--success {
+    color: t.$color-success;
+    background: t.$color-bg-panel;
+  }
+
+  &--failure {
+    color: t.$color-accent;
+    background: t.$color-bg-panel;
+  }
+}

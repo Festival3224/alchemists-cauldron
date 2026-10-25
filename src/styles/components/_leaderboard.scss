@@ -1,0 +1,129 @@
+@use '../abstracts/tokens' as t;
+
+.leaderboard-dialog {
+  position: fixed;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  gap: t.$space-4;
+  width: calc(100% - 2rem);
+  max-width: t.$modal-width-lg;
+  max-height: 85vh;
+  margin: auto;
+  padding: t.$space-4;
+  overflow-y: auto;
+  border: 1px solid t.$color-accent;
+  border-radius: t.$radius-xl;
+  background: t.$color-bg-panel;
+  color: t.$color-text-primary;
+
+  &[open] {
+    display: flex;
+  }
+
+  &::backdrop {
+    background: rgb(10 8 16 / 75%);
+  }
+
+  h2 {
+    margin: 0;
+    color: t.$color-accent;
+    text-align: center;
+  }
+
+  &__table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+
+  th,
+  td {
+    padding: 0.75rem 0.5rem;
+    border-bottom: 1px solid rgb(255 255 255 / 15%);
+  }
+
+  th {
+    color: t.$color-accent;
+  }
+
+  &__confirmation {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-3;
+    text-align: center;
+  }
+
+  button {
+    min-height: t.$button-min-height;
+    padding: 0.5rem 1rem;
+    border: 1px solid t.$color-accent;
+    border-radius: t.$radius-md;
+    background: transparent;
+    color: t.$color-accent;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: rgb(255 255 255 / 8%);
+  }
+}
+
+.leaderboard-name-form {
+  display: flex;
+  flex-direction: column;
+  gap: t.$space-3;
+  width: 100%;
+
+  label {
+    text-align: center;
+  }
+
+  input {
+    min-height: t.$button-min-height;
+    padding: 0.75rem;
+    border: 1px solid t.$color-accent;
+    border-radius: t.$radius-md;
+    background: t.$color-bg-track;
+    color: t.$color-text-primary;
+    font: inherit;
+  }
+
+  &__hint {
+    margin: 0;
+    font-size: 0.8rem;
+    text-align: center;
+  }
+
+  &__error {
+    margin: 0;
+    color: t.$color-danger;
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  button {
+    min-height: t.$button-min-height;
+    border: 0;
+    border-radius: t.$radius-md;
+    background: t.$color-accent;
+    color: t.$color-button-text;
+    font: inherit;
+    font-weight: t.$font-weight-bold;
+    cursor: pointer;
+  }
+}
+
+.menu-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: t.$size-4;
+}
