@@ -295,3 +295,37 @@
     padding: t.$space-4;
   }
 }
+
+.help-dialog {
+  width: min(90vw, 500px);
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow:
+    inset 0 0 0 5px t.$color-bg-panel,
+    inset 0 0 0 6px t.$color-border-primary;
+
+  &__content {
+    text-align: left;
+    line-height: 1.6;
+
+    ol {
+      margin: 1rem 0;
+      padding-left: 1.5rem;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      margin-bottom: 0.75rem;
+    }
+
+    strong {
+      color: t.$color-accent;
+      font-family: t.$font-family-title;
+      font-weight: t.$font-weight-normal;
+      font-size: 1.15em;
+    }
+  }
+}

@@ -243,9 +243,8 @@ const renderApp = (brewResult?: BrewResult): void => {
       <h2 id="menu-dialog-title">✦ Menu ✦</h2>
 
       <div class="menu-dialog__actions">
-        <button type="button" disabled>          
+        <button type="button" data-action="help-open">
           Help
-          <small>Coming soon</small>
         </button>
 
         <button type="button" disabled>
@@ -266,6 +265,36 @@ const renderApp = (brewResult?: BrewResult): void => {
         Close
       </button>
     </dialog>
+
+
+    <dialog class="menu-dialog help-dialog" aria-labelledby="help-dialog-title">
+  <h2 id="help-dialog-title">✦ How to Play ✦</h2>
+
+  <div class="help-dialog__content">
+    <p>Welcome to Alchemist's Cauldron!</p>
+
+    <ol>
+      <li>Press <strong>Start Game</strong> to begin.</li>
+      <li>Check your recipe's target ranges.</li>
+      <li>Select up to 4 ingredients from the shelf.</li>
+      <li>Watch how ingredients affect Temperature, Density and Magic Power.</li>
+      <li>Press <strong>Brew</strong> when your potion is ready.</li>
+      <li>Match all three target ranges to brew successfully!</li>
+    </ol>
+
+    <p>Each successful potion earns 200 points and 10 bonus seconds.</p>
+    <p>Failed potions cost one life. You have 3 lives!</p>
+    <p>Use <strong>Pause</strong> whenever you need a break.</p>
+  </div>
+
+  <button
+    class="menu-dialog__close"
+    type="button"
+    data-action="help-close"
+  >
+    Close
+  </button>
+</dialog>
 
     ${gameOverMarkup}
     ${pauseMarkup}
@@ -367,6 +396,21 @@ app.addEventListener('click', (event: MouseEvent) => {
 
   if (closeMenuButton) {
     app.querySelector<HTMLDialogElement>('.menu-dialog')?.close();
+    return;
+  }
+
+  const helpOpenButton = target.closest<HTMLButtonElement>('[data-action="help-open"]');
+
+  if (helpOpenButton) {
+    app.querySelector<HTMLDialogElement>('.menu-dialog:not(.help-dialog)')?.close();
+    app.querySelector<HTMLDialogElement>('.help-dialog')?.showModal();
+    return;
+  }
+
+  const helpCloseButton = target.closest<HTMLButtonElement>('[data-action="help-close"]');
+
+  if (helpCloseButton) {
+    app.querySelector<HTMLDialogElement>('.help-dialog')?.close();
     return;
   }
 
