@@ -40,8 +40,7 @@ export const renderCauldron = (brewResult?: BrewResult): string => {
   }).join('');
 
   return `
-    <section class="cauldron" aria-labelledby="cauldron-title">
-      <h2 id="cauldron-title">Cauldron</h2>
+    <section class="cauldron" aria-label="Cauldron">
 
       <div class="cauldron__body">
         <div class="cauldron__scene ${brewResult ? `cauldron__scene--${brewResult}` : ''}">
@@ -68,14 +67,6 @@ export const renderCauldron = (brewResult?: BrewResult): string => {
           ${slots}
         </ol>
 
-        <button
-          class="cauldron__brew"
-          type="button"
-          data-action="brew"
-          ${gameState.status !== 'playing' || ingredients.length === 0 ? 'disabled' : ''}
-        >
-          Brew
-        </button>
       </div>
     </section>
   `;

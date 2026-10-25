@@ -8,7 +8,39 @@ export const renderRecipe = (): string => {
   const isFull = ingredientCount >= maxIngredients;
 
   if (!recipe) {
-    return '';
+    return `
+    <section class="recipe recipe--empty" aria-labelledby="recipe-title">
+      <h2 id="recipe-title">Current Recipe</h2>
+
+      <p class="recipe__difficulty">
+        Difficulty: Medium
+      </p>
+
+      <p
+        class="recipe__counter"
+        aria-label="Ingredients: 0 of ${maxIngredients}"
+      >
+        0 / ${maxIngredients}
+      </p>
+
+      <div class="recipe__ranges">
+        <p>
+          <span>Temperature:</span>
+          <strong>—</strong>
+        </p>
+
+        <p>
+          <span>Density:</span>
+          <strong>—</strong>
+        </p>
+
+        <p>
+          <span>Magic Power:</span>
+          <strong>—</strong>
+        </p>
+      </div>
+    </section>
+  `;
   }
 
   return `

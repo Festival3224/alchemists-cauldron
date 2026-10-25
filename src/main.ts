@@ -42,6 +42,67 @@ if (!app) {
 
 let scoreSubmitted = false;
 
+let isStarting = false;
+
+const animateGameStart = (): void => {
+  if (isStarting) {
+    return;
+  }
+
+  isStarting = true;
+
+  const progress = app.querySelector<HTMLProgressElement>('.game-hud__progress');
+  const startButton = app.querySelector<HTMLButtonElement>('[data-action="start"]');
+
+  if (!progress) {
+    startNewGame();
+    renderApp();
+    isStarting = false;
+    return;
+  }
+
+  if (startButton) {
+    startButton.disabled = true;
+  }
+
+  const duration = 600;
+  const startTime = performance.now();
+
+  const animate = (now: number): void => {
+    const elapsed = Math.min((now - startTime) / duration, 1);
+    const eased = 1 - (1 - elapsed) ** 3;
+
+    progress.value = eased * LEVEL_ONE_CONFIG.startingTime;
+
+    if (elapsed < 1) {
+      requestAnimationFrame(animate);
+      return;
+    }
+
+    startNewGame();
+    renderApp();
+    isStarting = false;
+  };
+
+  requestAnimationFrame(animate);
+};
+
+const renderPrimaryAction = (): string => {
+  const isMenu = gameState.status === 'menu';
+  const canBrew = gameState.status === 'playing' && gameState.cauldronIngredients.length > 0;
+
+  return `
+    <button
+      class="cauldron__brew"
+      type="button"
+      data-action="${isMenu ? 'start' : 'brew'}"
+      ${!isMenu && !canBrew ? 'disabled' : ''}
+    >
+      ${isMenu ? 'Start Game' : 'Brew'}
+    </button>
+  `;
+};
+
 const renderApp = (brewResult?: BrewResult): void => {
   const gameOverMarkup =
     gameState.status === 'game-over'
@@ -105,23 +166,45 @@ const renderApp = (brewResult?: BrewResult): void => {
 
   app.innerHTML = `  
     <main class="app">
-      <h1>Alchemist's Cauldron</h1>
-      <p>A magical potion-brewing game.</p>
+      <header class="app-header">
+        <h1>Alchemist's Cauldron</h1>
+
+        <button
+          class="app-menu-trigger"
+          type="button"
+          data-action="menu-open"
+          aria-haspopup="dialog"
+        >
+          <span class="app-menu-trigger__label">Menu</span>
+
+          <svg
+            class="app-menu-trigger__ornaments"
+            viewBox="0 0 180 70"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <!-- Outer frame -->
+            <g class="frame-outer">
+              <path d="M22 9 H158 M171 22 V48 M158 61 H22 M9 48 V22" />
+            </g>
+
+            <!-- Inner frame -->
+            <g class="frame-inner">
+              <path d="M22 12 H158 M168 22 V48 M158 58 H22 M12 48 V22" />
+            </g>
+
+            <!-- Four decorative stars -->
+            <g class="frame-ornament">
+              <path d="M15 9 Q16 14 21 15 Q16 16 15 21 Q14 16 9 15 Q14 14 15 9Z" />
+              <path d="M165 9 Q166 14 171 15 Q166 16 165 21 Q164 16 159 15 Q164 14 165 9Z" />
+              <path d="M15 49 Q16 54 21 55 Q16 56 15 61 Q14 56 9 55 Q14 54 15 49Z" />
+              <path d="M165 49 Q166 54 171 55 Q166 56 165 61 Q164 56 159 55 Q164 54 165 49Z" />
+            </g>
+          </svg>
+        </button>
+      </header>
 
       ${renderGameHud()}
-
-      ${
-        gameState.status === 'menu'
-          ? `<div class="menu-actions">
-           <button class="start-button" type="button" data-action="start">
-             Start Game
-           </button>
-           <button class="start-button" type="button" data-action="leaderboard-open">
-             Leaderboard
-           </button>
-         </div>`
-          : ''
-      }
 
       <div class="game-layout">
         <div class="game-layout__shelf">
@@ -130,6 +213,10 @@ const renderApp = (brewResult?: BrewResult): void => {
 
         <div class="game-layout__cauldron">
           ${renderCauldron(brewResult)}
+        </div>
+
+        <div class="game-layout__action">
+          ${renderPrimaryAction()}
         </div>
 
         <div class="game-layout__recipe">
@@ -151,6 +238,35 @@ const renderApp = (brewResult?: BrewResult): void => {
                   : ''
             }
     </main>
+
+    <dialog class="menu-dialog" aria-labelledby="menu-dialog-title">
+      <h2 id="menu-dialog-title">✦ Menu ✦</h2>
+
+      <div class="menu-dialog__actions">
+        <button type="button" disabled>          
+          Help
+          <small>Coming soon</small>
+        </button>
+
+        <button type="button" disabled>
+          Settings
+          <small>Coming soon</small>
+        </button>
+
+        <button type="button" data-action="leaderboard-open">          
+         Leaderboard
+        </button>
+      </div>
+
+      <button
+        class="menu-dialog__close"
+        type="button"
+        data-action="menu-close"
+      >
+        Close
+      </button>
+    </dialog>
+
     ${gameOverMarkup}
     ${pauseMarkup}
   `;
@@ -178,6 +294,7 @@ const renderApp = (brewResult?: BrewResult): void => {
 };
 
 const openLeaderboard = (confirmClear = false): void => {
+  app.querySelector<HTMLDialogElement>('.menu-dialog')?.close();
   const existingDialog = app.querySelector<HTMLDialogElement>('.leaderboard-dialog');
 
   if (existingDialog) {
@@ -227,7 +344,7 @@ const refreshGameHud = (): void => {
 
   timeItem?.classList.toggle(
     'game-hud__item--urgent',
-    gameState.timeLeft < TIMER_WARNING_THRESHOLD,
+    gameState.status === 'playing' && gameState.timeLeft < TIMER_WARNING_THRESHOLD,
   );
 };
 
@@ -235,6 +352,21 @@ app.addEventListener('click', (event: MouseEvent) => {
   const target = event.target;
 
   if (!(target instanceof Element)) {
+    return;
+  }
+
+  const openMenuButton = target.closest<HTMLButtonElement>('[data-action="menu-open"]');
+
+  if (openMenuButton) {
+    const dialog = app.querySelector<HTMLDialogElement>('.menu-dialog');
+    dialog?.showModal();
+    return;
+  }
+
+  const closeMenuButton = target.closest<HTMLButtonElement>('[data-action="menu-close"]');
+
+  if (closeMenuButton) {
+    app.querySelector<HTMLDialogElement>('.menu-dialog')?.close();
     return;
   }
 
@@ -289,8 +421,7 @@ app.addEventListener('click', (event: MouseEvent) => {
 
   if (startButton) {
     scoreSubmitted = false;
-    startNewGame();
-    renderApp();
+    animateGameStart();
     return;
   }
 
@@ -342,6 +473,12 @@ app.addEventListener('click', (event: MouseEvent) => {
 
     if (cauldron) {
       cauldron.outerHTML = renderCauldron();
+    }
+
+    const primaryAction = app.querySelector<HTMLElement>('.game-layout__action');
+
+    if (primaryAction) {
+      primaryAction.innerHTML = renderPrimaryAction();
     }
 
     const recipe = app.querySelector('.recipe');
