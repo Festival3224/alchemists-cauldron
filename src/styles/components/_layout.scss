@@ -54,10 +54,7 @@
       'action';
 
     gap: t.$space-4;
-  }
-
-  @include bp.mobile {
-    gap: t.$space-4;
+    margin-top: 12px;
   }
 
   &__shelf {
