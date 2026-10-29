@@ -1,8 +1,9 @@
-import { LEVEL_ONE_CONFIG, TIMER_WARNING_THRESHOLD } from '../data/difficulty';
+import { DIFFICULTY_SETTINGS, TIMER_WARNING_THRESHOLD } from '../data/difficulty';
 import { formatTime } from '../logic/timer';
 import { gameState } from '../state/game-state';
 
 export const renderGameHud = (): string => {
+  const config = DIFFICULTY_SETTINGS[gameState.difficulty];
   const isMenu = gameState.status === 'menu';
 
   const isUrgent = gameState.status === 'playing' && gameState.timeLeft < TIMER_WARNING_THRESHOLD;
@@ -37,7 +38,7 @@ export const renderGameHud = (): string => {
 
         <progress
           class="game-hud__progress"
-          max="${LEVEL_ONE_CONFIG.startingTime}"
+          max="${config.startingTime}"
           value="${isMenu ? 0 : gameState.timeLeft}"
           aria-label="Remaining time"
         ></progress>

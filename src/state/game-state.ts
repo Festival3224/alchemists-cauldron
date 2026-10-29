@@ -1,18 +1,19 @@
 import { INGREDIENTS } from '../data/ingredients';
 import { createStock } from '../logic/stock';
-import type { IGameState } from '../types/game';
+import type { Difficulty, IGameState } from '../types/game';
 
 import { getRandomRecipe } from '../logic/recipe-generator';
 import { calculateCauldron } from '../logic/calculate-cauldron';
 import { checkRecipe } from '../logic/check-recipe';
 
-import { LEVEL_ONE_CONFIG, MILLISECONDS_PER_SECOND } from '../data/difficulty';
+import { DIFFICULTY_SETTINGS, MILLISECONDS_PER_SECOND } from '../data/difficulty';
 import { calculateTimeLeft } from '../logic/timer';
 
 export type BrewResult = 'success' | 'failure' | 'unavailable';
 
 export const gameState: IGameState = {
   status: 'menu',
+  difficulty: 'medium',
   score: 0,
   timeLeft: 0,
   timerEndsAt: null,
@@ -22,15 +23,25 @@ export const gameState: IGameState = {
   activeRecipe: null,
 };
 
+export const setDifficulty = (difficulty: Difficulty): void => {
+  if (gameState.status !== 'menu') {
+    return;
+  }
+
+  gameState.difficulty = difficulty;
+};
+
 export const startNewGame = (): void => {
+  const config = DIFFICULTY_SETTINGS[gameState.difficulty];
+
   gameState.status = 'playing';
   gameState.score = 0;
-  gameState.timeLeft = LEVEL_ONE_CONFIG.startingTime;
+  gameState.timeLeft = config.startingTime;
   gameState.timerEndsAt = Date.now() + gameState.timeLeft * MILLISECONDS_PER_SECOND;
-  gameState.lives = LEVEL_ONE_CONFIG.startingLives;
+  gameState.lives = config.startingLives;
   gameState.cauldronIngredients = [];
-  gameState.shelfStock = createStock(INGREDIENTS.slice(0, LEVEL_ONE_CONFIG.ingredientCount));
-  gameState.activeRecipe = getRandomRecipe('medium');
+  gameState.shelfStock = createStock(INGREDIENTS.slice(0, config.ingredientCount));
+  gameState.activeRecipe = getRandomRecipe(gameState.difficulty);
 };
 
 export const addIngredient = (id: string): boolean => {
@@ -38,13 +49,13 @@ export const addIngredient = (id: string): boolean => {
     return false;
   }
 
-  if (gameState.cauldronIngredients.length >= LEVEL_ONE_CONFIG.maxCauldronIngredients) {
+  const config = DIFFICULTY_SETTINGS[gameState.difficulty];
+
+  if (gameState.cauldronIngredients.length >= config.maxCauldronIngredients) {
     return false;
   }
 
-  const ingredient = INGREDIENTS.slice(0, LEVEL_ONE_CONFIG.ingredientCount).find(
-    (item) => item.id === id,
-  );
+  const ingredient = INGREDIENTS.slice(0, config.ingredientCount).find((item) => item.id === id);
 
   if (!ingredient || (gameState.shelfStock[id] ?? 0) <= 0) {
     return false;
@@ -67,18 +78,20 @@ export const brewPotion = (): BrewResult => {
     return 'unavailable';
   }
 
+  const config = DIFFICULTY_SETTINGS[gameState.difficulty];
+
   const values = calculateCauldron(gameState.cauldronIngredients);
-  const isSuccessful = checkRecipe(values, gameState.activeRecipe);
+  const isSuccessful = checkRecipe(values, gameState.activeRecipe, gameState.difficulty);
 
   gameState.cauldronIngredients = [];
 
   if (isSuccessful) {
-    gameState.score += LEVEL_ONE_CONFIG.scorePerBrew;
+    gameState.score += config.scorePerBrew;
 
     if (gameState.timerEndsAt !== null) {
       gameState.timeLeft = Math.min(
-        calculateTimeLeft(gameState.timerEndsAt, Date.now()) + LEVEL_ONE_CONFIG.timeBonusPerBrew,
-        LEVEL_ONE_CONFIG.startingTime,
+        calculateTimeLeft(gameState.timerEndsAt, Date.now()) + config.timeBonusPerBrew,
+        config.startingTime,
       );
 
       gameState.timerEndsAt = Date.now() + gameState.timeLeft * MILLISECONDS_PER_SECOND;
@@ -92,7 +105,7 @@ export const brewPotion = (): BrewResult => {
     gameState.timerEndsAt = null;
     gameState.activeRecipe = null;
   } else if (isSuccessful) {
-    gameState.activeRecipe = getRandomRecipe('medium');
+    gameState.activeRecipe = getRandomRecipe(gameState.difficulty);
   }
 
   checkOutOfIngredients();

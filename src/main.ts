@@ -1,6 +1,6 @@
 import './styles/main.scss';
 
-import { LEVEL_ONE_CONFIG, TIMER_WARNING_THRESHOLD } from './data/difficulty';
+import { DIFFICULTY_SETTINGS, TIMER_WARNING_THRESHOLD } from './data/difficulty';
 
 import {
   addIngredient,
@@ -11,6 +11,7 @@ import {
   pauseGame,
   resumeGame,
   exitToMenu,
+  setDifficulty,
 } from './state/game-state';
 
 import { formatTime } from './logic/timer';
@@ -72,7 +73,7 @@ const animateGameStart = (): void => {
     const elapsed = Math.min((now - startTime) / duration, 1);
     const eased = 1 - (1 - elapsed) ** 3;
 
-    progress.value = eased * LEVEL_ONE_CONFIG.startingTime;
+    progress.value = eased * DIFFICULTY_SETTINGS[gameState.difficulty].startingTime;
 
     if (elapsed < 1) {
       requestAnimationFrame(animate);
@@ -231,7 +232,7 @@ const renderApp = (brewResult?: BrewResult): void => {
             ${
               brewResult === 'success'
                 ? `<p class="brew-message brew-message--success" role="status">
-                    Potion brewed successfully! +${LEVEL_ONE_CONFIG.scorePerBrew} points
+                    Potion brewed successfully! +${DIFFICULTY_SETTINGS[gameState.difficulty].scorePerBrew} points
                   </p>`
                 : brewResult === 'failure'
                   ? '<p class="brew-message brew-message--failure" role="status">Brewing failed! Lost 1 life.</p>'
@@ -247,9 +248,8 @@ const renderApp = (brewResult?: BrewResult): void => {
           Help
         </button>
 
-        <button type="button" disabled>
+        <button type="button" data-action="settings-open">
           Settings
-          <small>Coming soon</small>
         </button>
 
         <button type="button" data-action="leaderboard-open">          
@@ -265,6 +265,53 @@ const renderApp = (brewResult?: BrewResult): void => {
         Close
       </button>
     </dialog>
+
+    
+    
+<dialog
+  class="menu-dialog settings-dialog"
+  aria-labelledby="settings-dialog-title"
+>
+  <h2 id="settings-dialog-title">✦ Difficulty ✦</h2>
+
+  
+<div class="settings-dialog__difficulty">
+
+  <div
+    class="settings-dialog__options"
+    role="group"
+    aria-labelledby="difficulty-title"
+  >
+    ${(['easy', 'medium', 'hard'] as const)
+      .map(
+        (difficulty) => `
+          <button
+            type="button"
+            class="settings-dialog__option ${
+              gameState.difficulty === difficulty ? 'settings-dialog__option--selected' : ''
+            }"
+            data-difficulty="${difficulty}"
+            aria-pressed="${gameState.difficulty === difficulty}"
+            ${gameState.status !== 'menu' ? 'disabled' : ''}
+          >
+            ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+          </button>
+        `,
+      )
+      .join('')}
+  </div>
+</div>
+
+
+  <button
+    class="menu-dialog__close"
+    type="button"
+    data-action="settings-close"
+  >
+    Close
+  </button>
+</dialog>
+
 
 
     <dialog class="menu-dialog help-dialog" aria-labelledby="help-dialog-title">
@@ -411,6 +458,52 @@ app.addEventListener('click', (event: MouseEvent) => {
 
   if (helpCloseButton) {
     app.querySelector<HTMLDialogElement>('.help-dialog')?.close();
+    return;
+  }
+
+  const settingsOpenButton = target.closest<HTMLButtonElement>('[data-action="settings-open"]');
+
+  if (settingsOpenButton) {
+    app
+      .querySelector<HTMLDialogElement>('.menu-dialog:not(.settings-dialog):not(.help-dialog)')
+      ?.close();
+
+    app.querySelector<HTMLDialogElement>('.settings-dialog')?.showModal();
+    return;
+  }
+
+  const settingsCloseButton = target.closest<HTMLButtonElement>('[data-action="settings-close"]');
+
+  if (settingsCloseButton) {
+    app.querySelector<HTMLDialogElement>('.settings-dialog')?.close();
+
+    if (gameState.status === 'menu') {
+      renderApp();
+    }
+
+    return;
+  }
+
+  const difficultyButton = target.closest<HTMLButtonElement>('[data-difficulty]');
+
+  if (difficultyButton) {
+    const difficulty = difficultyButton.dataset.difficulty;
+
+    if (difficulty !== 'easy' && difficulty !== 'medium' && difficulty !== 'hard') {
+      return;
+    }
+
+    setDifficulty(difficulty);
+
+    const options = app.querySelectorAll<HTMLButtonElement>('[data-difficulty]');
+
+    options.forEach((button) => {
+      const isSelected = button.dataset.difficulty === gameState.difficulty;
+
+      button.classList.toggle('settings-dialog__option--selected', isSelected);
+      button.setAttribute('aria-pressed', String(isSelected));
+    });
+
     return;
   }
 

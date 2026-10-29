@@ -1,13 +1,14 @@
 import { INGREDIENTS } from '../data/ingredients';
 import { gameState } from '../state/game-state';
 
-import { LEVEL_ONE_CONFIG } from '../data/difficulty';
+import { DIFFICULTY_SETTINGS } from '../data/difficulty';
 
 export const renderShelf = (): string => {
-  const ingredients = INGREDIENTS.slice(0, LEVEL_ONE_CONFIG.ingredientCount);
+  const config = DIFFICULTY_SETTINGS[gameState.difficulty];
 
-  const isCauldronFull =
-    gameState.cauldronIngredients.length >= LEVEL_ONE_CONFIG.maxCauldronIngredients;
+  const ingredients = INGREDIENTS.slice(0, config.ingredientCount);
+
+  const isCauldronFull = gameState.cauldronIngredients.length >= config.maxCauldronIngredients;
 
   const cards = ingredients
     .map((ingredient) => {

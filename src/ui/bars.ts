@@ -2,7 +2,7 @@ import { getBarLimit, getBarPosition } from '../logic/bar-scale';
 import { calculateCauldron } from '../logic/calculate-cauldron';
 import { gameState } from '../state/game-state';
 import type { ICauldronValues, IRecipeRange } from '../types/game';
-import { LEVEL_ONE_RECIPE_TOLERANCE } from '../data/difficulty';
+import { DIFFICULTY_SETTINGS } from '../data/difficulty';
 
 type ParameterKey = keyof ICauldronValues;
 
@@ -23,10 +23,12 @@ const renderBar = (
   value: number,
   range: IRecipeRange | undefined,
 ): string => {
+  const tolerance = DIFFICULTY_SETTINGS[gameState.difficulty].recipeTolerance;
+
   const toleranceRange = range
     ? {
-        min: range.min - LEVEL_ONE_RECIPE_TOLERANCE,
-        max: range.max + LEVEL_ONE_RECIPE_TOLERANCE,
+        min: range.min - tolerance,
+        max: range.max + tolerance,
       }
     : undefined;
 
@@ -93,6 +95,7 @@ const renderBar = (
 export const renderBars = (): string => {
   const values = calculateCauldron(gameState.cauldronIngredients);
   const recipe = gameState.activeRecipe;
+  const tolerance = DIFFICULTY_SETTINGS[gameState.difficulty].recipeTolerance;
 
   const bars = PARAMETERS.map(({ key, label, icon }) =>
     renderBar(key, label, icon, values[key], recipe?.[key]),
@@ -110,7 +113,7 @@ export const renderBars = (): string => {
           ? `
             <div class="parameters__legend" aria-label="Parameter bar legend">
               <span><i class="parameters__legend-exact"></i> Target range</span>
-              <span><i class="parameters__legend-tolerance"></i> Tolerance ±8</span>
+              <span><i class="parameters__legend-tolerance"></i> Tolerance ±${tolerance}</span>
               <span><i class="parameters__legend-marker"></i> Current value</span>
             </div>
           `
@@ -124,6 +127,7 @@ export const renderBars = (): string => {
 export const updateBars = (): void => {
   const values = calculateCauldron(gameState.cauldronIngredients);
   const recipe = gameState.activeRecipe;
+  const toleranceValue = DIFFICULTY_SETTINGS[gameState.difficulty].recipeTolerance;
 
   for (const { key } of PARAMETERS) {
     const bar = document.querySelector<HTMLElement>(`[data-parameter="${key}"]`);
@@ -137,8 +141,8 @@ export const updateBars = (): void => {
 
     const toleranceRange = range
       ? {
-          min: range.min - LEVEL_ONE_RECIPE_TOLERANCE,
-          max: range.max + LEVEL_ONE_RECIPE_TOLERANCE,
+          min: range.min - toleranceValue,
+          max: range.max + toleranceValue,
         }
       : undefined;
 

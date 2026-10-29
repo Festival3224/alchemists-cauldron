@@ -1,10 +1,10 @@
 import { gameState } from '../state/game-state';
-import { LEVEL_ONE_CONFIG } from '../data/difficulty';
+import { DIFFICULTY_SETTINGS } from '../data/difficulty';
 
 export const renderRecipe = (): string => {
   const recipe = gameState.activeRecipe;
   const ingredientCount = gameState.cauldronIngredients.length;
-  const maxIngredients = LEVEL_ONE_CONFIG.maxCauldronIngredients;
+  const maxIngredients = DIFFICULTY_SETTINGS[gameState.difficulty].maxCauldronIngredients;
   const isFull = ingredientCount >= maxIngredients;
 
   if (!recipe) {
@@ -13,7 +13,7 @@ export const renderRecipe = (): string => {
       <h2 id="recipe-title">Current Recipe</h2>
 
       <p class="recipe__difficulty">
-        Difficulty: Medium
+        Difficulty: ${gameState.difficulty}
       </p>
 
       <p

@@ -18,6 +18,7 @@ export type GameStatus = 'menu' | 'playing' | 'paused' | 'game-over';
 
 export interface IGameState {
   status: GameStatus;
+  difficulty: Difficulty;
   score: number;
   timeLeft: number;
   timerEndsAt: number | null;

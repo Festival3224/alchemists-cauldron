@@ -1,5 +1,5 @@
 import { gameState } from '../state/game-state';
-import { LEVEL_ONE_CONFIG } from '../data/difficulty';
+import { DIFFICULTY_SETTINGS } from '../data/difficulty';
 
 import cauldronImage from '../assets/image/cualdron.png';
 
@@ -8,7 +8,8 @@ import type { BrewResult } from '../state/game-state';
 export const renderCauldron = (brewResult?: BrewResult): string => {
   const ingredients = gameState.cauldronIngredients;
 
-  const slots = Array.from({ length: LEVEL_ONE_CONFIG.maxCauldronIngredients }, (_, index) => {
+  const maxIngredients = DIFFICULTY_SETTINGS[gameState.difficulty].maxCauldronIngredients;
+  const slots = Array.from({ length: maxIngredients }, (_, index) => {
     const ingredient = ingredients[index];
 
     return ingredient
