@@ -5,6 +5,8 @@ import {
   MAX_NAME_LENGTH,
 } from '../storage/leaderboard';
 
+import type { Difficulty } from '../types/game';
+
 const escapeHtml = (value: string): string =>
   value
     .replaceAll('&', '&amp;')
@@ -13,8 +15,11 @@ const escapeHtml = (value: string): string =>
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#39;');
 
-export const renderLeaderboard = (confirmClear = false): string => {
-  const entries = loadLeaderboard();
+export const renderLeaderboard = (
+  confirmClear = false,
+  difficulty: Difficulty = 'medium',
+): string => {
+  const entries = loadLeaderboard(difficulty);
 
   const rows = entries
     .map(
@@ -35,7 +40,9 @@ export const renderLeaderboard = (confirmClear = false): string => {
       closedby="none"
       aria-labelledby="leaderboard-title"
     >
-      <h2 id="leaderboard-title">Leaderboard</h2>
+      <h2 id="leaderboard-title">
+        Leaderboard — ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+      </h2>
 
       ${
         confirmClear

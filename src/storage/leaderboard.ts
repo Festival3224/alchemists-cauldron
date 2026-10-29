@@ -4,7 +4,14 @@ export interface ILeaderboardEntry {
   date: string;
 }
 
-const STORAGE_KEY = 'alchemists-cauldron-leaderboard';
+import type { Difficulty } from '../types/game';
+
+const STORAGE_KEYS: Record<Difficulty, string> = {
+  easy: 'alchemists-cauldron-leaderboard-easy',
+  medium: 'alchemists-cauldron-leaderboard',
+  hard: 'alchemists-cauldron-leaderboard-hard',
+};
+
 const MAX_ENTRIES = 10;
 export const MIN_NAME_LENGTH = 2;
 export const MAX_NAME_LENGTH = 15;
@@ -41,9 +48,9 @@ export const validatePlayerName = (name: string): boolean => {
   );
 };
 
-export const loadLeaderboard = (): ILeaderboardEntry[] => {
+export const loadLeaderboard = (difficulty: Difficulty = 'medium'): ILeaderboardEntry[] => {
   try {
-    const saved = localStorage.getItem(STORAGE_KEY);
+    const saved = localStorage.getItem(STORAGE_KEYS[difficulty]);
 
     if (!saved) {
       return [];
@@ -61,22 +68,29 @@ export const loadLeaderboard = (): ILeaderboardEntry[] => {
   }
 };
 
-export const qualifiesForLeaderboard = (score: number): boolean => {
+export const qualifiesForLeaderboard = (
+  score: number,
+  difficulty: Difficulty = 'medium',
+): boolean => {
   if (!Number.isFinite(score) || score < 0) {
     return false;
   }
 
-  const entries = loadLeaderboard();
+  const entries = loadLeaderboard(difficulty);
 
   return entries.length < MAX_ENTRIES || score > entries[entries.length - 1].score;
 };
 
-export const saveLeaderboardEntry = (name: string, score: number): boolean => {
+export const saveLeaderboardEntry = (
+  name: string,
+  score: number,
+  difficulty: Difficulty = 'medium',
+): boolean => {
   if (!validatePlayerName(name) || !Number.isFinite(score) || score < 0) {
     return false;
   }
 
-  const entries = loadLeaderboard();
+  const entries = loadLeaderboard(difficulty);
 
   entries.push({
     name: name.trim(),
@@ -87,16 +101,16 @@ export const saveLeaderboardEntry = (name: string, score: number): boolean => {
   const updated = sortEntries(entries);
 
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    localStorage.setItem(STORAGE_KEYS[difficulty], JSON.stringify(updated));
     return true;
   } catch {
     return false;
   }
 };
 
-export const clearLeaderboard = (): boolean => {
+export const clearLeaderboard = (difficulty: Difficulty = 'medium'): boolean => {
   try {
-    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(STORAGE_KEYS[difficulty]);
     return true;
   } catch {
     return false;

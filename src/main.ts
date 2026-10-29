@@ -124,7 +124,7 @@ const renderApp = (brewResult?: BrewResult): void => {
          <p class="game-over__score-label">Final Score</p>
          <strong class="game-over__score">${gameState.score}</strong>
 
-         ${!scoreSubmitted && qualifiesForLeaderboard(gameState.score) ? renderPlayerNameForm() : ''}
+         ${!scoreSubmitted && qualifiesForLeaderboard(gameState.score, gameState.difficulty) ? renderPlayerNameForm() : ''}
 
          <button class="start-button" type="button" data-action="start">
            Play Again
@@ -378,7 +378,7 @@ const openLeaderboard = (confirmClear = false): void => {
     existingDialog.remove();
   }
 
-  app.insertAdjacentHTML('beforeend', renderLeaderboard(confirmClear));
+  app.insertAdjacentHTML('beforeend', renderLeaderboard(confirmClear, gameState.difficulty));
 
   const dialog = app.querySelector<HTMLDialogElement>('.leaderboard-dialog');
 
@@ -531,7 +531,7 @@ app.addEventListener('click', (event: MouseEvent) => {
         break;
 
       case 'leaderboard-confirm-clear':
-        if (clearLeaderboard()) {
+        if (clearLeaderboard(gameState.difficulty)) {
           openLeaderboard();
         } else {
           const confirmation = app.querySelector('.leaderboard-dialog__confirmation');
@@ -653,7 +653,7 @@ app.addEventListener('submit', (event: SubmitEvent) => {
     return;
   }
 
-  if (!saveLeaderboardEntry(name, gameState.score)) {
+  if (!saveLeaderboardEntry(name, gameState.score, gameState.difficulty)) {
     if (errorElement) {
       errorElement.textContent = 'Could not save your score. Please try again.';
     }
