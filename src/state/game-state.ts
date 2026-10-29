@@ -9,11 +9,13 @@ import { checkRecipe } from '../logic/check-recipe';
 import { DIFFICULTY_SETTINGS, MILLISECONDS_PER_SECOND } from '../data/difficulty';
 import { calculateTimeLeft } from '../logic/timer';
 
+import { loadDifficulty, saveDifficulty } from '../storage/difficulty';
+
 export type BrewResult = 'success' | 'failure' | 'unavailable';
 
 export const gameState: IGameState = {
   status: 'menu',
-  difficulty: 'medium',
+  difficulty: loadDifficulty(),
   score: 0,
   timeLeft: 0,
   timerEndsAt: null,
@@ -29,6 +31,7 @@ export const setDifficulty = (difficulty: Difficulty): void => {
   }
 
   gameState.difficulty = difficulty;
+  saveDifficulty(difficulty);
 };
 
 export const startNewGame = (): void => {
