@@ -156,6 +156,7 @@ export const loadGame = (): ISavedGame | null => {
       shelfStock: parsed.shelfStock,
     };
   } catch {
+    clearSave();
     return null;
   }
 };
