@@ -6,6 +6,8 @@ import frostLotusImage from '../assets/image/frost-lotus.png';
 import mandrakeRootImage from '../assets/image/discord_newplant.svg';
 import causticAcidImage from '../assets/image/caustic-acid.png';
 import essenceOfVoidImage from '../assets/image/essence-of-void.png';
+import phoenixFeatherImage from '../assets/image/phoenix-feather.png';
+import toadSlimeImage from '../assets/image/toad-smile.png';
 
 export const INGREDIENTS: IIngredient[] = [
   {
@@ -66,6 +68,7 @@ export const INGREDIENTS: IIngredient[] = [
     id: 'phoenix-feather',
     name: 'Phoenix Feather',
     icon: '🔥',
+    image: phoenixFeatherImage,
     temperature: 50,
     density: -10,
     magicPower: 30,
@@ -74,6 +77,7 @@ export const INGREDIENTS: IIngredient[] = [
     id: 'toad-slime',
     name: 'Toad Slime',
     icon: '🐸',
+    image: toadSlimeImage,
     temperature: 5,
     density: 30,
     magicPower: 0,
