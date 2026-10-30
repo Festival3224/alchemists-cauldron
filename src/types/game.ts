@@ -43,3 +43,15 @@ export interface IRecipe {
   density: IRecipeRange;
   magicPower: IRecipeRange;
 }
+
+export type ISavedGame = Pick<
+  IGameState,
+  | 'difficulty'
+  | 'score'
+  | 'timeLeft'
+  | 'lives'
+  | 'activeRecipe'
+  | 'cauldronIngredients'
+  | 'shelfStock'
+  | 'status'
+>;

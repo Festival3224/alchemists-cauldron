@@ -13,6 +13,8 @@ import { loadDifficulty, saveDifficulty } from '../storage/difficulty';
 
 export type BrewResult = 'success' | 'failure' | 'unavailable';
 
+import { saveGame, loadGame, clearSave } from '../storage/game-save';
+
 export const gameState: IGameState = {
   status: 'menu',
   difficulty: loadDifficulty(),
@@ -25,6 +27,24 @@ export const gameState: IGameState = {
   activeRecipe: null,
 };
 
+const persistGame = (): void => {
+  if (gameState.status !== 'playing' && gameState.status !== 'paused') {
+    clearSave();
+    return;
+  }
+
+  saveGame({
+    difficulty: gameState.difficulty,
+    score: gameState.score,
+    timeLeft: gameState.timeLeft,
+    lives: gameState.lives,
+    activeRecipe: gameState.activeRecipe,
+    cauldronIngredients: gameState.cauldronIngredients,
+    shelfStock: gameState.shelfStock,
+    status: gameState.status,
+  });
+};
+
 export const setDifficulty = (difficulty: Difficulty): void => {
   if (gameState.status !== 'menu') {
     return;
@@ -32,6 +52,27 @@ export const setDifficulty = (difficulty: Difficulty): void => {
 
   gameState.difficulty = difficulty;
   saveDifficulty(difficulty);
+};
+
+export const continueGame = (): boolean => {
+  const saved = loadGame();
+
+  if (!saved) {
+    return false;
+  }
+
+  gameState.difficulty = saved.difficulty;
+  gameState.score = saved.score;
+  gameState.timeLeft = saved.timeLeft;
+  gameState.timerEndsAt = null;
+  gameState.lives = saved.lives;
+  gameState.cauldronIngredients = saved.cauldronIngredients;
+  gameState.shelfStock = { ...saved.shelfStock };
+  gameState.activeRecipe = saved.activeRecipe;
+
+  gameState.status = 'paused';
+
+  return true;
 };
 
 export const startNewGame = (): void => {
@@ -45,6 +86,7 @@ export const startNewGame = (): void => {
   gameState.cauldronIngredients = [];
   gameState.shelfStock = createStock(INGREDIENTS.slice(0, config.ingredientCount));
   gameState.activeRecipe = getRandomRecipe(gameState.difficulty);
+  persistGame();
 };
 
 export const addIngredient = (id: string): boolean => {
@@ -66,6 +108,8 @@ export const addIngredient = (id: string): boolean => {
 
   gameState.cauldronIngredients.push(ingredient);
   gameState.shelfStock[id] -= 1;
+
+  persistGame();
 
   return true;
 };
@@ -112,6 +156,8 @@ export const brewPotion = (): BrewResult => {
   }
 
   checkOutOfIngredients();
+  persistGame();
+
   return isSuccessful ? 'success' : 'failure';
 };
 
@@ -128,6 +174,10 @@ export const updateTimer = (): void => {
     gameState.activeRecipe = null;
   }
   checkOutOfIngredients();
+
+  if (gameState.status === 'game-over') {
+    clearSave();
+  }
 };
 
 export const pauseGame = (): void => {
@@ -143,6 +193,7 @@ export const pauseGame = (): void => {
 
   gameState.timerEndsAt = null;
   gameState.status = 'paused';
+  persistGame();
 };
 
 export const resumeGame = (): void => {
@@ -153,6 +204,7 @@ export const resumeGame = (): void => {
   gameState.timerEndsAt = Date.now() + gameState.timeLeft * MILLISECONDS_PER_SECOND;
 
   gameState.status = 'playing';
+  persistGame();
 };
 
 const checkOutOfIngredients = (): void => {
@@ -182,4 +234,5 @@ export const exitToMenu = (): void => {
   gameState.cauldronIngredients = [];
   gameState.shelfStock = {};
   gameState.activeRecipe = null;
+  clearSave();
 };
