@@ -5,6 +5,7 @@ import { DIFFICULTY_SETTINGS, TIMER_WARNING_THRESHOLD } from './data/difficulty'
 import {
   addIngredient,
   brewPotion,
+  continueGame,
   gameState,
   startNewGame,
   updateTimer,
@@ -32,6 +33,8 @@ import {
   MIN_NAME_LENGTH,
   MAX_NAME_LENGTH,
 } from './storage/leaderboard';
+
+import { loadGame } from './storage/game-save';
 
 import { renderLeaderboard, renderPlayerNameForm } from './ui/leaderboard';
 
@@ -91,6 +94,20 @@ const animateGameStart = (): void => {
 const renderPrimaryAction = (): string => {
   const isMenu = gameState.status === 'menu';
   const canBrew = gameState.status === 'playing' && gameState.cauldronIngredients.length > 0;
+
+  if (isMenu && loadGame()) {
+    return `
+      <div class="game-layout__start-actions">
+        <button class="cauldron__brew" type="button" data-action="continue">
+          Continue Game
+        </button>
+
+        <button class="cauldron__brew" type="button" data-action="start">
+          Start New Game
+        </button>
+      </div>
+    `;
+  }
 
   return `
     <button
@@ -244,6 +261,7 @@ const renderApp = (brewResult?: BrewResult): void => {
       <h2 id="menu-dialog-title">✦ Menu ✦</h2>
 
       <div class="menu-dialog__actions">
+
         <button type="button" data-action="help-open">
           Help
         </button>
@@ -554,6 +572,17 @@ app.addEventListener('click', (event: MouseEvent) => {
     return;
   }
 
+  const continueButton = target.closest<HTMLButtonElement>('[data-action="continue"]');
+
+  if (continueButton) {
+    if (continueGame()) {
+      scoreSubmitted = false;
+      renderApp();
+    }
+
+    return;
+  }
+
   const startButton = target.closest<HTMLButtonElement>('[data-action="start"]');
 
   if (startButton) {
@@ -669,6 +698,12 @@ document.addEventListener('visibilitychange', () => {
   if (document.hidden && gameState.status === 'playing') {
     pauseGame();
     renderApp();
+  }
+});
+
+window.addEventListener('pagehide', () => {
+  if (gameState.status === 'playing') {
+    pauseGame();
   }
 });
 

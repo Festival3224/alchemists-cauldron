@@ -76,6 +76,13 @@
     }
   }
 
+  &__start-actions {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-3;
+    width: 100%;
+  }
+
   &__recipe {
     grid-area: recipe;
     min-width: 0;
