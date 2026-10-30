@@ -76,6 +76,28 @@
     }
   }
 
+  &__brew-actions {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-3;
+    width: 100%;
+
+    .cauldron__pour-out {
+      width: 100%;
+      padding: t.$space-3;
+      border: 1px solid rgb(229 190 119 / 50%);
+      border-radius: 8px;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+
+      &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+    }
+  }
+
   &__start-actions {
     display: flex;
     flex-direction: column;

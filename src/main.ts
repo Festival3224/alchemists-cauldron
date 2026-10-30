@@ -5,6 +5,7 @@ import { DIFFICULTY_SETTINGS, TIMER_WARNING_THRESHOLD } from './data/difficulty'
 import {
   addIngredient,
   brewPotion,
+  pourOut,
   continueGame,
   gameState,
   startNewGame,
@@ -93,7 +94,8 @@ const animateGameStart = (): void => {
 
 const renderPrimaryAction = (): string => {
   const isMenu = gameState.status === 'menu';
-  const canBrew = gameState.status === 'playing' && gameState.cauldronIngredients.length > 0;
+  const isPlaying = gameState.status === 'playing';
+  const hasIngredients = gameState.cauldronIngredients.length > 0;
 
   if (isMenu && loadGame()) {
     return `
@@ -109,15 +111,34 @@ const renderPrimaryAction = (): string => {
     `;
   }
 
+  if (isMenu) {
+    return `
+      <button class="cauldron__brew" type="button" data-action="start">
+        Start Game
+      </button>
+    `;
+  }
+
   return `
-    <button
-      class="cauldron__brew"
-      type="button"
-      data-action="${isMenu ? 'start' : 'brew'}"
-      ${!isMenu && !canBrew ? 'disabled' : ''}
-    >
-      ${isMenu ? 'Start Game' : 'Brew'}
-    </button>
+    <div class="game-layout__brew-actions">
+      <button
+        class="cauldron__brew"
+        type="button"
+        data-action="brew"
+        ${!isPlaying || !hasIngredients ? 'disabled' : ''}
+      >
+        Brew
+      </button>
+
+      <button
+        class="cauldron__pour-out"
+        type="button"
+        data-action="pour-out"
+        ${!isPlaying || !hasIngredients ? 'disabled' : ''}
+      >
+        Pour Out
+      </button>
+    </div>
   `;
 };
 
@@ -601,6 +622,16 @@ app.addEventListener('click', (event: MouseEvent) => {
     }
 
     renderApp();
+    return;
+  }
+
+  const pourOutButton = target.closest<HTMLButtonElement>('[data-action="pour-out"]');
+
+  if (pourOutButton) {
+    if (!pourOutButton.disabled && pourOut()) {
+      renderApp();
+    }
+
     return;
   }
 

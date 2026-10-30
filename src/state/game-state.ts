@@ -15,6 +15,8 @@ export type BrewResult = 'success' | 'failure' | 'unavailable';
 
 import { saveGame, loadGame, clearSave } from '../storage/game-save';
 
+const POUR_OUT_PENALTY = 10;
+
 export const gameState: IGameState = {
   status: 'menu',
   difficulty: loadDifficulty(),
@@ -109,6 +111,25 @@ export const addIngredient = (id: string): boolean => {
   gameState.cauldronIngredients.push(ingredient);
   gameState.shelfStock[id] -= 1;
 
+  persistGame();
+
+  return true;
+};
+
+export const pourOut = (): boolean => {
+  updateTimer();
+
+  if (gameState.status !== 'playing' || gameState.cauldronIngredients.length === 0) {
+    return false;
+  }
+
+  gameState.cauldronIngredients = [];
+
+  gameState.timeLeft = Math.max(0, gameState.timeLeft - POUR_OUT_PENALTY);
+
+  gameState.timerEndsAt = Date.now() + gameState.timeLeft * MILLISECONDS_PER_SECOND;
+
+  updateTimer();
   persistGame();
 
   return true;
