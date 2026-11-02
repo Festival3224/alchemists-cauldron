@@ -491,6 +491,50 @@ const refreshGameHud = (): void => {
   );
 };
 
+const positionIngredientTooltip = (target: EventTarget | null): void => {
+  if (!(target instanceof Element) || gameState.status !== 'playing') {
+    return;
+  }
+
+  const card = target.closest<HTMLButtonElement>('.ingredient-card');
+
+  if (!card || card.disabled) {
+    return;
+  }
+
+  const tooltip = card.querySelector<HTMLElement>('.ingredient-tooltip');
+
+  if (!tooltip) {
+    return;
+  }
+
+  tooltip.classList.remove('ingredient-tooltip--left', 'ingredient-tooltip--up');
+
+  const cardRect = card.getBoundingClientRect();
+  const tooltipRect = tooltip.getBoundingClientRect();
+
+  const spaceRight = window.innerWidth - cardRect.right;
+  const spaceLeft = cardRect.left;
+
+  if (spaceRight < tooltipRect.width + 10 && spaceLeft > spaceRight) {
+    tooltip.classList.add('ingredient-tooltip--left');
+  }
+
+  const positionedRect = tooltip.getBoundingClientRect();
+
+  if (positionedRect.bottom > window.innerHeight - 8) {
+    tooltip.classList.add('ingredient-tooltip--up');
+  }
+};
+
+app.addEventListener('pointerover', (event) => {
+  positionIngredientTooltip(event.target);
+});
+
+app.addEventListener('focusin', (event) => {
+  positionIngredientTooltip(event.target);
+});
+
 app.addEventListener('click', (event: MouseEvent) => {
   if (isStarting) {
     return;

@@ -3,6 +3,12 @@ import { gameState } from '../state/game-state';
 
 import { DIFFICULTY_SETTINGS } from '../data/difficulty';
 
+const formatIngredientValue = (value: number): string => {
+  if (value > 0) return `+${value}`;
+  if (value < 0) return `−${Math.abs(value)}`;
+  return '0';
+};
+
 export const renderShelf = (): string => {
   const config = DIFFICULTY_SETTINGS[gameState.difficulty];
 
@@ -21,6 +27,7 @@ export const renderShelf = (): string => {
           class="ingredient-card ${isEmpty ? 'ingredient-card--empty' : ''}"
           type="button"
           data-ingredient-id="${ingredient.id}"
+          ${!isEmpty ? `aria-describedby="tooltip-${ingredient.id}"` : ''}
           ${isDisabled ? 'disabled' : ''}
         >
           <span class="ingredient-card__stock">${stock}</span>
@@ -42,27 +49,18 @@ export const renderShelf = (): string => {
           <span class="ingredient-card__name">
             ${isEmpty ? 'Empty' : ingredient.name}
           </span>
+          
           ${
             isEmpty
               ? ''
-              : `<span class="ingredient-card__values">
-           <span class="ingredient-card__value">
-             <span class="ingredient-card__label-desktop">Temp:</span>
-             <span class="ingredient-card__label-mobile">T:</span>
-             ${ingredient.temperature > 0 ? '+' : ''}${ingredient.temperature}
-           </span>
-           <span class="ingredient-card__value">
-             <span class="ingredient-card__label-desktop">Density:</span>
-             <span class="ingredient-card__label-mobile">D:</span>
-             ${ingredient.density > 0 ? '+' : ''}${ingredient.density}
-           </span>
-           <span class="ingredient-card__value">
-             <span class="ingredient-card__label-desktop">Magic:</span>
-             <span class="ingredient-card__label-mobile">M:</span>
-             ${ingredient.magicPower > 0 ? '+' : ''}${ingredient.magicPower}
-           </span>
-         </span>`
+              : `<span class="ingredient-tooltip" id="tooltip-${ingredient.id}" role="tooltip">
+                  <span class="ingredient-tooltip__title">${ingredient.name}</span>
+                  <span>Temperature: ${formatIngredientValue(ingredient.temperature)}</span>
+                  <span>Density: ${formatIngredientValue(ingredient.density)}</span>
+                  <span>Magic Power: ${formatIngredientValue(ingredient.magicPower)}</span>
+                </span>`
           }
+
         </button>
       `;
     })

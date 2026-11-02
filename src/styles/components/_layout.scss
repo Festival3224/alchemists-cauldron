@@ -22,13 +22,19 @@
   display: grid;
   width: 100%;
   max-width: t.$content-max-width;
-  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 0.9fr);
+  /* grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 0.9fr);*/
   grid-template-areas:
     'shelf cauldron right'
     'shelf action right';
   align-items: start;
   gap: t.$space-5;
   margin-top: t.$space-6;
+
+  @media (min-width: 1024px) {
+    .game-layout {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.25fr) minmax(0, 0.9fr);
+    }
+  }
 
   // Tablet: 769–1023px
   @include bp.tablet {
