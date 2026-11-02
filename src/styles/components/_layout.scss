@@ -24,9 +24,8 @@
   max-width: t.$content-max-width;
   grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 0.9fr);
   grid-template-areas:
-    'shelf cauldron recipe'
-    'shelf action recipe'
-    'bars bars bars';
+    'shelf cauldron right'
+    'shelf action right';
   align-items: start;
   gap: t.$space-5;
   margin-top: t.$space-6;
@@ -76,11 +75,41 @@
     }
   }
 
+  &__brew-actions {
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-3;
+    width: 100%;
+
+    .cauldron__pour-out {
+      width: 100%;
+      padding: t.$space-3;
+      border: 1px solid rgb(229 190 119 / 50%);
+      border-radius: 8px;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+
+      &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+    }
+  }
+
   &__start-actions {
     display: flex;
     flex-direction: column;
     gap: t.$space-3;
     width: 100%;
+  }
+
+  &__right {
+    grid-area: right;
+    display: flex;
+    flex-direction: column;
+    gap: t.$space-4;
+    min-width: 0;
   }
 
   &__recipe {
@@ -91,6 +120,12 @@
   &__bars {
     grid-area: bars;
     min-width: 0;
+  }
+
+  @include bp.tablet-and-mobile {
+    &__right {
+      display: contents;
+    }
   }
 }
 
@@ -395,4 +430,26 @@
     inset 0 0 0 3px t.$color-bg-panel,
     inset 0 0 0 4px rgb(229 190 119 / 20%),
     0 24px 70px rgb(0 0 0 / 60%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  #app.game-starting {
+    .game-layout__shelf,
+    .game-layout__recipe,
+    .game-layout__bars,
+    .game-layout__cauldron,
+    .game-layout__action {
+      animation: game-start-fade 600ms ease-out both;
+    }
+  }
+}
+
+@keyframes game-start-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }

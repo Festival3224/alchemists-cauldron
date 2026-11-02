@@ -3,8 +3,10 @@ import './styles/main.scss';
 import { DIFFICULTY_SETTINGS, TIMER_WARNING_THRESHOLD } from './data/difficulty';
 
 import {
+  activateGameTimer,
   addIngredient,
   brewPotion,
+  pourOut,
   continueGame,
   gameState,
   startNewGame,
@@ -55,24 +57,34 @@ const animateGameStart = (): void => {
 
   isStarting = true;
 
+  // Prepare the game without starting the countdown.
+  startNewGame(false);
+
+  app.classList.add('game-starting');
+  renderApp();
+
   const progress = app.querySelector<HTMLProgressElement>('.game-hud__progress');
-  const startButton = app.querySelector<HTMLButtonElement>('[data-action="start"]');
 
   if (!progress) {
-    startNewGame();
-    renderApp();
+    app.classList.remove('game-starting');
+    activateGameTimer();
     isStarting = false;
     return;
   }
 
-  if (startButton) {
-    startButton.disabled = true;
-  }
+  progress.value = 0;
 
   const duration = 600;
   const startTime = performance.now();
 
   const animate = (now: number): void => {
+    // Do not start the timer if the game was paused or exited.
+    if (gameState.status !== 'playing') {
+      app.classList.remove('game-starting');
+      isStarting = false;
+      return;
+    }
+
     const elapsed = Math.min((now - startTime) / duration, 1);
     const eased = 1 - (1 - elapsed) ** 3;
 
@@ -83,8 +95,8 @@ const animateGameStart = (): void => {
       return;
     }
 
-    startNewGame();
-    renderApp();
+    app.classList.remove('game-starting');
+    activateGameTimer();
     isStarting = false;
   };
 
@@ -93,7 +105,8 @@ const animateGameStart = (): void => {
 
 const renderPrimaryAction = (): string => {
   const isMenu = gameState.status === 'menu';
-  const canBrew = gameState.status === 'playing' && gameState.cauldronIngredients.length > 0;
+  const isPlaying = gameState.status === 'playing';
+  const hasIngredients = gameState.cauldronIngredients.length > 0;
 
   if (isMenu && loadGame()) {
     return `
@@ -109,15 +122,34 @@ const renderPrimaryAction = (): string => {
     `;
   }
 
+  if (isMenu) {
+    return `
+      <button class="cauldron__brew" type="button" data-action="start">
+        Start Game
+      </button>
+    `;
+  }
+
   return `
-    <button
-      class="cauldron__brew"
-      type="button"
-      data-action="${isMenu ? 'start' : 'brew'}"
-      ${!isMenu && !canBrew ? 'disabled' : ''}
-    >
-      ${isMenu ? 'Start Game' : 'Brew'}
-    </button>
+    <div class="game-layout__brew-actions">
+      <button
+        class="cauldron__brew"
+        type="button"
+        data-action="brew"
+        ${!isPlaying || !hasIngredients ? 'disabled' : ''}
+      >
+        Brew
+      </button>
+
+      <button
+        class="cauldron__pour-out"
+        type="button"
+        data-action="pour-out"
+        ${!isPlaying || !hasIngredients ? 'disabled' : ''}
+      >
+        Pour Out
+      </button>
+    </div>
   `;
 };
 
@@ -222,7 +254,7 @@ const renderApp = (brewResult?: BrewResult): void => {
         </button>
       </header>
 
-      ${renderGameHud()}
+      ${renderGameHud(brewResult)}
 
       <div class="game-layout">
         <div class="game-layout__shelf">
@@ -237,24 +269,17 @@ const renderApp = (brewResult?: BrewResult): void => {
           ${renderPrimaryAction()}
         </div>
 
-        <div class="game-layout__recipe">
-          ${renderRecipe()}
-        </div>
+        <div class="game-layout__right">
+          <div class="game-layout__recipe">
+            ${renderRecipe()}
+          </div>
 
-        <div class="game-layout__bars">
-          ${renderBars()}
+          <div class="game-layout__bars">
+            ${renderBars()}
+          </div>
         </div>
       </div>
 
-            ${
-              brewResult === 'success'
-                ? `<p class="brew-message brew-message--success" role="status">
-                    Potion brewed successfully! +${DIFFICULTY_SETTINGS[gameState.difficulty].scorePerBrew} points
-                  </p>`
-                : brewResult === 'failure'
-                  ? '<p class="brew-message brew-message--failure" role="status">Brewing failed! Lost 1 life.</p>'
-                  : ''
-            }
     </main>
 
     <dialog class="menu-dialog" aria-labelledby="menu-dialog-title">
@@ -364,6 +389,7 @@ const renderApp = (brewResult?: BrewResult): void => {
     ${gameOverMarkup}
     ${pauseMarkup}
   `;
+
   const gameOverDialog = app.querySelector<HTMLDialogElement>('.game-over');
 
   if (gameOverDialog) {
@@ -371,8 +397,20 @@ const renderApp = (brewResult?: BrewResult): void => {
       event.preventDefault();
     });
 
-    gameOverDialog.showModal();
-    gameOverDialog.querySelector<HTMLElement>('#game-over-title')?.focus();
+    const showGameOver = (): void => {
+      if (!gameOverDialog.isConnected || gameState.status !== 'game-over') {
+        return;
+      }
+
+      gameOverDialog.showModal();
+      gameOverDialog.querySelector<HTMLElement>('#game-over-title')?.focus();
+    };
+
+    if (brewResult === 'success' || brewResult === 'failure') {
+      window.setTimeout(showGameOver, 950);
+    } else {
+      showGameOver();
+    }
   }
 
   const pauseDialog = app.querySelector<HTMLDialogElement>('.pause-dialog');
@@ -384,6 +422,17 @@ const renderApp = (brewResult?: BrewResult): void => {
 
     pauseDialog.showModal();
     pauseDialog.querySelector<HTMLButtonElement>('[data-action="pause"]')?.focus();
+  }
+
+  if (brewResult === 'success') {
+    const scoreElement = app.querySelector<HTMLElement>('.game-hud__score');
+
+    window.setTimeout(() => {
+      if (scoreElement?.isConnected && scoreElement.classList.contains('game-hud__value--gain')) {
+        scoreElement.textContent = String(gameState.score);
+        scoreElement.classList.remove('game-hud__value--gain');
+      }
+    }, 850);
   }
 };
 
@@ -443,6 +492,14 @@ const refreshGameHud = (): void => {
 };
 
 app.addEventListener('click', (event: MouseEvent) => {
+  if (isStarting) {
+    return;
+  }
+
+  if (gameState.status === 'game-over' && app.querySelector('.game-over:not([open])')) {
+    return;
+  }
+
   const target = event.target;
 
   if (!(target instanceof Element)) {
@@ -601,6 +658,16 @@ app.addEventListener('click', (event: MouseEvent) => {
     }
 
     renderApp();
+    return;
+  }
+
+  const pourOutButton = target.closest<HTMLButtonElement>('[data-action="pour-out"]');
+
+  if (pourOutButton) {
+    if (!pourOutButton.disabled && pourOut()) {
+      renderApp();
+    }
+
     return;
   }
 

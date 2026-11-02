@@ -52,8 +52,8 @@
 
   &__list {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: t.$space-6;
+    grid-template-columns: minmax(0, 1fr);
+    gap: t.$space-4;
   }
 
   @include bp.tablet-and-mobile {
