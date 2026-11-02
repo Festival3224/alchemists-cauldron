@@ -77,18 +77,30 @@ export const continueGame = (): boolean => {
   return true;
 };
 
-export const startNewGame = (): void => {
+export const startNewGame = (startTimer = true): void => {
   const config = DIFFICULTY_SETTINGS[gameState.difficulty];
 
   gameState.status = 'playing';
   gameState.score = 0;
   gameState.timeLeft = config.startingTime;
-  gameState.timerEndsAt = Date.now() + gameState.timeLeft * MILLISECONDS_PER_SECOND;
+
+  gameState.timerEndsAt = startTimer
+    ? Date.now() + gameState.timeLeft * MILLISECONDS_PER_SECOND
+    : null;
+
   gameState.lives = config.startingLives;
   gameState.cauldronIngredients = [];
   gameState.shelfStock = createStock(INGREDIENTS.slice(0, config.ingredientCount));
   gameState.activeRecipe = getRandomRecipe(gameState.difficulty);
   persistGame();
+};
+
+export const activateGameTimer = (): void => {
+  if (gameState.status !== 'playing' || gameState.timerEndsAt !== null) {
+    return;
+  }
+
+  gameState.timerEndsAt = Date.now() + gameState.timeLeft * MILLISECONDS_PER_SECOND;
 };
 
 export const addIngredient = (id: string): boolean => {
