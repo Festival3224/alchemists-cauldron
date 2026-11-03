@@ -768,6 +768,116 @@ app.addEventListener('click', (event: MouseEvent) => {
   }
 });
 
+let draggedIngredientId: string | null = null;
+
+const clearDragState = (): void => {
+  document.documentElement.classList.remove('ingredient-drag-active');
+
+  app.querySelector('.ingredient-card--dragging')?.classList.remove('ingredient-card--dragging');
+
+  draggedIngredientId = null;
+
+  app.querySelectorAll('.cauldron--drag-over').forEach((element) => {
+    element.classList.remove('cauldron--drag-over');
+  });
+};
+
+app.addEventListener('dragstart', (event: DragEvent) => {
+  const target = event.target;
+
+  if (!(target instanceof Element) || isStarting || gameState.status !== 'playing') {
+    event.preventDefault();
+    return;
+  }
+
+  const card = target.closest<HTMLButtonElement>('.ingredient-card');
+
+  if (!card || card.disabled || !card.dataset.ingredientId || !event.dataTransfer) {
+    event.preventDefault();
+    return;
+  }
+
+  draggedIngredientId = card.dataset.ingredientId;
+
+  document.documentElement.classList.add('ingredient-drag-active');
+
+  card.classList.add('ingredient-card--dragging');
+
+  event.dataTransfer.setData('text/plain', draggedIngredientId);
+  event.dataTransfer.effectAllowed = 'copy';
+
+  const image = card.querySelector<HTMLImageElement>('.ingredient-card__image');
+
+  if (image && image.complete && image.naturalWidth > 0) {
+    event.dataTransfer.setDragImage(
+      image,
+      image.getBoundingClientRect().width / 2,
+      image.getBoundingClientRect().height / 2,
+    );
+  }
+});
+
+app.addEventListener('dragover', (event: DragEvent) => {
+  if (!draggedIngredientId || gameState.status !== 'playing' || isStarting) {
+    return;
+  }
+
+  const target = event.target;
+
+  if (!(target instanceof Element)) {
+    return;
+  }
+
+  const cauldron = target.closest<HTMLElement>('.cauldron');
+
+  const config = DIFFICULTY_SETTINGS[gameState.difficulty];
+  const hasSpace = gameState.cauldronIngredients.length < config.maxCauldronIngredients;
+
+  if (!cauldron || !hasSpace) {
+    return;
+  }
+
+  event.preventDefault();
+
+  if (event.dataTransfer) {
+    event.dataTransfer.dropEffect = 'copy';
+  }
+
+  cauldron.classList.add('cauldron--drag-over');
+});
+
+app.addEventListener('dragleave', (event: DragEvent) => {
+  const target = event.target;
+
+  if (!(target instanceof Element)) {
+    return;
+  }
+
+  const cauldron = target.closest<HTMLElement>('.cauldron');
+
+  if (cauldron && (!event.relatedTarget || !cauldron.contains(event.relatedTarget as Node))) {
+    cauldron.classList.remove('cauldron--drag-over');
+  }
+});
+
+app.addEventListener('drop', (event: DragEvent) => {
+  const target = event.target;
+  const cauldron = target instanceof Element ? target.closest('.cauldron') : null;
+  const ingredientId = draggedIngredientId;
+
+  if (cauldron) {
+    event.preventDefault();
+  }
+
+  clearDragState();
+
+  if (cauldron && ingredientId && !isStarting && addIngredient(ingredientId)) {
+    renderApp();
+  }
+});
+
+app.addEventListener('dragend', clearDragState);
+
 app.addEventListener('submit', (event: SubmitEvent) => {
   const form = event.target;
 
