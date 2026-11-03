@@ -242,3 +242,7 @@
     }
   }
 }
+
+html.ingredient-drag-active .ingredient-tooltip {
+  display: none !important;
+}

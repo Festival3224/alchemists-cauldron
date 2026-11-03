@@ -27,6 +27,7 @@ export const renderShelf = (): string => {
           class="ingredient-card ${isEmpty ? 'ingredient-card--empty' : ''}"
           type="button"
           data-ingredient-id="${ingredient.id}"
+          draggable="${!isDisabled}"
           ${!isEmpty ? `aria-describedby="tooltip-${ingredient.id}"` : ''}
           ${isDisabled ? 'disabled' : ''}
         >
