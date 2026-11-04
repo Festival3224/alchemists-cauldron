@@ -1,5 +1,9 @@
 import './styles/main.scss';
 
+import { renderLanguageSwitcher } from './ui/language-switcher';
+import { getLocale, setLocale } from './i18n';
+import type { Locale } from './i18n/translations';
+
 import { DIFFICULTY_SETTINGS, TIMER_WARNING_THRESHOLD } from './data/difficulty';
 
 import {
@@ -219,39 +223,48 @@ const renderApp = (brewResult?: BrewResult): void => {
       <header class="app-header">
         <h1>Alchemist's Cauldron</h1>
 
-        <button
-          class="app-menu-trigger"
-          type="button"
-          data-action="menu-open"
-          aria-haspopup="dialog"
-        >
-          <span class="app-menu-trigger__label">Menu</span>
+        <div class="app-header__controls">
+          ${renderLanguageSwitcher()}
 
-          <svg
-            class="app-menu-trigger__ornaments"
-            viewBox="0 0 180 70"
-            preserveAspectRatio="none"
-            aria-hidden="true"
+
+          <button
+            class="app-menu-trigger"
+            type="button"
+            data-action="menu-open"
+            aria-haspopup="dialog"
+            aria-label="Open menu"
           >
-            <!-- Outer frame -->
-            <g class="frame-outer">
-              <path d="M22 9 H158 M171 22 V48 M158 61 H22 M9 48 V22" />
-            </g>
+            <span class="app-menu-trigger__label">Menu</span>
 
-            <!-- Inner frame -->
-            <g class="frame-inner">
-              <path d="M22 12 H158 M168 22 V48 M158 58 H22 M12 48 V22" />
-            </g>
+            <span class="app-menu-trigger__hamburger" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
 
-            <!-- Four decorative stars -->
-            <g class="frame-ornament">
-              <path d="M15 9 Q16 14 21 15 Q16 16 15 21 Q14 16 9 15 Q14 14 15 9Z" />
-              <path d="M165 9 Q166 14 171 15 Q166 16 165 21 Q164 16 159 15 Q164 14 165 9Z" />
-              <path d="M15 49 Q16 54 21 55 Q16 56 15 61 Q14 56 9 55 Q14 54 15 49Z" />
-              <path d="M165 49 Q166 54 171 55 Q166 56 165 61 Q164 56 159 55 Q164 54 165 49Z" />
-            </g>
-          </svg>
-        </button>
+            <svg
+              class="app-menu-trigger__ornaments"
+              viewBox="0 0 180 70"
+              preserveAspectRatio="none"
+              aria-hidden="true"
+            >
+              
+              <g class="frame-outer">
+                <path d="M22 9 H158 M171 22 V48 M158 61 H22 M9 48 V22" />
+              </g>
+
+              <g class="frame-inner">
+                <path d="M22 12 H158 M168 22 V48 M158 58 H22 M12 48 V22" />
+              </g>                            
+            </svg>
+
+            <span class="app-menu-trigger__stars" aria-hidden="true">
+              <span class="app-menu-trigger__stars-top"></span>
+              <span class="app-menu-trigger__stars-bottom"></span>
+            </span>
+
+          </button>
+        </div>
       </header>
 
       ${renderGameHud(brewResult)}
@@ -282,7 +295,17 @@ const renderApp = (brewResult?: BrewResult): void => {
 
     </main>
 
-    <dialog class="menu-dialog" aria-labelledby="menu-dialog-title">
+    <dialog class="menu-dialog main-menu-dialog" aria-labelledby="menu-dialog-title">
+      <button
+        class="main-menu-dialog__close-icon"
+        type="button"
+        data-action="menu-close"
+        aria-label="Close menu"
+      >
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </button>
+
       <h2 id="menu-dialog-title">✦ Menu ✦</h2>
 
       <div class="menu-dialog__actions">
@@ -298,6 +321,10 @@ const renderApp = (brewResult?: BrewResult): void => {
         <button type="button" data-action="leaderboard-open">          
          Leaderboard
         </button>
+      </div>
+
+      <div class="main-menu-dialog__language">
+        ${renderLanguageSwitcher()}
       </div>
 
       <button
@@ -547,6 +574,27 @@ app.addEventListener('click', (event: MouseEvent) => {
   const target = event.target;
 
   if (!(target instanceof Element)) {
+    return;
+  }
+
+  const languageButton = target.closest<HTMLButtonElement>('[data-locale]');
+
+  if (languageButton) {
+    const locale = languageButton.dataset.locale;
+
+    if (locale !== 'en' && locale !== 'ru' && locale !== 'es') {
+      return;
+    }
+
+    setLocale(locale as Locale);
+
+    app.querySelectorAll<HTMLButtonElement>('[data-locale]').forEach((button) => {
+      const isActive = button.dataset.locale === getLocale();
+
+      button.classList.toggle('language-switcher__button--active', isActive);
+      button.setAttribute('aria-pressed', String(isActive));
+    });
+
     return;
   }
 
@@ -927,6 +975,8 @@ window.addEventListener('pagehide', () => {
     pauseGame();
   }
 });
+
+document.documentElement.lang = getLocale();
 
 renderApp();
 
