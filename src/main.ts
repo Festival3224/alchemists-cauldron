@@ -1,8 +1,8 @@
 import './styles/main.scss';
 
 import { renderLanguageSwitcher } from './ui/language-switcher';
-import { getLocale, setLocale } from './i18n';
-import type { Locale } from './i18n/translations';
+import { getLocale, setLocale, t } from './i18n';
+import type { TranslationKey } from './i18n/translations';
 
 import { DIFFICULTY_SETTINGS, TIMER_WARNING_THRESHOLD } from './data/difficulty';
 
@@ -115,12 +115,17 @@ const renderPrimaryAction = (): string => {
   if (isMenu && loadGame()) {
     return `
       <div class="game-layout__start-actions">
-        <button class="cauldron__brew" type="button" data-action="continue">
-          Continue Game
+        <button
+          class="cauldron__brew"
+          type="button"
+          data-action="continue"
+          data-i18n="continueGame"
+        >
+          ${t('continueGame')}
         </button>
 
-        <button class="cauldron__brew" type="button" data-action="start">
-          Start New Game
+        <button class="cauldron__brew" type="button" data-action="start" data-i18n="startNewGame">
+          ${t('startNewGame')}
         </button>
       </div>
     `;
@@ -128,8 +133,8 @@ const renderPrimaryAction = (): string => {
 
   if (isMenu) {
     return `
-      <button class="cauldron__brew" type="button" data-action="start">
-        Start Game
+      <button class="cauldron__brew" type="button" data-action="start" data-i18n="startGame">
+        ${t('startGame')}
       </button>
     `;
   }
@@ -140,18 +145,20 @@ const renderPrimaryAction = (): string => {
         class="cauldron__brew"
         type="button"
         data-action="brew"
+        data-i18n="brew"
         ${!isPlaying || !hasIngredients ? 'disabled' : ''}
       >
-        Brew
+        ${t('brew')}
       </button>
 
       <button
         class="cauldron__pour-out"
         type="button"
         data-action="pour-out"
+        data-i18n="pourOut"
         ${!isPlaying || !hasIngredients ? 'disabled' : ''}
       >
-        Pour Out
+        ${t('pourOut')}
       </button>
     </div>
   `;
@@ -306,20 +313,22 @@ const renderApp = (brewResult?: BrewResult): void => {
         <span aria-hidden="true"></span>
       </button>
 
-      <h2 id="menu-dialog-title">✦ Menu ✦</h2>
+      <h2 id="menu-dialog-title">
+        ✦ <span data-i18n="menu">${t('menu')}</span> ✦
+      </h2>
 
       <div class="menu-dialog__actions">
 
-        <button type="button" data-action="help-open">
-          Help
+        <button type="button" data-action="help-open" data-i18n="help">
+          ${t('help')}
         </button>
 
-        <button type="button" data-action="settings-open">
-          Settings
+        <button type="button" data-action="settings-open" data-i18n="settings">
+          ${t('settings')}
         </button>
 
-        <button type="button" data-action="leaderboard-open">          
-         Leaderboard
+        <button type="button" data-action="leaderboard-open" data-i18n="leaderboard">          
+         ${t('leaderboard')}
         </button>
       </div>
 
@@ -331,8 +340,9 @@ const renderApp = (brewResult?: BrewResult): void => {
         class="menu-dialog__close"
         type="button"
         data-action="menu-close"
+        data-i18n="close"
       >
-        Close
+        ${t('close')}
       </button>
     </dialog>
 
@@ -562,6 +572,14 @@ app.addEventListener('focusin', (event) => {
   positionIngredientTooltip(event.target);
 });
 
+const updateTranslations = (): void => {
+  app.querySelectorAll<HTMLElement>('[data-i18n]').forEach((element) => {
+    const key = element.dataset.i18n as TranslationKey;
+
+    element.textContent = t(key);
+  });
+};
+
 app.addEventListener('click', (event: MouseEvent) => {
   if (isStarting) {
     return;
@@ -586,14 +604,16 @@ app.addEventListener('click', (event: MouseEvent) => {
       return;
     }
 
-    setLocale(locale as Locale);
+    setLocale(locale);
 
     app.querySelectorAll<HTMLButtonElement>('[data-locale]').forEach((button) => {
-      const isActive = button.dataset.locale === getLocale();
+      const isActive = button.dataset.locale === locale;
 
       button.classList.toggle('language-switcher__button--active', isActive);
       button.setAttribute('aria-pressed', String(isActive));
     });
+
+    updateTranslations();
 
     return;
   }
