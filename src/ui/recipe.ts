@@ -1,8 +1,40 @@
 import { gameState } from '../state/game-state';
 import { DIFFICULTY_SETTINGS } from '../data/difficulty';
 
+import { translate } from '../i18n';
+import type { TranslationKey } from '../i18n/translations';
+
+const RECIPE_NAME_KEYS: Record<string, TranslationKey> = {
+  'moon-mist': 'moonMist',
+  'root-bloom': 'rootBloom',
+  'frost-steam': 'frostSteam',
+  'quiet-swirl': 'quietSwirl',
+  'bright-dew': 'brightDew',
+  'snow-dust': 'snowDust',
+
+  'acid-spark': 'acidSpark',
+  'void-ember': 'voidEmber',
+  'heavy-acid': 'heavyAcid',
+  'frost-acid': 'frostAcid',
+  'dusty-void': 'dustyVoid',
+  'dragon-void': 'dragonVoid',
+  'rooted-night': 'rootedNight',
+
+  'phoenix-pulse': 'phoenixPulse',
+  'slime-crown': 'slimeCrown',
+  'void-flame': 'voidFlame',
+  'acid-bog': 'acidBog',
+  'frozen-ash': 'frozenAsh',
+  'triple-eclipse': 'tripleEclipse',
+  'ember-soup': 'emberSoup',
+};
+
 export const renderRecipe = (): string => {
   const recipe = gameState.activeRecipe;
+
+  const recipeNameKey = recipe ? RECIPE_NAME_KEYS[recipe.id] : undefined;
+  const recipeName = recipeNameKey ? translate(recipeNameKey) : recipe?.name;
+
   const ingredientCount = gameState.cauldronIngredients.length;
   const maxIngredients = DIFFICULTY_SETTINGS[gameState.difficulty].maxCauldronIngredients;
   const isFull = ingredientCount >= maxIngredients;
@@ -10,10 +42,10 @@ export const renderRecipe = (): string => {
   if (!recipe) {
     return `
     <section class="recipe recipe--empty" aria-labelledby="recipe-title">
-      <h2 id="recipe-title">Current Recipe</h2>
+      <h2 id="recipe-title">${translate('currentRecipe')}</h2>
 
       <p class="recipe__difficulty">
-        Difficulty: ${gameState.difficulty}
+        ${translate('difficulty')}: ${translate(gameState.difficulty)}
       </p>
 
       <p
@@ -25,17 +57,17 @@ export const renderRecipe = (): string => {
 
       <div class="recipe__ranges">
         <p>
-          <span>Temperature:</span>
+          <span>${translate('temperature')}:</span>
           <strong>—</strong>
         </p>
 
         <p>
-          <span>Density:</span>
+          <span>${translate('density')}:</span>
           <strong>—</strong>
         </p>
 
         <p>
-          <span>Magic Power:</span>
+          <span>${translate('magicPower')}:</span>
           <strong>—</strong>
         </p>
       </div>
@@ -45,10 +77,10 @@ export const renderRecipe = (): string => {
 
   return `
     <section class="recipe" aria-labelledby="recipe-title">
-      <h2 id="recipe-title">${recipe.name}</h2>
+      <h2 id="recipe-title">${recipeName}</h2>
 
       <p class="recipe__difficulty">
-        Difficulty: ${recipe.difficulty}
+        ${translate('difficulty')}: ${translate(recipe.difficulty)}
       </p>
 
       <p
@@ -61,18 +93,18 @@ export const renderRecipe = (): string => {
 
       <div class="recipe__ranges">
         <p>
-          <span>Temperature:</span>
-          <strong>${recipe.temperature.min} to ${recipe.temperature.max}</strong>
+          <span>${translate('temperature')}:</span>
+          <strong>${recipe.temperature.min} … ${recipe.temperature.max}</strong>
         </p>
 
         <p>
-          <span>Density:</span>
-          <strong>${recipe.density.min} to ${recipe.density.max}</strong>
+          <span>${translate('density')}:</span>
+          <strong>${recipe.density.min} … ${recipe.density.max}</strong>
         </p>
 
         <p>
-          <span>Magic Power:</span>
-          <strong>${recipe.magicPower.min} to ${recipe.magicPower.max}</strong>
+          <span>${translate('magicPower')}:</span>
+          <strong>${recipe.magicPower.min} … ${recipe.magicPower.max}</strong>
         </p>
       </div>
     </section>

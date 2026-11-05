@@ -10,6 +10,7 @@
 
 :root {
   --font-title: 'Metal Mania', fantasy;
+  --font-fantasy: 'Nightmare Before Christmas', fantasy;
 
   font-family: Arial, Helvetica, sans-serif;
   font-synthesis: none;
@@ -19,6 +20,7 @@
 
 :root[lang='ru'] {
   --font-title: 'Underdog', cursive;
+  --font-fantasy: 'Underdog', cursive;
 }
 
 * {

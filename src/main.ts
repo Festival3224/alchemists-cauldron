@@ -581,6 +581,18 @@ const updateTranslations = (): void => {
     const key = element.dataset.i18n as TranslationKey;
     element.textContent = translate(key);
   });
+
+  const shelf = app.querySelector<HTMLElement>('.shelf');
+
+  if (shelf) {
+    shelf.outerHTML = renderShelf();
+  }
+
+  const recipe = app.querySelector<HTMLElement>('.recipe');
+
+  if (recipe) {
+    recipe.outerHTML = renderRecipe();
+  }
 };
 
 app.addEventListener('click', (event: MouseEvent) => {
