@@ -5,6 +5,8 @@ import {
   MAX_NAME_LENGTH,
 } from '../storage/leaderboard';
 
+import { translate } from '../i18n';
+
 import type { Difficulty } from '../types/game';
 
 const escapeHtml = (value: string): string =>
@@ -41,34 +43,34 @@ export const renderLeaderboard = (
       aria-labelledby="leaderboard-title"
     >
       <h2 id="leaderboard-title">
-        Leaderboard — ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+        ${translate('leaderboard')} — ${translate(difficulty)}
       </h2>
 
       ${
         confirmClear
           ? `<div class="leaderboard-dialog__confirmation">
-               <p>Clear all leaderboard records? This cannot be undone.</p>
+               <p>${translate('clearLeaderboardConfirm')}</p>
 
                <button type="button" data-action="leaderboard-confirm-clear">
-                 Yes, Clear All
+                  ${translate('confirmClearAll')}
                </button>
 
                <button type="button" data-action="leaderboard-cancel-clear">
-                 Cancel
+                  ${translate('cancel')}
                </button>
              </div>`
           : `
             ${
               entries.length === 0
-                ? '<p>No records yet. Brew some potions!</p>'
+                ? `<p>${translate('noRecords')}</p>`
                 : `<div class="leaderboard-dialog__table-wrapper">
                      <table>
                        <thead>
                          <tr>
-                           <th scope="col">Rank</th>
-                           <th scope="col">Player</th>
-                           <th scope="col">Score</th>
-                           <th scope="col">Date</th>
+                           <th scope="col">${translate('rank')}</th>
+                           <th scope="col">${translate('player')}</th>
+                           <th scope="col">${translate('score')}</th>
+                           <th scope="col">${translate('date')}</th>
                          </tr>
                        </thead>
                        <tbody>${rows}</tbody>
@@ -79,8 +81,8 @@ export const renderLeaderboard = (
             ${
               entries.length > 0
                 ? `<button type="button" data-action="leaderboard-clear">
-                     Clear Leaderboard
-                   </button>`
+                    ${translate('clearLeaderboard')}
+                  </button>`
                 : ''
             }
           `
@@ -91,7 +93,7 @@ export const renderLeaderboard = (
         type="button"
         data-action="leaderboard-close"
       >
-        Close
+        ${translate('close')}
       </button>
     </dialog>
   `;
@@ -100,7 +102,7 @@ export const renderLeaderboard = (
 export const renderPlayerNameForm = (): string => `
   <form class="leaderboard-name-form" data-form="leaderboard-name">
     <label for="leaderboard-player-name">
-      Enter your name for the leaderboard:
+      ${translate('enterPlayerName')}
     </label>
 
     <input
@@ -114,11 +116,13 @@ export const renderPlayerNameForm = (): string => `
     />
 
     <p class="leaderboard-name-form__hint">
-      ${MIN_NAME_LENGTH}-${MAX_NAME_LENGTH} characters: letters, numbers, spaces, _ or -
+      ${MIN_NAME_LENGTH}-${MAX_NAME_LENGTH} ${translate('playerNameHint')}
     </p>
 
     <p class="leaderboard-name-form__error" role="alert"></p>
 
-    <button type="submit">Save Score</button>
+    <button type="submit">
+      ${translate('saveScore')}
+    </button>
   </form>
 `;

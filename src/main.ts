@@ -621,18 +621,18 @@ const updateTranslations = (): void => {
   });
 
   const helpActions = {
-  start: ['helpStart', 'startGame'],
-  brew: ['helpBrew', 'brew'],
-  pause: ['helpPause', 'pause'],
-} as const;
+    start: ['helpStart', 'startGame'],
+    brew: ['helpBrew', 'brew'],
+    pause: ['helpPause', 'pause'],
+  } as const;
 
-Object.entries(helpActions).forEach(([action, [textKey, actionKey]]) => {
-  const element = app.querySelector<HTMLElement>(`[data-help-action="${action}"]`);
+  Object.entries(helpActions).forEach(([action, [textKey, actionKey]]) => {
+    const element = app.querySelector<HTMLElement>(`[data-help-action="${action}"]`);
 
-  if (element) {
-    element.innerHTML = renderHelpAction(textKey, actionKey);
-  }
-});
+    if (element) {
+      element.innerHTML = renderHelpAction(textKey, actionKey);
+    }
+  });
 
   const shelf = app.querySelector<HTMLElement>('.shelf');
 
