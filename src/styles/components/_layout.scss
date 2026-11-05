@@ -501,12 +501,18 @@
 
   &__content {
     text-align: left;
+    font-size: 1rem;
     line-height: 1.6;
 
     ol {
       margin: 1rem 0;
       padding-left: 1.5rem;
     }
+
+    li,
+  p {
+    font-size: inherit;
+  }
 
     li {
       margin-bottom: 0.5rem;
@@ -523,6 +529,16 @@
       font-size: 1.15em;
     }
   }
+}
+
+.help-dialog__content > p:first-child {
+  text-align: center;
+}
+
+.help-dialog__action {
+  color: t.$color-accent;
+  font-family: t.$font-family-title;
+  font-weight: normal;
 }
 
 .settings-dialog {

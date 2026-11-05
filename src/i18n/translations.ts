@@ -76,6 +76,18 @@ const en = {
   outOfLives: "You've run out of lives.",
   outOfIngredients: 'Out of ingredients.',
   finalScore: 'Final Score',
+
+  howToPlay: 'How to Play',
+helpWelcome: "Welcome to Alchemist's Cauldron!",
+helpStart: 'Press {action} to begin.',
+helpRecipe: "Check your recipe's target ranges.",
+helpIngredients: 'Select ingredients from the shelf.',
+helpParameters: 'Watch how ingredients affect Temperature, Density and Magic Power.',
+helpBrew: 'Press {action} when your potion is ready.',
+helpSuccess: 'Match all three target ranges to brew successfully!',
+helpRewards: 'Successful potions earn points and bonus time.',
+helpLives: 'Failed potions cost one life. The number of lives depends on difficulty.',
+helpPause: 'Use {action} whenever you need a break.',
 } as const;
 
 export type TranslationKey = keyof typeof en;
@@ -159,6 +171,18 @@ const ru: Record<TranslationKey, string> = {
   outOfLives: 'Жизни закончились.',
   outOfIngredients: 'Ингредиенты закончились.',
   finalScore: 'Итоговый счёт',
+
+  howToPlay: 'Как играть',
+helpWelcome: 'Добро пожаловать в Котёл алхимика!',
+helpStart: 'Нажми {action}, чтобы начать.',
+helpRecipe: 'Изучи целевые диапазоны рецепта.',
+helpIngredients: 'Выбирай ингредиенты с полки.',
+helpParameters: 'Следи за температурой, плотностью и магической силой.',
+helpBrew: 'Когда зелье готово, нажми {action}.',
+helpSuccess: 'Для успешного зелья все три параметра должны попасть в целевые диапазоны!',
+helpRewards: 'Успешные зелья приносят очки и дополнительное время.',
+helpLives: 'Неудачное зелье отнимает одну жизнь. Количество жизней зависит от сложности.',
+helpPause: 'Используй {action}, когда нужен перерыв.',
 };
 
 const es: Record<TranslationKey, string> = {
@@ -239,6 +263,18 @@ const es: Record<TranslationKey, string> = {
   outOfLives: 'Te has quedado sin vidas.',
   outOfIngredients: 'Te has quedado sin ingredientes.',
   finalScore: 'Puntuación final',
+
+  howToPlay: 'Cómo jugar',
+  helpWelcome: '¡Bienvenido al Caldero del Alquimista!',
+  helpStart: 'Pulsa {action} para comenzar.',
+  helpRecipe: 'Consulta los rangos objetivo de la receta.',
+  helpIngredients: 'Selecciona ingredientes del estante.',
+  helpParameters: 'Observa cómo afectan a la temperatura, la densidad y el poder mágico.',
+  helpBrew: 'Pulsa {action} cuando esté lista.',
+  helpSuccess: '¡Los tres parámetros deben estar dentro de sus rangos objetivo!',
+  helpRewards: 'Las pociones bien preparadas dan puntos y tiempo extra.',
+  helpLives: 'Cada poción fallida cuesta una vida. El número de vidas depende de la dificultad.',
+  helpPause: 'Utiliza {action} cuando necesites descansar.',
 };
 
 export const translations = {

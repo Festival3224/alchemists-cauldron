@@ -164,6 +164,15 @@ const renderPrimaryAction = (): string => {
   `;
 };
 
+const renderHelpAction = (
+  textKey: 'helpStart' | 'helpBrew' | 'helpPause',
+  actionKey: 'startGame' | 'brew' | 'pause',
+): string => {
+  const [before, after] = translate(textKey).split('{action}');
+
+  return `${before}<strong class="help-dialog__action">${translate(actionKey)}</strong>${after}`;
+};
+
 const renderApp = (brewResult?: BrewResult): void => {
   const gameOverReasonKey: TranslationKey =
     gameState.timeLeft === 0 ? 'timeUp' : gameState.lives <= 0 ? 'outOfLives' : 'outOfIngredients';
@@ -419,31 +428,40 @@ const renderApp = (brewResult?: BrewResult): void => {
 
 
     <dialog class="menu-dialog help-dialog" aria-labelledby="help-dialog-title">
-  <h2 id="help-dialog-title">✦ How to Play ✦</h2>
+  <h2 id="help-dialog-title">
+    ✦ <span data-i18n="howToPlay">${translate('howToPlay')}</span> ✦
+  </h2>
 
   <div class="help-dialog__content">
-    <p>Welcome to Alchemist's Cauldron!</p>
+    <p data-i18n="helpWelcome">${translate('helpWelcome')}</p>
 
     <ol>
-      <li>Press <strong>Start Game</strong> to begin.</li>
-      <li>Check your recipe's target ranges.</li>
-      <li>Select up to 4 ingredients from the shelf.</li>
-      <li>Watch how ingredients affect Temperature, Density and Magic Power.</li>
-      <li>Press <strong>Brew</strong> when your potion is ready.</li>
-      <li>Match all three target ranges to brew successfully!</li>
+      <li data-help-action="start">
+        ${renderHelpAction('helpStart', 'startGame')}
+      </li>
+      <li data-i18n="helpRecipe">${translate('helpRecipe')}</li>
+      <li data-i18n="helpIngredients">${translate('helpIngredients')}</li>
+      <li data-i18n="helpParameters">${translate('helpParameters')}</li>
+      <li data-help-action="brew">
+        ${renderHelpAction('helpBrew', 'brew')}
+      </li>
+      <li data-i18n="helpSuccess">${translate('helpSuccess')}</li>
     </ol>
 
-    <p>Each successful potion earns 200 points and 10 bonus seconds.</p>
-    <p>Failed potions cost one life. You have 3 lives!</p>
-    <p>Use <strong>Pause</strong> whenever you need a break.</p>
+    <p data-i18n="helpRewards">${translate('helpRewards')}</p>
+    <p data-i18n="helpLives">${translate('helpLives')}</p>
+    <p data-help-action="pause">
+      ${renderHelpAction('helpPause', 'pause')}
+    </p>
   </div>
 
   <button
     class="menu-dialog__close"
     type="button"
     data-action="help-close"
+    data-i18n="close"
   >
-    Close
+    ${translate('close')}
   </button>
 </dialog>
 
@@ -601,6 +619,20 @@ const updateTranslations = (): void => {
     const key = element.dataset.i18n as TranslationKey;
     element.textContent = translate(key);
   });
+
+  const helpActions = {
+  start: ['helpStart', 'startGame'],
+  brew: ['helpBrew', 'brew'],
+  pause: ['helpPause', 'pause'],
+} as const;
+
+Object.entries(helpActions).forEach(([action, [textKey, actionKey]]) => {
+  const element = app.querySelector<HTMLElement>(`[data-help-action="${action}"]`);
+
+  if (element) {
+    element.innerHTML = renderHelpAction(textKey, actionKey);
+  }
+});
 
   const shelf = app.querySelector<HTMLElement>('.shelf');
 
