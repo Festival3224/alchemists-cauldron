@@ -1,7 +1,7 @@
 import './styles/main.scss';
 
 import { renderLanguageSwitcher } from './ui/language-switcher';
-import { getLocale, setLocale, t } from './i18n';
+import { getLocale, setLocale, translate } from './i18n';
 import type { TranslationKey } from './i18n/translations';
 
 import { DIFFICULTY_SETTINGS, TIMER_WARNING_THRESHOLD } from './data/difficulty';
@@ -121,11 +121,11 @@ const renderPrimaryAction = (): string => {
           data-action="continue"
           data-i18n="continueGame"
         >
-          ${t('continueGame')}
+          ${translate('continueGame')}
         </button>
 
         <button class="cauldron__brew" type="button" data-action="start" data-i18n="startNewGame">
-          ${t('startNewGame')}
+          ${translate('startNewGame')}
         </button>
       </div>
     `;
@@ -134,7 +134,7 @@ const renderPrimaryAction = (): string => {
   if (isMenu) {
     return `
       <button class="cauldron__brew" type="button" data-action="start" data-i18n="startGame">
-        ${t('startGame')}
+        ${translate('startGame')}
       </button>
     `;
   }
@@ -148,7 +148,7 @@ const renderPrimaryAction = (): string => {
         data-i18n="brew"
         ${!isPlaying || !hasIngredients ? 'disabled' : ''}
       >
-        ${t('brew')}
+        ${translate('brew')}
       </button>
 
       <button
@@ -158,7 +158,7 @@ const renderPrimaryAction = (): string => {
         data-i18n="pourOut"
         ${!isPlaying || !hasIngredients ? 'disabled' : ''}
       >
-        ${t('pourOut')}
+        ${translate('pourOut')}
       </button>
     </div>
   `;
@@ -215,8 +215,8 @@ const renderApp = (brewResult?: BrewResult): void => {
               <h2 id="pause-title">Game Paused</h2>
               <p>Your potion is waiting.</p>
 
-              <button class="start-button" type="button" data-action="pause">
-                Resume
+              <button class="start-button" type="button" data-action="pause" data-i18n="resume">
+                ${translate('resume')}
               </button>
 
               <button class="pause-dialog__menu-button" type="button" data-action="menu">
@@ -314,21 +314,21 @@ const renderApp = (brewResult?: BrewResult): void => {
       </button>
 
       <h2 id="menu-dialog-title">
-        ✦ <span data-i18n="menu">${t('menu')}</span> ✦
+        ✦ <span data-i18n="menu">${translate('menu')}</span> ✦
       </h2>
 
       <div class="menu-dialog__actions">
 
         <button type="button" data-action="help-open" data-i18n="help">
-          ${t('help')}
+          ${translate('help')}
         </button>
 
         <button type="button" data-action="settings-open" data-i18n="settings">
-          ${t('settings')}
+          ${translate('settings')}
         </button>
 
         <button type="button" data-action="leaderboard-open" data-i18n="leaderboard">          
-         ${t('leaderboard')}
+         ${translate('leaderboard')}
         </button>
       </div>
 
@@ -342,7 +342,7 @@ const renderApp = (brewResult?: BrewResult): void => {
         data-action="menu-close"
         data-i18n="close"
       >
-        ${t('close')}
+        ${translate('close')}
       </button>
     </dialog>
 
@@ -352,7 +352,9 @@ const renderApp = (brewResult?: BrewResult): void => {
   class="menu-dialog settings-dialog"
   aria-labelledby="settings-dialog-title"
 >
-  <h2 id="settings-dialog-title">✦ Difficulty ✦</h2>
+  <h2 id="settings-dialog-title">
+    ✦ <span data-i18n="difficulty">${translate('difficulty')}</span> ✦
+  </h2>
 
   
 <div class="settings-dialog__difficulty">
@@ -373,8 +375,9 @@ const renderApp = (brewResult?: BrewResult): void => {
             data-difficulty="${difficulty}"
             aria-pressed="${gameState.difficulty === difficulty}"
             ${gameState.status !== 'menu' ? 'disabled' : ''}
+            data-i18n="${difficulty}"
           >
-            ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+            ${translate(difficulty)}
           </button>
         `,
       )
@@ -387,8 +390,9 @@ const renderApp = (brewResult?: BrewResult): void => {
     class="menu-dialog__close"
     type="button"
     data-action="settings-close"
+    data-i18n="close"
   >
-    Close
+    ${translate('close')}
   </button>
 </dialog>
 
@@ -575,8 +579,7 @@ app.addEventListener('focusin', (event) => {
 const updateTranslations = (): void => {
   app.querySelectorAll<HTMLElement>('[data-i18n]').forEach((element) => {
     const key = element.dataset.i18n as TranslationKey;
-
-    element.textContent = t(key);
+    element.textContent = translate(key);
   });
 };
 

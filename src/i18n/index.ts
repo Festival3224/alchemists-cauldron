@@ -32,4 +32,4 @@ export const setLocale = (locale: Locale): void => {
   }
 };
 
-export const t = (key: TranslationKey): string => translations[currentLocale][key];
+export const translate = (key: TranslationKey): string => translations[currentLocale][key];

@@ -23,6 +23,12 @@ const en = {
   mainMenu: 'Main Menu',
   gameOver: 'Game Over!',
   playAgain: 'Play Again',
+  score: 'Score',
+  time: 'Time',
+  lives: 'Lives',
+  gameStatistics: 'Game statistics',
+  remainingTime: 'Remaining time',
+  livesRemaining: '{current} of {total} lives remaining',
 } as const;
 
 export type TranslationKey = keyof typeof en;
@@ -52,6 +58,13 @@ const ru: Record<TranslationKey, string> = {
   mainMenu: 'Главное меню',
   gameOver: 'Игра окончена!',
   playAgain: 'Играть снова',
+
+  score: 'Очки',
+  time: 'Время',
+  lives: 'Жизни',
+  gameStatistics: 'Игровая статистика',
+  remainingTime: 'Оставшееся время',
+  livesRemaining: 'Осталось жизней: {current} из {total}',
 };
 
 const es: Record<TranslationKey, string> = {
@@ -79,6 +92,12 @@ const es: Record<TranslationKey, string> = {
   mainMenu: 'Menú principal',
   gameOver: '¡Fin de la partida!',
   playAgain: 'Jugar de nuevo',
+  score: 'Puntos',
+  time: 'Tiempo',
+  lives: 'Vidas',
+  gameStatistics: 'Estadísticas de la partida',
+  remainingTime: 'Tiempo restante',
+  livesRemaining: 'Vidas restantes: {current} de {total}',
 };
 
 export const translations = {

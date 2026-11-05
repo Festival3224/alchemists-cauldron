@@ -4,6 +4,8 @@ import { gameState } from '../state/game-state';
 
 import type { BrewResult } from '../state/game-state';
 
+import { translate } from '../i18n';
+
 const renderHearts = (count: number, lives: number, lostLife: boolean): string => {
   return Array.from({ length: count }, (_, index) => {
     const isFilled = index < lives;
@@ -37,10 +39,11 @@ export const renderGameHud = (brewResult?: BrewResult): string => {
   return `
     <section
       class="game-hud ${isMenu ? 'game-hud--idle' : 'game-hud--active'}"
-      aria-label="Game statistics"  
+      aria-label="${translate('gameStatistics')}"
+      data-i18n-aria-label="gameStatistics" 
     >
       <div class="game-hud__item">
-  <span class="game-hud__label">Score</span>
+  <span class="game-hud__label" data-i18n="score">${translate('score')}</span>
   <strong
     class="game-hud__value game-hud__score ${isSuccess ? 'game-hud__value--gain' : ''}"
     aria-live="polite"
@@ -50,7 +53,7 @@ export const renderGameHud = (brewResult?: BrewResult): string => {
 </div>
 
       <div class="game-hud__item game-hud__item--time ${isUrgent ? 'game-hud__item--urgent' : ''}">
-        <span class="game-hud__label">Time</span>
+        <span class="game-hud__label" data-i18n="time">${translate('time')}</span>
 
         <div class="game-hud__time-controls">
           <strong class="game-hud__value">
@@ -61,9 +64,10 @@ export const renderGameHud = (brewResult?: BrewResult): string => {
             class="game-hud__pause"
             type="button"
             data-action="pause"
+            data-i18n="${gameState.status === 'paused' ? 'resume' : 'pause'}"
             ${isMenu ? 'disabled' : ''}
           >
-            ${gameState.status === 'paused' ? 'Resume' : 'Pause'}
+            ${gameState.status === 'paused' ? translate('resume') : translate('pause')}
           </button>
         </div>
 
@@ -71,12 +75,13 @@ export const renderGameHud = (brewResult?: BrewResult): string => {
           class="game-hud__progress"
           max="${config.startingTime}"
           value="${isMenu ? 0 : gameState.timeLeft}"
-          aria-label="Remaining time"
+          aria-label="${translate('remainingTime')}"
+          data-i18n-aria-label="remainingTime"
         ></progress>
       </div>
 
       <div class="game-hud__item">
-  <span class="game-hud__label">Lives</span>
+  <span class="game-hud__label" data-i18n="lives">${translate('lives')}</span>
   <div
     class="game-hud__hearts"
     role="img"
