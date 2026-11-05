@@ -69,6 +69,13 @@ const en = {
   frozenAsh: 'Frozen Ash',
   tripleEclipse: 'Triple Eclipse',
   emberSoup: 'Ember Soup',
+
+  gamePaused: 'Game Paused',
+  potionWaiting: 'Your potion is waiting.',
+  timeUp: "Time's up!",
+  outOfLives: "You've run out of lives.",
+  outOfIngredients: 'Out of ingredients.',
+  finalScore: 'Final Score',
 } as const;
 
 export type TranslationKey = keyof typeof en;
@@ -145,6 +152,13 @@ const ru: Record<TranslationKey, string> = {
   frozenAsh: 'Замёрзший пепел',
   tripleEclipse: 'Тройное затмение',
   emberSoup: 'Суп из угольков',
+
+  gamePaused: 'Игра на паузе',
+  potionWaiting: 'Твоё зелье ждёт.',
+  timeUp: 'Время вышло!',
+  outOfLives: 'Жизни закончились.',
+  outOfIngredients: 'Ингредиенты закончились.',
+  finalScore: 'Итоговый счёт',
 };
 
 const es: Record<TranslationKey, string> = {
@@ -218,6 +232,13 @@ const es: Record<TranslationKey, string> = {
   frozenAsh: 'Ceniza helada',
   tripleEclipse: 'Triple eclipse',
   emberSoup: 'Sopa de brasas',
+
+  gamePaused: 'Juego en pausa',
+  potionWaiting: 'Tu poción está esperando.',
+  timeUp: '¡Se acabó el tiempo!',
+  outOfLives: 'Te has quedado sin vidas.',
+  outOfIngredients: 'Te has quedado sin ingredientes.',
+  finalScore: 'Puntuación final',
 };
 
 export const translations = {

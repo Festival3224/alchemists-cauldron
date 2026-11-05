@@ -165,6 +165,9 @@ const renderPrimaryAction = (): string => {
 };
 
 const renderApp = (brewResult?: BrewResult): void => {
+  const gameOverReasonKey: TranslationKey =
+    gameState.timeLeft === 0 ? 'timeUp' : gameState.lives <= 0 ? 'outOfLives' : 'outOfIngredients';
+
   const gameOverMarkup =
     gameState.status === 'game-over'
       ? `<dialog
@@ -172,38 +175,40 @@ const renderApp = (brewResult?: BrewResult): void => {
           closedby="none"
           aria-labelledby="game-over-title"
          >
-          <h2 id="game-over-title" tabindex="-1">Game Over!</h2>
-          <p>${
-            gameState.timeLeft === 0
-              ? "Time's up!"
-              : gameState.lives <= 0
-                ? "You've run out of lives."
-                : 'Out of ingredients.'
-          }</p>
+          <h2 id="game-over-title" tabindex="-1" data-i18n="gameOver">
+            ${translate('gameOver')}
+          </h2>
+          <p data-i18n="${gameOverReasonKey}">
+            ${translate(gameOverReasonKey)}
+          </p>
 
-         <p class="game-over__score-label">Final Score</p>
+         <p class="game-over__score-label" data-i18n="finalScore">
+            ${translate('finalScore')}
+         </p>
          <strong class="game-over__score">${gameState.score}</strong>
 
          ${!scoreSubmitted && qualifiesForLeaderboard(gameState.score, gameState.difficulty) ? renderPlayerNameForm() : ''}
 
-         <button class="start-button" type="button" data-action="start">
-           Play Again
+         <button class="start-button" type="button" data-action="start" data-i18n="playAgain">
+           ${translate('playAgain')}
          </button>
 
          <button
             class="game-over__menu-button"
             type="button"
             data-action="menu"
+            data-i18n="mainMenu"
           >
-            Main Menu
+            ${translate('mainMenu')}
           </button>
 
          <button
            class="game-over__menu-button"
            type="button"
            data-action="leaderboard-open"
-      >
-           Leaderboard
+           data-i18n="leaderboard"
+          >
+            ${translate('leaderboard')}
          </button> 
 
        </dialog>`
@@ -212,17 +217,32 @@ const renderApp = (brewResult?: BrewResult): void => {
   const pauseMarkup =
     gameState.status === 'paused'
       ? `<dialog class="pause-dialog" closedby="none" aria-labelledby="pause-title">
-              <h2 id="pause-title">Game Paused</h2>
-              <p>Your potion is waiting.</p>
+        <h2 id="pause-title" data-i18n="gamePaused">
+          ${translate('gamePaused')}
+        </h2>
 
-              <button class="start-button" type="button" data-action="pause" data-i18n="resume">
-                ${translate('resume')}
-              </button>
+        <p data-i18n="potionWaiting">
+          ${translate('potionWaiting')}
+        </p>
 
-              <button class="pause-dialog__menu-button" type="button" data-action="menu">
-                Main Menu
-              </button>
-            </dialog>`
+        <button
+          class="start-button"
+          type="button"
+          data-action="pause"
+          data-i18n="resume"
+        >
+          ${translate('resume')}
+        </button>
+
+        <button
+          class="pause-dialog__menu-button"
+          type="button"
+          data-action="menu"
+          data-i18n="mainMenu"
+        >
+          ${translate('mainMenu')}
+        </button>
+      </dialog>`
       : '';
 
   app.innerHTML = `  
