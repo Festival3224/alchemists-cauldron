@@ -645,6 +645,18 @@ const updateTranslations = (): void => {
   if (recipe) {
     recipe.outerHTML = renderRecipe();
   }
+
+  const cauldron = app.querySelector<HTMLElement>('.cauldron');
+
+  if (cauldron) {
+    cauldron.outerHTML = renderCauldron();
+  }
+
+  app.querySelectorAll<HTMLElement>('[data-i18n-aria-label]').forEach((element) => {
+    const key = element.dataset.i18nAriaLabel as TranslationKey;
+
+    element.setAttribute('aria-label', translate(key));
+  });
 };
 
 app.addEventListener('click', (event: MouseEvent) => {

@@ -100,6 +100,17 @@ const en = {
   enterPlayerName: 'Enter your name for the leaderboard:',
   playerNameHint: 'characters: letters, numbers, spaces, _ or -',
   saveScore: 'Save Score',
+
+  cauldron: 'Cauldron',
+  emptyIngredientSlot: 'Empty ingredient slot',
+  ingredientsInCauldron: 'Ingredients in the cauldron',
+  magicalCauldron: 'Magical cauldron filled with glowing purple potion',
+
+  cauldronParameters: 'Cauldron Parameters',
+  targetRange: 'Target range',
+  tolerance: 'Tolerance',
+  currentValue: 'Current value',
+  parameterBarLegend: 'Parameter bar legend',
 } as const;
 
 export type TranslationKey = keyof typeof en;
@@ -207,6 +218,17 @@ const ru: Record<TranslationKey, string> = {
   enterPlayerName: 'Введи своё имя для таблицы рекордов:',
   playerNameHint: 'символов: буквы, цифры, пробелы, _ или -',
   saveScore: 'Сохранить результат',
+
+  cauldron: 'Котёл',
+  emptyIngredientSlot: 'Пустой слот для ингредиента',
+  ingredientsInCauldron: 'Ингредиенты в котле',
+  magicalCauldron: 'Волшебный котёл со светящимся фиолетовым зельем',
+
+  cauldronParameters: 'Параметры котла',
+  targetRange: 'Целевой диапазон',
+  tolerance: 'Допуск',
+  currentValue: 'Текущее значение',
+  parameterBarLegend: 'Обозначения шкал параметров',
 };
 
 const es: Record<TranslationKey, string> = {
@@ -311,6 +333,17 @@ const es: Record<TranslationKey, string> = {
   enterPlayerName: 'Introduce tu nombre para la clasificación:',
   playerNameHint: 'caracteres: letras, números, espacios, _ o -',
   saveScore: 'Guardar puntuación',
+
+  cauldron: 'Caldero',
+  emptyIngredientSlot: 'Espacio vacío para ingrediente',
+  ingredientsInCauldron: 'Ingredientes en el caldero',
+  magicalCauldron: 'Caldero mágico con una poción violeta brillante',
+
+  cauldronParameters: 'Parámetros del caldero',
+  targetRange: 'Rango objetivo',
+  tolerance: 'Tolerancia',
+  currentValue: 'Valor actual',
+  parameterBarLegend: 'Leyenda de las barras de parámetros',
 };
 
 export const translations = {

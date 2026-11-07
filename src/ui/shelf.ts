@@ -4,18 +4,8 @@ import { gameState } from '../state/game-state';
 import { DIFFICULTY_SETTINGS } from '../data/difficulty';
 
 import { translate } from '../i18n';
-import type { TranslationKey } from '../i18n/translations';
 
-const INGREDIENT_NAME_KEYS: Record<string, TranslationKey> = {
-  'dragon-tears': 'dragonTears',
-  'fairy-dust': 'fairyDust',
-  'frost-lotus': 'frostLotus',
-  'mandrake-root': 'mandrakeRoot',
-  'caustic-acid': 'causticAcid',
-  'essence-of-the-void': 'essenceOfVoid',
-  'phoenix-feather': 'phoenixFeather',
-  'toad-slime': 'toadSlime',
-};
+import { getIngredientName } from '../i18n/ingredients';
 
 const formatIngredientValue = (value: number): string => {
   if (value > 0) return `+${value}`;
@@ -36,8 +26,7 @@ export const renderShelf = (): string => {
       const isEmpty = stock === 0;
       const isDisabled = isEmpty || isCauldronFull || gameState.status !== 'playing';
 
-      const nameKey = INGREDIENT_NAME_KEYS[ingredient.id];
-      const ingredientName = nameKey ? translate(nameKey) : ingredient.name;
+      const ingredientName = getIngredientName(ingredient);
 
       return `
         <button
