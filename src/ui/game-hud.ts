@@ -85,7 +85,7 @@ export const renderGameHud = (brewResult?: BrewResult): string => {
   <div
     class="game-hud__hearts"
     role="img"
-    aria-label="${visibleLives} of ${config.startingLives} lives remaining"
+    aria-label="${translate('livesRemaining')}: ${visibleLives} / ${config.startingLives}"
   >
     ${renderHearts(config.startingLives, visibleLives, brewResult === 'failure')}
   </div>

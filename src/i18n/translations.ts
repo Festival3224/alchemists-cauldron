@@ -1,4 +1,5 @@
 const en = {
+  gameTitle: "Alchemist's Cauldron",
   menu: 'Menu',
   help: 'Help',
   settings: 'Settings',
@@ -28,7 +29,6 @@ const en = {
   lives: 'Lives',
   gameStatistics: 'Game statistics',
   remainingTime: 'Remaining time',
-  livesRemaining: '{current} of {total} lives remaining',
 
   ingredientShelf: 'Ingredient Shelf',
   empty: 'Empty',
@@ -111,11 +111,18 @@ const en = {
   tolerance: 'Tolerance',
   currentValue: 'Current value',
   parameterBarLegend: 'Parameter bar legend',
+
+  openMenu: 'Open menu',
+  closeMenu: 'Close menu',
+  selectLanguage: 'Select language',
+  ingredientsCount: 'Ingredients',
+  livesRemaining: 'lives remaining',
 } as const;
 
 export type TranslationKey = keyof typeof en;
 
 const ru: Record<TranslationKey, string> = {
+  gameTitle: 'Котёл алхимика',
   menu: 'Меню',
   help: 'Помощь',
   settings: 'Настройки',
@@ -146,7 +153,6 @@ const ru: Record<TranslationKey, string> = {
   lives: 'Жизни',
   gameStatistics: 'Игровая статистика',
   remainingTime: 'Оставшееся время',
-  livesRemaining: 'Осталось жизней: {current} из {total}',
 
   ingredientShelf: 'Полка ингредиентов',
   empty: 'Пусто',
@@ -229,9 +235,16 @@ const ru: Record<TranslationKey, string> = {
   tolerance: 'Допуск',
   currentValue: 'Текущее значение',
   parameterBarLegend: 'Обозначения шкал параметров',
+
+  openMenu: 'Открыть меню',
+  closeMenu: 'Закрыть меню',
+  selectLanguage: 'Выбрать язык',
+  ingredientsCount: 'Ингредиенты',
+  livesRemaining: 'осталось жизней',
 };
 
 const es: Record<TranslationKey, string> = {
+  gameTitle: 'El Caldero del Alquimista',
   menu: 'Menú',
   help: 'Ayuda',
   settings: 'Configuración',
@@ -261,7 +274,7 @@ const es: Record<TranslationKey, string> = {
   lives: 'Vidas',
   gameStatistics: 'Estadísticas de la partida',
   remainingTime: 'Tiempo restante',
-  livesRemaining: 'Vidas restantes: {current} de {total}',
+  /* livesRemaining: 'Vidas restantes: {current} de {total}', */
 
   ingredientShelf: 'Estante de ingredientes',
   empty: 'Vacío',
@@ -344,6 +357,12 @@ const es: Record<TranslationKey, string> = {
   tolerance: 'Tolerancia',
   currentValue: 'Valor actual',
   parameterBarLegend: 'Leyenda de las barras de parámetros',
+
+  openMenu: 'Abrir menú',
+  closeMenu: 'Cerrar menú',
+  selectLanguage: 'Seleccionar idioma',
+  ingredientsCount: 'Ingredientes',
+  livesRemaining: 'vidas restantes',
 };
 
 export const translations = {

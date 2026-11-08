@@ -1,5 +1,6 @@
 @use '../abstracts/tokens' as t;
 @use '../abstracts/breakpoints' as bp;
+@use '../abstracts/mixins' as m;
 
 /* App layout */
 
@@ -87,11 +88,38 @@
     .cauldron__pour-out {
       width: 100%;
       padding: t.$space-3;
+
       border: 1px solid rgb(229 190 119 / 50%);
       border-radius: 8px;
       background: transparent;
-      color: inherit;
+
+      color: t.$color-accent;
+      font-family: inherit;
+      text-transform: uppercase;
+      font-size: t.$font-size-lg;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+
       cursor: pointer;
+
+      transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        color 0.2s ease,
+        text-shadow 0.2s ease;
+
+      &:hover:not(:disabled) {
+        @include m.magic-text-glow;
+        background: t.$color-bg-card-hover;
+        border-color: t.$color-magic-mid;
+        box-shadow: 0 0 14px t.$color-magic-mid;
+      }
+
+      &:focus-visible {
+        outline: 2px solid t.$color-accent;
+        outline-offset: 3px;
+      }
 
       &:disabled {
         opacity: 0.4;
@@ -211,10 +239,7 @@
     }
 
     &--active {
-      color: #f1d9ff;
-      text-shadow:
-        0 0 6px rgb(190 145 240 / 90%),
-        0 0 14px rgb(174 112 238 / 75%);
+      @include m.magic-text-glow;
     }
   }
 }

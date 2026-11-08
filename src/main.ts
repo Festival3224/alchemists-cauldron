@@ -257,7 +257,7 @@ const renderApp = (brewResult?: BrewResult): void => {
   app.innerHTML = `  
     <main class="app">
       <header class="app-header">
-        <h1>Alchemist's Cauldron</h1>
+        <h1 data-i18n="gameTitle">${translate('gameTitle')}</h1>
 
         <div class="app-header__controls">
           ${renderLanguageSwitcher()}
@@ -268,9 +268,12 @@ const renderApp = (brewResult?: BrewResult): void => {
             type="button"
             data-action="menu-open"
             aria-haspopup="dialog"
-            aria-label="Open menu"
+            aria-label="${translate('openMenu')}"
+            data-i18n-aria-label="openMenu"
           >
-            <span class="app-menu-trigger__label">Menu</span>
+            <span class="app-menu-trigger__label" data-i18n="menu">
+              ${translate('menu')}
+            </span>
 
             <span class="app-menu-trigger__hamburger" aria-hidden="true">
               <span></span>
@@ -336,7 +339,8 @@ const renderApp = (brewResult?: BrewResult): void => {
         class="main-menu-dialog__close-icon"
         type="button"
         data-action="menu-close"
-        aria-label="Close menu"
+        aria-label="${translate('closeMenu')}"
+        data-i18n-aria-label="closeMenu"
       >
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
@@ -657,6 +661,18 @@ const updateTranslations = (): void => {
 
     element.setAttribute('aria-label', translate(key));
   });
+
+  const hearts = app.querySelector<HTMLElement>('.game-hud__hearts');
+
+  if (hearts) {
+    const config = DIFFICULTY_SETTINGS[gameState.difficulty];
+    const visibleLives = gameState.status === 'menu' ? 0 : gameState.lives;
+
+    hearts.setAttribute(
+      'aria-label',
+      `${translate('livesRemaining')}: ${visibleLives} / ${config.startingLives}`,
+    );
+  }
 };
 
 app.addEventListener('click', (event: MouseEvent) => {

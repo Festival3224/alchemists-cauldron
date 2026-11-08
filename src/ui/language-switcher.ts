@@ -1,10 +1,15 @@
-import { getLocale } from '../i18n';
+import { getLocale, translate } from '../i18n';
 
 export const renderLanguageSwitcher = (): string => {
   const currentLocale = getLocale();
 
   return `
-    <div class="language-switcher" role="group" aria-label="Select language">
+    <div
+     class="language-switcher"
+     role="group"
+     aria-label="${translate('selectLanguage')}"
+     data-i18n-aria-label="selectLanguage"
+    >
       ${(['en', 'ru', 'es'] as const)
         .map(
           (locale) => `

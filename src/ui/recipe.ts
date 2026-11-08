@@ -50,7 +50,7 @@ export const renderRecipe = (): string => {
 
       <p
         class="recipe__counter"
-        aria-label="Ingredients: 0 of ${maxIngredients}"
+        aria-label="${translate('ingredientsCount')}: 0 / ${maxIngredients}"
       >
         0 / ${maxIngredients}
       </p>
@@ -86,7 +86,7 @@ export const renderRecipe = (): string => {
       <p
         class="recipe__counter ${isFull ? 'recipe__counter--full' : ''}"
         aria-live="polite"
-        aria-label="Ingredients: ${ingredientCount} of ${maxIngredients}"
+        aria-label="${translate('ingredientsCount')}: ${ingredientCount} / ${maxIngredients}"
       >
          ${ingredientCount} / ${maxIngredients}
       </p>
