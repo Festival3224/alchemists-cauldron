@@ -62,9 +62,26 @@ export const renderShelf = (): string => {
               ? ''
               : `<span class="ingredient-tooltip" id="tooltip-${ingredient.id}" role="tooltip">
                   <span class="ingredient-tooltip__title">${ingredientName}</span>
-                  <span>${translate('temperature')}: ${formatIngredientValue(ingredient.temperature)}</span>
-                  <span>${translate('density')}: ${formatIngredientValue(ingredient.density)}</span>
-                  <span>${translate('magicPower')}: ${formatIngredientValue(ingredient.magicPower)}</span>
+                  <span>
+                    ${translate('temperature')}:
+                    <strong class="ingredient-tooltip__value">
+                      ${formatIngredientValue(ingredient.temperature)}
+                    </strong>
+                  </span>
+
+                  <span>
+                    ${translate('density')}:
+                    <strong class="ingredient-tooltip__value">
+                      ${formatIngredientValue(ingredient.density)}
+                    </strong>
+                  </span>
+
+                  <span>
+                    ${translate('magicPower')}:
+                    <strong class="ingredient-tooltip__value">
+                      ${formatIngredientValue(ingredient.magicPower)}
+                    </strong>
+                  </span>
                 </span>`
           }
 
