@@ -1,0 +1,6 @@
+@mixin magic-text-glow {
+  color: #f1d9ff;
+  text-shadow:
+    0 0 6px rgb(190 145 240 / 90%),
+    0 0 14px rgb(174 112 238 / 75%);
+}

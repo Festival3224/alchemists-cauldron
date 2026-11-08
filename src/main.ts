@@ -1,5 +1,9 @@
 import './styles/main.scss';
 
+import { renderLanguageSwitcher } from './ui/language-switcher';
+import { getLocale, setLocale, translate } from './i18n';
+import type { TranslationKey } from './i18n/translations';
+
 import { DIFFICULTY_SETTINGS, TIMER_WARNING_THRESHOLD } from './data/difficulty';
 
 import {
@@ -111,12 +115,17 @@ const renderPrimaryAction = (): string => {
   if (isMenu && loadGame()) {
     return `
       <div class="game-layout__start-actions">
-        <button class="cauldron__brew" type="button" data-action="continue">
-          Continue Game
+        <button
+          class="cauldron__brew"
+          type="button"
+          data-action="continue"
+          data-i18n="continueGame"
+        >
+          ${translate('continueGame')}
         </button>
 
-        <button class="cauldron__brew" type="button" data-action="start">
-          Start New Game
+        <button class="cauldron__brew" type="button" data-action="start" data-i18n="startNewGame">
+          ${translate('startNewGame')}
         </button>
       </div>
     `;
@@ -124,8 +133,8 @@ const renderPrimaryAction = (): string => {
 
   if (isMenu) {
     return `
-      <button class="cauldron__brew" type="button" data-action="start">
-        Start Game
+      <button class="cauldron__brew" type="button" data-action="start" data-i18n="startGame">
+        ${translate('startGame')}
       </button>
     `;
   }
@@ -136,24 +145,38 @@ const renderPrimaryAction = (): string => {
         class="cauldron__brew"
         type="button"
         data-action="brew"
+        data-i18n="brew"
         ${!isPlaying || !hasIngredients ? 'disabled' : ''}
       >
-        Brew
+        ${translate('brew')}
       </button>
 
       <button
         class="cauldron__pour-out"
         type="button"
         data-action="pour-out"
+        data-i18n="pourOut"
         ${!isPlaying || !hasIngredients ? 'disabled' : ''}
       >
-        Pour Out
+        ${translate('pourOut')}
       </button>
     </div>
   `;
 };
 
+const renderHelpAction = (
+  textKey: 'helpStart' | 'helpBrew' | 'helpPause',
+  actionKey: 'startGame' | 'brew' | 'pause',
+): string => {
+  const [before, after] = translate(textKey).split('{action}');
+
+  return `${before}<strong class="help-dialog__action">${translate(actionKey)}</strong>${after}`;
+};
+
 const renderApp = (brewResult?: BrewResult): void => {
+  const gameOverReasonKey: TranslationKey =
+    gameState.timeLeft === 0 ? 'timeUp' : gameState.lives <= 0 ? 'outOfLives' : 'outOfIngredients';
+
   const gameOverMarkup =
     gameState.status === 'game-over'
       ? `<dialog
@@ -161,38 +184,40 @@ const renderApp = (brewResult?: BrewResult): void => {
           closedby="none"
           aria-labelledby="game-over-title"
          >
-          <h2 id="game-over-title" tabindex="-1">Game Over!</h2>
-          <p>${
-            gameState.timeLeft === 0
-              ? "Time's up!"
-              : gameState.lives <= 0
-                ? "You've run out of lives."
-                : 'Out of ingredients.'
-          }</p>
+          <h2 id="game-over-title" tabindex="-1" data-i18n="gameOver">
+            ${translate('gameOver')}
+          </h2>
+          <p data-i18n="${gameOverReasonKey}">
+            ${translate(gameOverReasonKey)}
+          </p>
 
-         <p class="game-over__score-label">Final Score</p>
+         <p class="game-over__score-label" data-i18n="finalScore">
+            ${translate('finalScore')}
+         </p>
          <strong class="game-over__score">${gameState.score}</strong>
 
          ${!scoreSubmitted && qualifiesForLeaderboard(gameState.score, gameState.difficulty) ? renderPlayerNameForm() : ''}
 
-         <button class="start-button" type="button" data-action="start">
-           Play Again
+         <button class="start-button" type="button" data-action="start" data-i18n="playAgain">
+           ${translate('playAgain')}
          </button>
 
          <button
             class="game-over__menu-button"
             type="button"
             data-action="menu"
+            data-i18n="mainMenu"
           >
-            Main Menu
+            ${translate('mainMenu')}
           </button>
 
          <button
            class="game-over__menu-button"
            type="button"
            data-action="leaderboard-open"
-      >
-           Leaderboard
+           data-i18n="leaderboard"
+          >
+            ${translate('leaderboard')}
          </button> 
 
        </dialog>`
@@ -201,57 +226,84 @@ const renderApp = (brewResult?: BrewResult): void => {
   const pauseMarkup =
     gameState.status === 'paused'
       ? `<dialog class="pause-dialog" closedby="none" aria-labelledby="pause-title">
-              <h2 id="pause-title">Game Paused</h2>
-              <p>Your potion is waiting.</p>
+        <h2 id="pause-title" data-i18n="gamePaused">
+          ${translate('gamePaused')}
+        </h2>
 
-              <button class="start-button" type="button" data-action="pause">
-                Resume
-              </button>
+        <p data-i18n="potionWaiting">
+          ${translate('potionWaiting')}
+        </p>
 
-              <button class="pause-dialog__menu-button" type="button" data-action="menu">
-                Main Menu
-              </button>
-            </dialog>`
+        <button
+          class="start-button"
+          type="button"
+          data-action="pause"
+          data-i18n="resume"
+        >
+          ${translate('resume')}
+        </button>
+
+        <button
+          class="pause-dialog__menu-button"
+          type="button"
+          data-action="menu"
+          data-i18n="mainMenu"
+        >
+          ${translate('mainMenu')}
+        </button>
+      </dialog>`
       : '';
 
   app.innerHTML = `  
     <main class="app">
       <header class="app-header">
-        <h1>Alchemist's Cauldron</h1>
+        <h1 data-i18n="gameTitle">${translate('gameTitle')}</h1>
 
-        <button
-          class="app-menu-trigger"
-          type="button"
-          data-action="menu-open"
-          aria-haspopup="dialog"
-        >
-          <span class="app-menu-trigger__label">Menu</span>
+        <div class="app-header__controls">
+          ${renderLanguageSwitcher()}
 
-          <svg
-            class="app-menu-trigger__ornaments"
-            viewBox="0 0 180 70"
-            preserveAspectRatio="none"
-            aria-hidden="true"
+
+          <button
+            class="app-menu-trigger"
+            type="button"
+            data-action="menu-open"
+            aria-haspopup="dialog"
+            aria-label="${translate('openMenu')}"
+            data-i18n-aria-label="openMenu"
           >
-            <!-- Outer frame -->
-            <g class="frame-outer">
-              <path d="M22 9 H158 M171 22 V48 M158 61 H22 M9 48 V22" />
-            </g>
+            <span class="app-menu-trigger__label" data-i18n="menu">
+              ${translate('menu')}
+            </span>
 
-            <!-- Inner frame -->
-            <g class="frame-inner">
-              <path d="M22 12 H158 M168 22 V48 M158 58 H22 M12 48 V22" />
-            </g>
+            <span class="app-menu-trigger__hamburger" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
 
-            <!-- Four decorative stars -->
-            <g class="frame-ornament">
-              <path d="M15 9 Q16 14 21 15 Q16 16 15 21 Q14 16 9 15 Q14 14 15 9Z" />
-              <path d="M165 9 Q166 14 171 15 Q166 16 165 21 Q164 16 159 15 Q164 14 165 9Z" />
-              <path d="M15 49 Q16 54 21 55 Q16 56 15 61 Q14 56 9 55 Q14 54 15 49Z" />
-              <path d="M165 49 Q166 54 171 55 Q166 56 165 61 Q164 56 159 55 Q164 54 165 49Z" />
-            </g>
-          </svg>
-        </button>
+            <svg
+              class="app-menu-trigger__ornaments"
+              viewBox="0 0 180 70"
+              preserveAspectRatio="none"
+              aria-hidden="true"
+            >
+              
+              <g class="frame-outer">
+                <path d="M22 9 H158 M171 22 V48 M158 61 H22 M9 48 V22" />
+              </g>
+
+              <g class="frame-inner">
+                <path d="M22 12 H158 M168 22 V48 M158 58 H22 M12 48 V22" />
+              </g>                            
+            </svg>
+
+            <span class="app-menu-trigger__stars" aria-hidden="true">
+              <span class="app-menu-trigger__stars-top"></span>
+              <span class="app-menu-trigger__stars-bottom"></span>
+            </span>
+
+          </button>
+        </div>
       </header>
 
       ${renderGameHud(brewResult)}
@@ -282,30 +334,48 @@ const renderApp = (brewResult?: BrewResult): void => {
 
     </main>
 
-    <dialog class="menu-dialog" aria-labelledby="menu-dialog-title">
-      <h2 id="menu-dialog-title">✦ Menu ✦</h2>
+    <dialog class="menu-dialog main-menu-dialog" aria-labelledby="menu-dialog-title">
+      <button
+        class="main-menu-dialog__close-icon"
+        type="button"
+        data-action="menu-close"
+        aria-label="${translate('closeMenu')}"
+        data-i18n-aria-label="closeMenu"
+      >
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </button>
+
+      <h2 id="menu-dialog-title">
+        ✦ <span data-i18n="menu">${translate('menu')}</span> ✦
+      </h2>
 
       <div class="menu-dialog__actions">
 
-        <button type="button" data-action="help-open">
-          Help
+        <button type="button" data-action="help-open" data-i18n="help">
+          ${translate('help')}
         </button>
 
-        <button type="button" data-action="settings-open">
-          Settings
+        <button type="button" data-action="settings-open" data-i18n="settings">
+          ${translate('settings')}
         </button>
 
-        <button type="button" data-action="leaderboard-open">          
-         Leaderboard
+        <button type="button" data-action="leaderboard-open" data-i18n="leaderboard">          
+         ${translate('leaderboard')}
         </button>
+      </div>
+
+      <div class="main-menu-dialog__language">
+        ${renderLanguageSwitcher()}
       </div>
 
       <button
         class="menu-dialog__close"
         type="button"
         data-action="menu-close"
+        data-i18n="close"
       >
-        Close
+        ${translate('close')}
       </button>
     </dialog>
 
@@ -315,7 +385,9 @@ const renderApp = (brewResult?: BrewResult): void => {
   class="menu-dialog settings-dialog"
   aria-labelledby="settings-dialog-title"
 >
-  <h2 id="settings-dialog-title">✦ Difficulty ✦</h2>
+  <h2 id="settings-dialog-title">
+    ✦ <span data-i18n="difficulty">${translate('difficulty')}</span> ✦
+  </h2>
 
   
 <div class="settings-dialog__difficulty">
@@ -336,8 +408,9 @@ const renderApp = (brewResult?: BrewResult): void => {
             data-difficulty="${difficulty}"
             aria-pressed="${gameState.difficulty === difficulty}"
             ${gameState.status !== 'menu' ? 'disabled' : ''}
+            data-i18n="${difficulty}"
           >
-            ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+            ${translate(difficulty)}
           </button>
         `,
       )
@@ -350,39 +423,49 @@ const renderApp = (brewResult?: BrewResult): void => {
     class="menu-dialog__close"
     type="button"
     data-action="settings-close"
+    data-i18n="close"
   >
-    Close
+    ${translate('close')}
   </button>
 </dialog>
 
 
 
     <dialog class="menu-dialog help-dialog" aria-labelledby="help-dialog-title">
-  <h2 id="help-dialog-title">✦ How to Play ✦</h2>
+  <h2 id="help-dialog-title">
+    ✦ <span data-i18n="howToPlay">${translate('howToPlay')}</span> ✦
+  </h2>
 
   <div class="help-dialog__content">
-    <p>Welcome to Alchemist's Cauldron!</p>
+    <p data-i18n="helpWelcome">${translate('helpWelcome')}</p>
 
     <ol>
-      <li>Press <strong>Start Game</strong> to begin.</li>
-      <li>Check your recipe's target ranges.</li>
-      <li>Select up to 4 ingredients from the shelf.</li>
-      <li>Watch how ingredients affect Temperature, Density and Magic Power.</li>
-      <li>Press <strong>Brew</strong> when your potion is ready.</li>
-      <li>Match all three target ranges to brew successfully!</li>
+      <li data-help-action="start">
+        ${renderHelpAction('helpStart', 'startGame')}
+      </li>
+      <li data-i18n="helpRecipe">${translate('helpRecipe')}</li>
+      <li data-i18n="helpIngredients">${translate('helpIngredients')}</li>
+      <li data-i18n="helpParameters">${translate('helpParameters')}</li>
+      <li data-help-action="brew">
+        ${renderHelpAction('helpBrew', 'brew')}
+      </li>
+      <li data-i18n="helpSuccess">${translate('helpSuccess')}</li>
     </ol>
 
-    <p>Each successful potion earns 200 points and 10 bonus seconds.</p>
-    <p>Failed potions cost one life. You have 3 lives!</p>
-    <p>Use <strong>Pause</strong> whenever you need a break.</p>
+    <p data-i18n="helpRewards">${translate('helpRewards')}</p>
+    <p data-i18n="helpLives">${translate('helpLives')}</p>
+    <p data-help-action="pause">
+      ${renderHelpAction('helpPause', 'pause')}
+    </p>
   </div>
 
   <button
     class="menu-dialog__close"
     type="button"
     data-action="help-close"
+    data-i18n="close"
   >
-    Close
+    ${translate('close')}
   </button>
 </dialog>
 
@@ -535,6 +618,63 @@ app.addEventListener('focusin', (event) => {
   positionIngredientTooltip(event.target);
 });
 
+const updateTranslations = (): void => {
+  app.querySelectorAll<HTMLElement>('[data-i18n]').forEach((element) => {
+    const key = element.dataset.i18n as TranslationKey;
+    element.textContent = translate(key);
+  });
+
+  const helpActions = {
+    start: ['helpStart', 'startGame'],
+    brew: ['helpBrew', 'brew'],
+    pause: ['helpPause', 'pause'],
+  } as const;
+
+  Object.entries(helpActions).forEach(([action, [textKey, actionKey]]) => {
+    const element = app.querySelector<HTMLElement>(`[data-help-action="${action}"]`);
+
+    if (element) {
+      element.innerHTML = renderHelpAction(textKey, actionKey);
+    }
+  });
+
+  const shelf = app.querySelector<HTMLElement>('.shelf');
+
+  if (shelf) {
+    shelf.outerHTML = renderShelf();
+  }
+
+  const recipe = app.querySelector<HTMLElement>('.recipe');
+
+  if (recipe) {
+    recipe.outerHTML = renderRecipe();
+  }
+
+  const cauldron = app.querySelector<HTMLElement>('.cauldron');
+
+  if (cauldron) {
+    cauldron.outerHTML = renderCauldron();
+  }
+
+  app.querySelectorAll<HTMLElement>('[data-i18n-aria-label]').forEach((element) => {
+    const key = element.dataset.i18nAriaLabel as TranslationKey;
+
+    element.setAttribute('aria-label', translate(key));
+  });
+
+  const hearts = app.querySelector<HTMLElement>('.game-hud__hearts');
+
+  if (hearts) {
+    const config = DIFFICULTY_SETTINGS[gameState.difficulty];
+    const visibleLives = gameState.status === 'menu' ? 0 : gameState.lives;
+
+    hearts.setAttribute(
+      'aria-label',
+      `${translate('livesRemaining')}: ${visibleLives} / ${config.startingLives}`,
+    );
+  }
+};
+
 app.addEventListener('click', (event: MouseEvent) => {
   if (isStarting) {
     return;
@@ -547,6 +687,29 @@ app.addEventListener('click', (event: MouseEvent) => {
   const target = event.target;
 
   if (!(target instanceof Element)) {
+    return;
+  }
+
+  const languageButton = target.closest<HTMLButtonElement>('[data-locale]');
+
+  if (languageButton) {
+    const locale = languageButton.dataset.locale;
+
+    if (locale !== 'en' && locale !== 'ru' && locale !== 'es') {
+      return;
+    }
+
+    setLocale(locale);
+
+    app.querySelectorAll<HTMLButtonElement>('[data-locale]').forEach((button) => {
+      const isActive = button.dataset.locale === locale;
+
+      button.classList.toggle('language-switcher__button--active', isActive);
+      button.setAttribute('aria-pressed', String(isActive));
+    });
+
+    updateTranslations();
+
     return;
   }
 
@@ -927,6 +1090,8 @@ window.addEventListener('pagehide', () => {
     pauseGame();
   }
 });
+
+document.documentElement.lang = getLocale();
 
 renderApp();
 
