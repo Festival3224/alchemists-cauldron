@@ -3,13 +3,14 @@ import { calculateCauldron } from '../logic/calculate-cauldron';
 import { gameState } from '../state/game-state';
 import type { ICauldronValues, IRecipeRange } from '../types/game';
 import { DIFFICULTY_SETTINGS } from '../data/difficulty';
+import { translate } from '../i18n';
 
 type ParameterKey = keyof ICauldronValues;
 
-const PARAMETERS: { key: ParameterKey; label: string; icon: string }[] = [
-  { key: 'temperature', label: 'Temperature', icon: '🌡️' },
-  { key: 'density', label: 'Density', icon: '💧' },
-  { key: 'magicPower', label: 'Magic Power', icon: '🪄' },
+const PARAMETERS: { key: ParameterKey; icon: string }[] = [
+  { key: 'temperature', icon: '🌡️' },
+  { key: 'density', icon: '💧' },
+  { key: 'magicPower', icon: '🪄' },
 ];
 
 const isValueInRange = (value: number, range: IRecipeRange | undefined): boolean => {
@@ -18,7 +19,6 @@ const isValueInRange = (value: number, range: IRecipeRange | undefined): boolean
 
 const renderBar = (
   key: ParameterKey,
-  label: string,
   icon: string,
   value: number,
   range: IRecipeRange | undefined,
@@ -50,8 +50,8 @@ const renderBar = (
       <div class="parameter-bar__header">
         <span class="parameter-bar__label">
           <span class="parameter-bar__icon" aria-hidden="true">${icon}</span>
-            ${label}
-          </span>
+          <span data-i18n="${key}">${translate(key)}</span>
+        </span>
         <span class="parameter-bar__value">${value}</span>
       </div>
 
@@ -97,13 +97,15 @@ export const renderBars = (): string => {
   const recipe = gameState.activeRecipe;
   const tolerance = DIFFICULTY_SETTINGS[gameState.difficulty].recipeTolerance;
 
-  const bars = PARAMETERS.map(({ key, label, icon }) =>
-    renderBar(key, label, icon, values[key], recipe?.[key]),
+  const bars = PARAMETERS.map(({ key, icon }) =>
+    renderBar(key, icon, values[key], recipe?.[key]),
   ).join('');
 
   return `
     <section class="parameters" aria-labelledby="parameters-title">
-      <h2 id="parameters-title">Cauldron Parameters</h2>
+      <h2 id="parameters-title" data-i18n="cauldronParameters">
+        ${translate('cauldronParameters')}
+      </h2>
       <div class="parameters__list">
         ${bars}
       </div>
@@ -111,10 +113,26 @@ export const renderBars = (): string => {
       ${
         gameState.status !== 'menu'
           ? `
-            <div class="parameters__legend" aria-label="Parameter bar legend">
-              <span><i class="parameters__legend-exact"></i> Target range</span>
-              <span><i class="parameters__legend-tolerance"></i> Tolerance ±${tolerance}</span>
-              <span><i class="parameters__legend-marker"></i> Current value</span>
+            <div
+              class="parameters__legend"
+              aria-label="${translate('parameterBarLegend')}"
+              data-i18n-aria-label="parameterBarLegend"
+            >
+              <span>
+                <i class="parameters__legend-exact"></i>
+                <span data-i18n="targetRange">${translate('targetRange')}</span>
+              </span>
+
+              <span>
+                <i class="parameters__legend-tolerance"></i>
+                <span data-i18n="tolerance">${translate('tolerance')}</span>
+                ±${tolerance}
+              </span>
+
+              <span>
+                <i class="parameters__legend-marker"></i>
+                <span data-i18n="currentValue">${translate('currentValue')}</span>
+              </span>
             </div>
           `
           : ''

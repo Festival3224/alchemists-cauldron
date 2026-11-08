@@ -1,6 +1,10 @@
 import { gameState } from '../state/game-state';
 import { DIFFICULTY_SETTINGS } from '../data/difficulty';
 
+import { translate } from '../i18n';
+
+import { getIngredientName } from '../i18n/ingredients';
+
 import cauldronImage from '../assets/image/cualdron.png';
 
 import type { BrewResult } from '../state/game-state';
@@ -11,11 +15,12 @@ export const renderCauldron = (brewResult?: BrewResult): string => {
   const maxIngredients = DIFFICULTY_SETTINGS[gameState.difficulty].maxCauldronIngredients;
   const slots = Array.from({ length: maxIngredients }, (_, index) => {
     const ingredient = ingredients[index];
+    const ingredientName = ingredient ? getIngredientName(ingredient) : '';
 
     return ingredient
       ? `
         <li class="cauldron__slot cauldron__slot--filled"
-            title="${ingredient.name}">
+            title="${ingredientName}">
 
           <span class="cauldron__slot-icon" aria-hidden="true">
             ${
@@ -29,19 +34,19 @@ export const renderCauldron = (brewResult?: BrewResult): string => {
             }
           </span>
 
-          <span class="cauldron__slot-name">${ingredient.name}</span>
+          <span class="cauldron__slot-name">${ingredientName}</span>
         </li>
       `
       : `
         <li class="cauldron__slot cauldron__slot--empty"
-            aria-label="Empty ingredient slot">
+            aria-label="${translate('emptyIngredientSlot')}"
           <span aria-hidden="true">✧</span>
         </li>
       `;
   }).join('');
 
   return `
-    <section class="cauldron" aria-label="Cauldron">
+    <section class="cauldron" aria-label="${translate('cauldron')}">
 
       <div class="cauldron__body">
         <div class="cauldron__scene ${brewResult ? `cauldron__scene--${brewResult}` : ''}">
@@ -49,7 +54,7 @@ export const renderCauldron = (brewResult?: BrewResult): string => {
             <img
               class="cauldron__image"
               src="${cauldronImage}"
-              alt="Magical cauldron filled with glowing purple potion"
+              alt="${translate('magicalCauldron')}"
               width="1024"
               height="1024"
             />
@@ -64,7 +69,7 @@ export const renderCauldron = (brewResult?: BrewResult): string => {
           </div>
         </div>
 
-        <ol class="cauldron__slots" aria-label="Ingredients in the cauldron">
+        <ol class="cauldron__slots" aria-label="${translate('ingredientsInCauldron')}">
           ${slots}
         </ol>
 

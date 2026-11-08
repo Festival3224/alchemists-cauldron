@@ -247,6 +247,11 @@
       animation: score-gain 850ms ease-out both;
     }
   }
+
+  &__item--urgent .game-hud__value {
+    color: t.$color-danger;
+    animation: timer-pulse 0.8s ease-in-out infinite alternate;
+  }
 }
 
 @keyframes score-gain {

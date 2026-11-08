@@ -14,18 +14,26 @@
   &__grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: t.$space-2-5;
+    // gap: t.$space-2-5;
+    gap: clamp(6px, 0.9vh, 10px);
   }
 }
 
 .ingredient-card {
   position: relative;
   display: flex;
-  min-height: t.$ingredient-card-min-height;
+
+  /* min-height: t.$ingredient-card-min-height;*/
+  min-height: clamp(110px, 15vh, 150px);
+
   flex-direction: column;
   align-items: center;
-  gap: t.$space-2-5;
-  padding: t.$space-5 t.$space-3;
+
+  /* gap: t.$space-2-5;
+  padding: t.$space-5 t.$space-3; */
+  gap: clamp(6px, 0.8vh, 10px);
+  padding: clamp(10px, 1.5vh, 20px) t.$space-3;
+
   border: 1px solid t.$color-border-primary;
   border-radius: t.$radius-lg;
   background:
@@ -77,16 +85,20 @@
 
   &__stock {
     position: absolute;
-    top: t.$space-2-5;
-    right: t.$space-2-5;
+    top: clamp(5px, 0.8vw, 10px);
+    right: clamp(5px, 0.8vw, 10px);
+
     display: grid;
-    width: t.$ingredient-stock-size;
-    height: t.$ingredient-stock-size;
+    width: clamp(22px, 2.5vw, 32px);
+    height: clamp(22px, 2.5vw, 32px);
     place-items: center;
+
     border-radius: 50%;
     background: t.$color-bg-stock;
-    font-size: t.$font-size-sm;
+
+    font-size: clamp(11px, 1vw, 14px);
     font-weight: t.$font-weight-bold;
+    font-variant-numeric: tabular-nums;
   }
 
   &__icon {
@@ -179,7 +191,7 @@
   top: 50%;
   left: calc(100% + 10px);
   display: flex;
-  width: min(210px, calc(100vw - 24px));
+  width: min(185px, calc(100vw - 24px));
   flex-direction: column;
   gap: t.$space-2;
   padding: t.$space-3;
